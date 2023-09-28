@@ -1,0 +1,22 @@
+enum Type {
+	NORMAL,
+	FIGHTING,
+	FIRE,
+	WATER,
+	GRASS,
+	ICE,
+	ELECTRIC,
+	GROUND,
+	FLYING,
+	POISON,
+	BUG,
+	ROCK,
+	STEEL,
+	FAIRY,
+	DRAGON,
+	DARK,
+	GHOST,
+	PSYCHIC
+}
+
+export default Type;

@@ -1,0 +1,22 @@
+var Type;
+(function (Type) {
+    Type[Type["NORMAL"] = 0] = "NORMAL";
+    Type[Type["FIGHTING"] = 1] = "FIGHTING";
+    Type[Type["FIRE"] = 2] = "FIRE";
+    Type[Type["WATER"] = 3] = "WATER";
+    Type[Type["GRASS"] = 4] = "GRASS";
+    Type[Type["ICE"] = 5] = "ICE";
+    Type[Type["ELECTRIC"] = 6] = "ELECTRIC";
+    Type[Type["GROUND"] = 7] = "GROUND";
+    Type[Type["FLYING"] = 8] = "FLYING";
+    Type[Type["POISON"] = 9] = "POISON";
+    Type[Type["BUG"] = 10] = "BUG";
+    Type[Type["ROCK"] = 11] = "ROCK";
+    Type[Type["STEEL"] = 12] = "STEEL";
+    Type[Type["FAIRY"] = 13] = "FAIRY";
+    Type[Type["DRAGON"] = 14] = "DRAGON";
+    Type[Type["DARK"] = 15] = "DARK";
+    Type[Type["GHOST"] = 16] = "GHOST";
+    Type[Type["PSYCHIC"] = 17] = "PSYCHIC";
+})(Type || (Type = {}));
+export default Type;
