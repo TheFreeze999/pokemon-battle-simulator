@@ -24,6 +24,13 @@ namespace SpeciesDex {
 		baseStats: { hp: 45, attack: 50, defense: 43, specialAttack: 40, specialDefense: 38, speed: 62 },
 		abilities: { primary: AbilityDex.big_pecks },
 	});
+	export const honedge = new Species({
+		name: "honedge",
+		displayName: "Honedge",
+		types: [Type.STEEL, Type.GHOST],
+		baseStats: { hp: 45, attack: 80, defense: 100, specialAttack: 35, specialDefense: 37, speed: 28 },
+		abilities: { primary: AbilityDex.no_guard },
+	});
 }
 
 export default SpeciesDex;

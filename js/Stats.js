@@ -63,6 +63,20 @@ var Stats;
         }
         CreatureStats.normalize = normalize;
     })(CreatureStats = Stats.CreatureStats || (Stats.CreatureStats = {}));
+    let AccuracyEvasionStats;
+    (function (AccuracyEvasionStats) {
+        function createDefault() {
+            return {
+                accuracy: 0,
+                evasion: 0
+            };
+        }
+        AccuracyEvasionStats.createDefault = createDefault;
+        function normalize(stats) {
+            return normalizeStats(stats);
+        }
+        AccuracyEvasionStats.normalize = normalize;
+    })(AccuracyEvasionStats = Stats.AccuracyEvasionStats || (Stats.AccuracyEvasionStats = {}));
     function toDisplayName(stat) {
         if (stat === "currentHp")
             return "Current HP";
@@ -76,6 +90,10 @@ var Stats;
             return "Special Attack";
         if (stat === "specialDefense")
             return "Special Defense";
+        if (stat === "accuracy")
+            return "Accuracy";
+        if (stat === "evasion")
+            return "Evasion";
         return "Speed";
     }
     Stats.toDisplayName = toDisplayName;

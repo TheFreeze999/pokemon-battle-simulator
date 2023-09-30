@@ -6,6 +6,7 @@ class Move {
     category;
     basePower;
     priority;
+    accuracy;
     dealStandardDamage;
     applySecondaryEffects;
     constructor(data) {
@@ -15,6 +16,7 @@ class Move {
         this.category = data.category;
         this.basePower = data.basePower;
         this.priority = data.priority ?? 0;
+        this.accuracy = data.accuracy;
         this.dealStandardDamage = data.dealStandardDamage ?? true;
         this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
     }

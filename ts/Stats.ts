@@ -73,18 +73,36 @@ namespace Stats {
 		}
 	}
 
-	export function toDisplayName(stat: keyof CreatureStats) {
+	export interface AccuracyEvasionStats {
+		accuracy: number,
+		evasion: number
+	}
+	export namespace AccuracyEvasionStats {
+		export function createDefault(): AccuracyEvasionStats {
+			return {
+				accuracy: 0,
+				evasion: 0
+			}
+		}
+		export function normalize(stats: AccuracyEvasionStats) {
+			return normalizeStats(stats) as AccuracyEvasionStats;
+		}
+	}
+
+	export function toDisplayName(stat: keyof (CreatureStats & AccuracyEvasionStats)) {
 		if (stat === "currentHp") return "Current HP";
 		if (stat === "hp") return "HP";
 		if (stat === "attack") return "Attack";
 		if (stat === "defense") return "Defense";
 		if (stat === "specialAttack") return "Special Attack";
 		if (stat === "specialDefense") return "Special Defense";
+		if (stat === "accuracy") return "Accuracy";
+		if (stat === "evasion") return "Evasion";
 
 		return "Speed";
 	}
 
-	export function getStatStageChangeInfoText(displayName: string, stat: keyof BaseStatsWithoutHP, amount: number) {
+	export function getStatStageChangeInfoText(displayName: string, stat: keyof (BaseStatsWithoutHP & AccuracyEvasionStats), amount: number) {
 		const statDisplayName = toDisplayName(stat);
 		if (amount === 1) return `${displayName}'s ${statDisplayName} rose!`;
 		if (amount === 2) return `${displayName}'s ${statDisplayName} rose sharply!`;

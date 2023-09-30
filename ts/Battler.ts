@@ -11,7 +11,8 @@ class Battler {
 	level: number;
 	types: Type[];
 	initialStats: Stats.CreatureStats;
-	statBoosts: Stats.BaseStatsWithoutHP = Stats.BaseStatsWithoutHP.createDefault();
+	statBoosts = Stats.BaseStatsWithoutHP.createDefault();
+	accuracyEvasionBoosts = Stats.AccuracyEvasionStats.createDefault();
 	displayName: string;
 	ability: Ability;
 
@@ -48,6 +49,23 @@ class Battler {
 			const boostAbs = Math.abs(boost);
 			let numerator = 2;
 			let denominator = 2;
+			if (boost > 0) numerator += boostAbs;
+			else denominator += boostAbs;
+			stats[statName] *= (numerator / denominator);
+			stats[statName] = Math.round(stats[statName]);
+		}
+
+		return stats;
+	}
+
+	getEffectiveAccuracyAndEvasion() {
+		const stats = objectClone(this.accuracyEvasionBoosts);
+		const boostableStatNames = Object.keys(this.accuracyEvasionBoosts) as (keyof Stats.AccuracyEvasionStats)[]
+		for (const statName of boostableStatNames) {
+			const boost = this.accuracyEvasionBoosts[statName];
+			const boostAbs = Math.abs(boost);
+			let numerator = 3;
+			let denominator = 3;
 			if (boost > 0) numerator += boostAbs;
 			else denominator += boostAbs;
 			stats[statName] *= (numerator / denominator);

@@ -1,15 +1,18 @@
 import Battler from "../../Battler.js";
 import Move from "../../Move.js";
 import { TypeUtils } from "../../Type.js";
-import { delay } from "../../util.js";
+import { delay, randomInteger } from "../../util.js";
 import BattleAction from "../BattleAction.js";
 import DamageAction from "./DamageAction.js";
 
 class MoveAction extends BattleAction {
 	attackStatMultiplier = 1;
+	accuracyMultiplier = 1;
+	forceMoveHit = false;
 	negateDirectDamage = false;
 	performSecondaryEffects = true;
 	showTypeEffectivenessInfoText = true;
+	missed = false;
 
 	constructor(public user: Battler, public target: Battler, public move: Move) {
 		super();
@@ -18,10 +21,20 @@ class MoveAction extends BattleAction {
 		if (this.user.fainted || this.target.fainted) return;
 		if (!this.user.moves.includes(this.move)) return;
 
-		console.log("-------------")
+		console.log("-------------");
 
+		if (this.user === this.target)
+			console.log(`${this.user.displayName} used ${this.move.displayName}!`);
+		else
+			console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
 
-		console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
+		const moveHit = this.didMoveHit();
+		if (!moveHit) {
+			console.log(`The move missed!`);
+			this.missed = true;
+			return;
+		}
+
 
 		if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealStandardDamage) {
 			const userBoostedStats = this.user.getEffectiveStats();
@@ -45,8 +58,30 @@ class MoveAction extends BattleAction {
 				this.queue?.push(damageAction);
 			}
 		}
-		if (this.performSecondaryEffects)
+		if (this.performSecondaryEffects) {
 			this.move.applySecondaryEffects(this);
+		}
+	}
+
+	didMoveHit() {
+		let accuracy = this.move.accuracy;
+
+		if (this.forceMoveHit === true) return true
+		if (accuracy === -1) return true;
+
+		const random = randomInteger(1, 100);
+		const attackerAccuracy = this.user.getEffectiveAccuracyAndEvasion().accuracy;
+		const defenderEvasion = this.target.getEffectiveAccuracyAndEvasion().evasion;
+
+
+		if (defenderEvasion > 0) {
+			const fraction = attackerAccuracy / defenderEvasion;
+			accuracy *= fraction;
+		}
+
+		accuracy *= this.accuracyMultiplier;
+
+		return random <= accuracy;
 	}
 }
 

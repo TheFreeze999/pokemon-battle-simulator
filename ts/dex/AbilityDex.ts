@@ -9,19 +9,19 @@ namespace AbilityDex {
 		name: "no_ability",
 		displayName: "No Ability"
 	});
-	export const overgrow = new Ability({
-		name: "overgrow",
-		displayName: "Overgrow",
+	export const big_pecks = new Ability({
+		name: "big_pecks",
+		displayName: "Big Pecks",
 		battleActionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
-					if (!(battleAction instanceof MoveAction)) return;
-					if (battleAction.user !== owner) return;
-					if (owner.hpPercentage > (100 / 3)) return;
-					if (battleAction.move.type !== Type.GRASS) return;
-
-					battleAction.attackStatMultiplier *= 1.5;
+					if (!(battleAction instanceof StatStageChangeAction)) return;
+					if (battleAction.target !== owner) return;
+					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
+					battleAction.toExecute = false;
+					console.log(`[${owner.displayName}'s Big Pecks]`);
+					console.log(`${owner.displayName}'s defense was not lowered.`);
 				}
 			}
 		]
@@ -43,9 +43,24 @@ namespace AbilityDex {
 			}
 		]
 	});
-	export const torrent = new Ability({
-		name: "torrent",
-		displayName: "Torrent",
+	export const no_guard = new Ability({
+		name: "no_guard",
+		displayName: "No Guard",
+		battleActionModifiers: [
+			{
+				priority: 0,
+				modify(battleAction, owner) {
+					if (!(battleAction instanceof MoveAction)) return;
+					if (battleAction.user !== owner && battleAction.target !== owner) return;
+
+					battleAction.forceMoveHit = true;
+				}
+			}
+		]
+	});
+	export const overgrow = new Ability({
+		name: "overgrow",
+		displayName: "Overgrow",
 		battleActionModifiers: [
 			{
 				priority: 0,
@@ -53,7 +68,7 @@ namespace AbilityDex {
 					if (!(battleAction instanceof MoveAction)) return;
 					if (battleAction.user !== owner) return;
 					if (owner.hpPercentage > (100 / 3)) return;
-					if (battleAction.move.type !== Type.WATER) return;
+					if (battleAction.move.type !== Type.GRASS) return;
 
 					battleAction.attackStatMultiplier *= 1.5;
 				}
@@ -83,21 +98,24 @@ namespace AbilityDex {
 			}
 		]
 	});
-	export const big_pecks = new Ability({
-		name: "big_pecks",
-		displayName: "Big Pecks",
+	export const torrent = new Ability({
+		name: "torrent",
+		displayName: "Torrent",
 		battleActionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
-					if (!(battleAction instanceof StatStageChangeAction)) return;
-					if (battleAction.target !== owner) return;
-					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
-					battleAction.toExecute = false;
+					if (!(battleAction instanceof MoveAction)) return;
+					if (battleAction.user !== owner) return;
+					if (owner.hpPercentage > (100 / 3)) return;
+					if (battleAction.move.type !== Type.WATER) return;
+
+					battleAction.attackStatMultiplier *= 1.5;
 				}
 			}
 		]
 	});
+
 }
 
 export default AbilityDex;

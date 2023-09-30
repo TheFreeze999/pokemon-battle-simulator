@@ -19,8 +19,14 @@ class StatStageChangeAction extends BattleAction {
         const infoText = Stats.getStatStageChangeInfoText(this.target.displayName, this.stat, this.amount);
         if (infoText)
             console.log(infoText);
-        this.target.statBoosts[this.stat] += this.amount;
-        this.target.statBoosts = Stats.BaseStatsWithoutHP.normalize(this.target.statBoosts);
+        if (this.stat === "accuracy" || this.stat === "evasion") {
+            this.target.accuracyEvasionBoosts[this.stat] += this.amount;
+            this.target.accuracyEvasionBoosts = Stats.AccuracyEvasionStats.normalize(this.target.accuracyEvasionBoosts);
+        }
+        else {
+            this.target.statBoosts[this.stat] += this.amount;
+            this.target.statBoosts = Stats.BaseStatsWithoutHP.normalize(this.target.statBoosts);
+        }
     }
 }
 export default StatStageChangeAction;

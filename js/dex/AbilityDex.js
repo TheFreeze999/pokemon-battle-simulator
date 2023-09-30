@@ -8,22 +8,22 @@ var AbilityDex;
         name: "no_ability",
         displayName: "No Ability"
     });
-    AbilityDex.overgrow = new Ability({
-        name: "overgrow",
-        displayName: "Overgrow",
+    AbilityDex.big_pecks = new Ability({
+        name: "big_pecks",
+        displayName: "Big Pecks",
         battleActionModifiers: [
             {
                 priority: 0,
                 modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
+                    if (!(battleAction instanceof StatStageChangeAction))
                         return;
-                    if (battleAction.user !== owner)
+                    if (battleAction.target !== owner)
                         return;
-                    if (owner.hpPercentage > (100 / 3))
+                    if (battleAction.stat !== "defense" || battleAction.amount > 0)
                         return;
-                    if (battleAction.move.type !== Type.GRASS)
-                        return;
-                    battleAction.attackStatMultiplier *= 1.5;
+                    battleAction.toExecute = false;
+                    console.log(`[${owner.displayName}'s Big Pecks]`);
+                    console.log(`${owner.displayName}'s defense was not lowered.`);
                 }
             }
         ]
@@ -48,9 +48,25 @@ var AbilityDex;
             }
         ]
     });
-    AbilityDex.torrent = new Ability({
-        name: "torrent",
-        displayName: "Torrent",
+    AbilityDex.no_guard = new Ability({
+        name: "no_guard",
+        displayName: "No Guard",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.user !== owner && battleAction.target !== owner)
+                        return;
+                    battleAction.forceMoveHit = true;
+                }
+            }
+        ]
+    });
+    AbilityDex.overgrow = new Ability({
+        name: "overgrow",
+        displayName: "Overgrow",
         battleActionModifiers: [
             {
                 priority: 0,
@@ -61,7 +77,7 @@ var AbilityDex;
                         return;
                     if (owner.hpPercentage > (100 / 3))
                         return;
-                    if (battleAction.move.type !== Type.WATER)
+                    if (battleAction.move.type !== Type.GRASS)
                         return;
                     battleAction.attackStatMultiplier *= 1.5;
                 }
@@ -93,20 +109,22 @@ var AbilityDex;
             }
         ]
     });
-    AbilityDex.big_pecks = new Ability({
-        name: "big_pecks",
-        displayName: "Big Pecks",
+    AbilityDex.torrent = new Ability({
+        name: "torrent",
+        displayName: "Torrent",
         battleActionModifiers: [
             {
                 priority: 0,
                 modify(battleAction, owner) {
-                    if (!(battleAction instanceof StatStageChangeAction))
+                    if (!(battleAction instanceof MoveAction))
                         return;
-                    if (battleAction.target !== owner)
+                    if (battleAction.user !== owner)
                         return;
-                    if (battleAction.stat !== "defense" || battleAction.amount > 0)
+                    if (owner.hpPercentage > (100 / 3))
                         return;
-                    battleAction.toExecute = false;
+                    if (battleAction.move.type !== Type.WATER)
+                        return;
+                    battleAction.attackStatMultiplier *= 1.5;
                 }
             }
         ]

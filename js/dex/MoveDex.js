@@ -9,6 +9,7 @@ var MoveDex;
         displayName: "Dragon Rage",
         type: Type.DRAGON,
         category: Move.Category.SPECIAL,
+        accuracy: 100,
         applySecondaryEffects(moveAction) {
             if (TypeUtils.calculateEffectiveness([Type.DRAGON], moveAction.target.types) === 0) {
                 console.log(TypeUtils.getInfoFromEffectiveness(0));
@@ -26,6 +27,7 @@ var MoveDex;
         type: Type.GRASS,
         category: Move.Category.SPECIAL,
         basePower: 90,
+        accuracy: 100,
         applySecondaryEffects(moveAction) {
             const statDropAction = new StatStageChangeAction(moveAction.target, "specialDefense", -1);
             statDropAction.chance = [10, 100];
@@ -39,13 +41,31 @@ var MoveDex;
         displayName: "Flamethrower",
         type: Type.FIRE,
         category: Move.Category.SPECIAL,
-        basePower: 90
+        basePower: 90,
+        accuracy: 100,
+    });
+    MoveDex.hone_claws = new Move({
+        name: "hone_claws",
+        displayName: "Hone Claws",
+        type: Type.DARK,
+        category: Move.Category.STATUS,
+        accuracy: -1,
+        applySecondaryEffects(moveAction) {
+            const attackStatDropAction = new StatStageChangeAction(moveAction.user, "attack", 1);
+            const accuracyStatDropAction = new StatStageChangeAction(moveAction.user, "accuracy", 1);
+            attackStatDropAction.priority = 3;
+            attackStatDropAction.cause = moveAction;
+            accuracyStatDropAction.priority = 3;
+            accuracyStatDropAction.cause = moveAction;
+            moveAction.target.battle?.queue.push(attackStatDropAction, accuracyStatDropAction);
+        }
     });
     MoveDex.metal_sound = new Move({
         name: "metal_sound",
         displayName: "Metal Sound",
         type: Type.STEEL,
         category: Move.Category.STATUS,
+        accuracy: 85,
         applySecondaryEffects(moveAction) {
             const statDropAction = new StatStageChangeAction(moveAction.target, "specialDefense", -2);
             statDropAction.priority = 3;
@@ -58,6 +78,7 @@ var MoveDex;
         displayName: "Screech",
         type: Type.NORMAL,
         category: Move.Category.STATUS,
+        accuracy: 85,
         applySecondaryEffects(moveAction) {
             const statDropAction = new StatStageChangeAction(moveAction.target, "defense", -2);
             statDropAction.priority = 3;
@@ -70,7 +91,8 @@ var MoveDex;
         displayName: "Tackle",
         type: Type.NORMAL,
         category: Move.Category.PHYSICAL,
-        basePower: 55
+        basePower: 55,
+        accuracy: 100,
     });
 })(MoveDex || (MoveDex = {}));
 export default MoveDex;

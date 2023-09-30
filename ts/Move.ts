@@ -5,7 +5,7 @@ import { randomInteger as randomInteger } from "./util.js";
 
 type MoveData =
 	/* Required Fields */
-	Pick<Move, "name" | "displayName" | "type" | "category"> &
+	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy"> &
 	/* Optional Fields */
 	Partial<Pick<Move, "priority" | "basePower" | "dealStandardDamage" | "applySecondaryEffects">>;
 
@@ -16,6 +16,7 @@ class Move {
 	readonly category: Move.Category;
 	readonly basePower?: number;
 	readonly priority: number;
+	readonly accuracy: number;
 	readonly dealStandardDamage: boolean;
 	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
 
@@ -26,6 +27,7 @@ class Move {
 		this.category = data.category;
 		this.basePower = data.basePower;
 		this.priority = data.priority ?? 0;
+		this.accuracy = data.accuracy;
 		this.dealStandardDamage = data.dealStandardDamage ?? true;
 		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
 	}
