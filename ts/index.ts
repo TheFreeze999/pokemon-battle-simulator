@@ -1,37 +1,36 @@
 import Battle from "./Battle.js";
 import Battler from "./Battler.js";
 import Creature from "./Creature.js";
-import Type, { TypeUtils } from "./Type.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { delay } from "./util.js";
 
 const battle = new Battle();
-const bulba1 = new Creature(SpeciesDex.bulbasaur);
-const charma1 = new Creature(SpeciesDex.charmander);
 
-bulba1.moves = [MoveDex.tackle, MoveDex.energy_ball];
-charma1.moves = [MoveDex.tackle, MoveDex.flamethrower];
+const creature0 = new Creature(SpeciesDex.charmander);
+const creature1 = new Creature(SpeciesDex.fletchling);
 
-bulba1.level = 100;
-bulba1.calcStats();
-charma1.level = 100;
-charma1.calcStats();
+creature0.moves = [MoveDex.tackle, MoveDex.flamethrower, MoveDex.screech, MoveDex.metal_sound];
+creature1.moves = [MoveDex.tackle, MoveDex.energy_ball, MoveDex.screech, MoveDex.metal_sound];
 
-const bulba1Battler = new Battler(bulba1);
-const charma1Battler = new Battler(charma1);
+creature0.level = 100;
+creature1.level = 100;
+creature0.calcStats();
+creature1.calcStats();
 
-battle.teams[0].addBattler(bulba1Battler);
-battle.teams[1].addBattler(charma1Battler);
+const battler0 = new Battler(creature0);
+const battler1 = new Battler(creature1);
 
-const moveAction1 = new MoveAction(bulba1Battler, charma1Battler, MoveDex.energy_ball);
-const moveAction2 = new MoveAction(charma1Battler, bulba1Battler, MoveDex.tackle);
+battle.teams[0].addBattler(battler1);
+battle.teams[1].addBattler(battler0);
 
-
-battle.queue.push(moveAction1, moveAction2);
+battle.queue.push(
+	new MoveAction(battler0, battler1, MoveDex.screech),
+	new MoveAction(battler1, battler0, MoveDex.energy_ball),
+	new MoveAction(battler0, battler1, MoveDex.flamethrower),
+	new MoveAction(battler1, battler0, MoveDex.tackle),
+);
 
 await battle.queue.executeAll();
-
 
 console.log(battle)

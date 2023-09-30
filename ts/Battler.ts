@@ -10,12 +10,13 @@ class Battler {
 	team: Team | null = null;
 	level: number;
 	types: Type[];
-	moves: Move[] = [];
 	initialStats: Stats.CreatureStats;
 	statBoosts: Stats.BaseStatsWithoutHP = Stats.BaseStatsWithoutHP.createDefault();
 	displayName: string;
-	fainted = false;
 	ability: Ability;
+
+	moves: Move[] = [];
+	fainted = false;
 
 	constructor(public readonly creature: Creature) {
 		this.level = this.creature.level;

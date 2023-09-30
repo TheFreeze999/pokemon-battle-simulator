@@ -31,7 +31,7 @@ class Creature {
         return stats;
     }
     get ability() {
-        return this.species.abilities[this.abilitySlot] || AbilityDex.noAbility;
+        return this.species.abilities[this.abilitySlot] || AbilityDex.no_ability;
     }
 }
 export default Creature;

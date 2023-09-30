@@ -5,12 +5,12 @@ class Battler {
     team = null;
     level;
     types;
-    moves = [];
     initialStats;
     statBoosts = Stats.BaseStatsWithoutHP.createDefault();
     displayName;
-    fainted = false;
     ability;
+    moves = [];
+    fainted = false;
     constructor(creature) {
         this.creature = creature;
         this.level = this.creature.level;

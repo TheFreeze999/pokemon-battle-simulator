@@ -5,7 +5,7 @@ import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 
 namespace AbilityDex {
-	export const noAbility = new Ability({
+	export const no_ability = new Ability({
 		name: "no_ability",
 		displayName: "No Ability"
 	});
@@ -60,7 +60,7 @@ namespace AbilityDex {
 			}
 		]
 	});
-	export const sapSipper = new Ability({
+	export const sap_sipper = new Ability({
 		name: "sap_sipper",
 		displayName: "Sap Sipper",
 		battleActionModifiers: [
@@ -79,6 +79,21 @@ namespace AbilityDex {
 					statBoostAction.priority = 15;
 					statBoostAction.cause = battleAction;
 					battleAction.queue?.push(statBoostAction);
+				}
+			}
+		]
+	});
+	export const big_pecks = new Ability({
+		name: "big_pecks",
+		displayName: "Big Pecks",
+		battleActionModifiers: [
+			{
+				priority: 0,
+				modify(battleAction, owner) {
+					if (!(battleAction instanceof StatStageChangeAction)) return;
+					if (battleAction.target !== owner) return;
+					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
+					battleAction.toExecute = false;
 				}
 			}
 		]
