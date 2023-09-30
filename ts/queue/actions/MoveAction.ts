@@ -1,5 +1,6 @@
 import Battler from "../../Battler.js";
 import Move from "../../Move.js";
+import { TypeUtils } from "../../Type.js";
 import { delay } from "../../util.js";
 import BattleAction from "../BattleAction.js";
 import DamageAction from "./DamageAction.js";
@@ -19,7 +20,14 @@ class MoveAction extends BattleAction {
 			const attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
 			const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
 			// include type effectiveness and STAB
-			const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, 1);
+			const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
+			const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
+			const multiplier = typeEffectiveness * stab;
+
+			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
+			if (typeEffectivenessInfoText) console.log(typeEffectivenessInfoText);
+
+			const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
 			const damageAction = new DamageAction(this.target, damageAmount);
 			this.queue?.push(damageAction)
 		}

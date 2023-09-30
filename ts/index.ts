@@ -1,11 +1,11 @@
 import Battle from "./Battle.js";
 import Battler from "./Battler.js";
 import Creature from "./Creature.js";
+import Type, { TypeUtils } from "./Type.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
 import { delay } from "./util.js";
-
 
 const battle = new Battle();
 
