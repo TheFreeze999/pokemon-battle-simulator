@@ -17,6 +17,7 @@ class DamageAction extends BattleAction {
         await delay(1000);
         if (this.target.stats.currentHp <= 0) {
             const faintAction = new FaintAction(this.target);
+            faintAction.priority = 10;
             this.queue?.push(faintAction);
             return;
         }

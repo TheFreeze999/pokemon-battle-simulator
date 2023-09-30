@@ -10,6 +10,9 @@ class MoveAction extends BattleAction {
 		super();
 	}
 	async execute() {
+		if (this.user.fainted || this.target.fainted) return;
+
+
 		console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
 
 		await delay(2000);
@@ -19,7 +22,7 @@ class MoveAction extends BattleAction {
 			const targetBoostedStats = this.target.calcBoostedStats();
 			const attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
 			const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
-			// include type effectiveness and STAB
+
 			const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
 			const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
 			const multiplier = typeEffectiveness * stab;
@@ -29,6 +32,7 @@ class MoveAction extends BattleAction {
 
 			const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
 			const damageAction = new DamageAction(this.target, damageAmount);
+			damageAction.priority = 5;
 			this.queue?.push(damageAction)
 		}
 	}
