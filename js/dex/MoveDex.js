@@ -24,8 +24,8 @@ var MoveDex;
         category: Move.Category.SPECIAL,
         basePower: 90,
         applySecondaryEffects(user, target) {
-            const statDropAction = new StatStageChangeAction(target, "specialDefense", -12);
-            statDropAction.chance = [50, 100];
+            const statDropAction = new StatStageChangeAction(target, "specialDefense", -1);
+            statDropAction.chance = [10, 100];
             statDropAction.priority = 3;
             target.battle?.queue.push(statDropAction);
         }

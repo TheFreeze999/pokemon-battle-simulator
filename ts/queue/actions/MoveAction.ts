@@ -30,10 +30,12 @@ class MoveAction extends BattleAction {
 			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
 			if (typeEffectivenessInfoText) console.log(typeEffectivenessInfoText);
 
-			const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
-			const damageAction = new DamageAction(this.target, damageAmount);
-			damageAction.priority = 5;
-			this.queue?.push(damageAction);
+			if (typeEffectiveness !== 0) {
+				const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
+				const damageAction = new DamageAction(this.target, damageAmount);
+				damageAction.priority = 5;
+				this.queue?.push(damageAction);
+			}
 		}
 
 		this.move.applySecondaryEffects(this.user, this.target);
