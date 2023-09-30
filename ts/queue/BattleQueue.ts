@@ -18,7 +18,7 @@ class BattleQueue {
 	async executeNextActionThenRemove() {
 		const action = this.actions.sort((a, b) => b.priority - a.priority)[0];
 		this.currentlyBeingExecuted = action;
-		await action.executeIfAllowed();
+		await action.modifyThenExecuteIfAllowed();
 		action.removeSelfFromQueue();
 		this.currentlyBeingExecuted = null;
 	}

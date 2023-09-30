@@ -9,7 +9,7 @@ class Creature {
 	stats = Stats.CreatureStats.createDefault();
 	evSpread = Stats.BaseStats.createDefault();
 	ivSpread = Stats.BaseStats.createDefault();
-	abilitySlot: keyof Required<Species["abilities"]> = "secondary";
+	abilitySlot: keyof Required<Species["abilities"]> = "primary";
 
 	constructor(public readonly species: Species) {
 		this.calcStats();

@@ -6,5 +6,8 @@ class Battle {
         new Team(this)
     ];
     queue = new BattleQueue(this);
+    get allBattlers() {
+        return this.teams.flatMap(team => team.battlers);
+    }
 }
 export default Battle;

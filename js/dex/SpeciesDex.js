@@ -15,7 +15,7 @@ var SpeciesDex;
         displayName: "Charmander",
         types: [Type.FIRE],
         baseStats: { hp: 39, attack: 52, defense: 43, specialAttack: 60, specialDefense: 50, speed: 65 },
-        abilities: { primary: AbilityDex.blaze },
+        abilities: { primary: AbilityDex.sapSipper },
     });
 })(SpeciesDex || (SpeciesDex = {}));
 export default SpeciesDex;

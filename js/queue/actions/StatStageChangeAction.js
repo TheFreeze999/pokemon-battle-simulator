@@ -4,6 +4,7 @@ class StatStageChangeAction extends BattleAction {
     target;
     stat;
     amount;
+    reasonText = null;
     constructor(target, stat, amount) {
         super();
         this.target = target;
@@ -13,6 +14,8 @@ class StatStageChangeAction extends BattleAction {
     async execute() {
         if (this.amount === 0 || this.target.fainted)
             return;
+        if (this.reasonText)
+            console.log(this.reasonText);
         const infoText = Stats.getStatStageChangeInfoText(this.target.displayName, this.stat, this.amount);
         if (infoText)
             console.log(infoText);

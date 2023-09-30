@@ -1,12 +1,13 @@
 import Battler from "./Battler.js";
 import Type from "./Type.js";
+import MoveAction from "./queue/actions/MoveAction.js";
 import { randomInteger as randomInteger } from "./util.js";
 
 type MoveData =
 	/* Required Fields */
 	Pick<Move, "name" | "displayName" | "type" | "category"> &
 	/* Optional Fields */
-	Partial<Pick<Move, "priority" | "basePower" | "applySecondaryEffects">>;
+	Partial<Pick<Move, "priority" | "basePower" | "dealStandardDamage" | "applySecondaryEffects">>;
 
 class Move {
 	readonly name: string;
@@ -15,7 +16,8 @@ class Move {
 	readonly category: Move.Category;
 	readonly basePower?: number;
 	readonly priority: number;
-	readonly applySecondaryEffects: (user: Battler, target: Battler) => void;
+	readonly dealStandardDamage: boolean;
+	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
 
 	constructor(data: MoveData) {
 		this.name = data.name;
@@ -24,7 +26,8 @@ class Move {
 		this.category = data.category;
 		this.basePower = data.basePower;
 		this.priority = data.priority ?? 0;
-		this.applySecondaryEffects = data.applySecondaryEffects || (() => { })
+		this.dealStandardDamage = data.dealStandardDamage ?? true;
+		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
 	}
 
 	static standardDamageCalculation(attackerLevel: number, attackingStat: number, defendingStat: number, power: number, multiplier: number): number {

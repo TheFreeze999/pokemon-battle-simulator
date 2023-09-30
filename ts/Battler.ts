@@ -57,7 +57,7 @@ class Battler {
 	}
 
 	get hpPercentage() {
-		return this.initialStats.currentHp / this.initialStats.hp;
+		return this.initialStats.currentHp / this.initialStats.hp * 100;
 	}
 }
 

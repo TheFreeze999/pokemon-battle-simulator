@@ -7,7 +7,7 @@ class Creature {
     stats = Stats.CreatureStats.createDefault();
     evSpread = Stats.BaseStats.createDefault();
     ivSpread = Stats.BaseStats.createDefault();
-    abilitySlot = "secondary";
+    abilitySlot = "primary";
     constructor(species) {
         this.species = species;
         this.calcStats();

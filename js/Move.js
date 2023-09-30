@@ -6,6 +6,7 @@ class Move {
     category;
     basePower;
     priority;
+    dealStandardDamage;
     applySecondaryEffects;
     constructor(data) {
         this.name = data.name;
@@ -14,7 +15,8 @@ class Move {
         this.category = data.category;
         this.basePower = data.basePower;
         this.priority = data.priority ?? 0;
-        this.applySecondaryEffects = data.applySecondaryEffects || (() => { });
+        this.dealStandardDamage = data.dealStandardDamage ?? true;
+        this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {
         const randomMultiplier = randomInteger(85, 100) / 100;
