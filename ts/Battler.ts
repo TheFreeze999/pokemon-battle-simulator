@@ -4,23 +4,26 @@ import Type from "./Type.js";
 import { objectClone, removeNullAndUndefined } from "./util.js";
 import Move from "./Move.js";
 import Stats from './Stats.js';
+import Ability from "./Ability.js";
 
 class Battler {
 	team: Team | null = null;
 	level: number;
 	types: Type[];
 	moves: Move[] = [];
-	stats: Stats.CreatureStats;
+	initialStats: Stats.CreatureStats;
 	statBoosts: Stats.BaseStatsWithoutHP = Stats.BaseStatsWithoutHP.createDefault();
 	displayName: string;
 	fainted = false;
+	ability: Ability;
 
 	constructor(public readonly creature: Creature) {
-		this.level = creature.level;
-		this.types = creature.species.types;
-		this.moves = creature.moves;
-		this.stats = creature.stats;
-		this.displayName = creature.species.displayName;
+		this.level = this.creature.level;
+		this.types = this.creature.species.types;
+		this.moves = this.creature.moves;
+		this.initialStats = this.creature.stats;
+		this.displayName = this.creature.species.displayName;
+		this.ability = this.creature.ability;
 	}
 
 	get battle() {
@@ -36,8 +39,8 @@ class Battler {
 		return this.team.enemyTeam.battlers;
 	}
 
-	calcBoostedStats() {
-		const stats = objectClone(this.stats);
+	getEffectiveStats() {
+		const stats = objectClone(this.initialStats);
 		const boostableStatNames = Object.keys(this.statBoosts) as (keyof Stats.BaseStatsWithoutHP)[]
 		for (const statName of boostableStatNames) {
 			const boost = this.statBoosts[statName];
@@ -51,6 +54,10 @@ class Battler {
 		}
 
 		return stats;
+	}
+
+	get hpPercentage() {
+		return this.initialStats.currentHp / this.initialStats.hp;
 	}
 }
 

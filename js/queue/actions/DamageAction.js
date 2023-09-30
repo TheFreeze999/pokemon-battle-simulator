@@ -12,14 +12,14 @@ class DamageAction extends BattleAction {
         if (this.amount < 0)
             return;
         console.log(`${this.target.displayName} took ${this.amount} damage!`);
-        this.target.stats.currentHp -= this.amount;
-        if (this.target.stats.currentHp <= 0) {
+        this.target.initialStats.currentHp -= this.amount;
+        if (this.target.initialStats.currentHp <= 0) {
             const faintAction = new FaintAction(this.target);
             faintAction.priority = 10;
             this.queue?.push(faintAction);
             return;
         }
-        console.log(`${this.target.displayName} now has ${this.target.stats.currentHp} HP!`);
+        console.log(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }
 export default DamageAction;

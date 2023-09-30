@@ -18,8 +18,8 @@ class MoveAction extends BattleAction {
 		console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
 
 		if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined) {
-			const userBoostedStats = this.user.calcBoostedStats();
-			const targetBoostedStats = this.target.calcBoostedStats();
+			const userBoostedStats = this.user.getEffectiveStats();
+			const targetBoostedStats = this.target.getEffectiveStats();
 			const attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
 			const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
 

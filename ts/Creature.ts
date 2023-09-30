@@ -1,6 +1,7 @@
 import Move from "./Move.js";
 import Species from "./Species.js";
 import Stats from "./Stats.js";
+import AbilityDex from "./dex/AbilityDex.js";
 
 class Creature {
 	level = 1;
@@ -8,6 +9,8 @@ class Creature {
 	stats = Stats.CreatureStats.createDefault();
 	evSpread = Stats.BaseStats.createDefault();
 	ivSpread = Stats.BaseStats.createDefault();
+	abilitySlot: keyof Required<Species["abilities"]> = "secondary";
+
 	constructor(public readonly species: Species) {
 		this.calcStats();
 		this.stats.currentHp = this.stats.hp;
@@ -34,6 +37,10 @@ class Creature {
 		this.stats = { currentHp, ...stats };
 
 		return stats;
+	}
+
+	get ability() {
+		return this.species.abilities[this.abilitySlot] || AbilityDex.noAbility;
 	}
 }
 

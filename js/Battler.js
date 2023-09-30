@@ -6,17 +6,19 @@ class Battler {
     level;
     types;
     moves = [];
-    stats;
+    initialStats;
     statBoosts = Stats.BaseStatsWithoutHP.createDefault();
     displayName;
     fainted = false;
+    ability;
     constructor(creature) {
         this.creature = creature;
-        this.level = creature.level;
-        this.types = creature.species.types;
-        this.moves = creature.moves;
-        this.stats = creature.stats;
-        this.displayName = creature.species.displayName;
+        this.level = this.creature.level;
+        this.types = this.creature.species.types;
+        this.moves = this.creature.moves;
+        this.initialStats = this.creature.stats;
+        this.displayName = this.creature.species.displayName;
+        this.ability = this.creature.ability;
     }
     get battle() {
         return this.team?.battle || null;
@@ -31,8 +33,8 @@ class Battler {
             return [];
         return this.team.enemyTeam.battlers;
     }
-    calcBoostedStats() {
-        const stats = objectClone(this.stats);
+    getEffectiveStats() {
+        const stats = objectClone(this.initialStats);
         const boostableStatNames = Object.keys(this.statBoosts);
         for (const statName of boostableStatNames) {
             const boost = this.statBoosts[statName];
@@ -47,6 +49,9 @@ class Battler {
             stats[statName] = Math.round(stats[statName]);
         }
         return stats;
+    }
+    get hpPercentage() {
+        return this.initialStats.currentHp / this.initialStats.hp;
     }
 }
 export default Battler;

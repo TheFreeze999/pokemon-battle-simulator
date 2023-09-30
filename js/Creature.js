@@ -1,4 +1,5 @@
 import Stats from "./Stats.js";
+import AbilityDex from "./dex/AbilityDex.js";
 class Creature {
     species;
     level = 1;
@@ -6,6 +7,7 @@ class Creature {
     stats = Stats.CreatureStats.createDefault();
     evSpread = Stats.BaseStats.createDefault();
     ivSpread = Stats.BaseStats.createDefault();
+    abilitySlot = "secondary";
     constructor(species) {
         this.species = species;
         this.calcStats();
@@ -27,6 +29,9 @@ class Creature {
         const currentHp = Math.floor(oldHpPercentage * stats.hp);
         this.stats = { currentHp, ...stats };
         return stats;
+    }
+    get ability() {
+        return this.species.abilities[this.abilitySlot] || AbilityDex.noAbility;
     }
 }
 export default Creature;
