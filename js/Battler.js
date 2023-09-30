@@ -8,7 +8,7 @@ class Battler {
     moves = [];
     stats;
     statBoosts = Stats.BaseStatsWithoutHP.createDefault();
-    name;
+    displayName;
     fainted = false;
     constructor(creature) {
         this.creature = creature;
@@ -16,7 +16,7 @@ class Battler {
         this.types = creature.species.types;
         this.moves = creature.moves;
         this.stats = creature.stats;
-        this.name = creature.species.name;
+        this.displayName = creature.species.displayName;
     }
     get battle() {
         return this.team?.battle || null;

@@ -8,7 +8,7 @@ class FaintAction extends BattleAction {
 		super();
 	}
 	async execute() {
-		console.log(`${this.target.name} fainted!`);
+		console.log(`${this.target.displayName} fainted!`);
 		this.target.fainted = true;
 	}
 }

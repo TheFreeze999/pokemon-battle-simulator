@@ -1,12 +1,14 @@
 import { random as randomInteger } from "./util.js";
 class Move {
     name;
+    displayName;
     type;
     category;
     basePower;
     priority;
     constructor(data) {
         this.name = data.name;
+        this.displayName = data.displayName;
         this.type = data.type;
         this.category = data.category;
         this.basePower = data.basePower;

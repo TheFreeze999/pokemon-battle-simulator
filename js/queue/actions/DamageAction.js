@@ -12,7 +12,7 @@ class DamageAction extends BattleAction {
     async execute() {
         if (this.amount < 0)
             return;
-        console.log(`${this.target.name} took ${this.amount} damage!`);
+        console.log(`${this.target.displayName} took ${this.amount} damage!`);
         this.target.stats.currentHp -= this.amount;
         await delay(1000);
         if (this.target.stats.currentHp <= 0) {
@@ -20,7 +20,7 @@ class DamageAction extends BattleAction {
             this.queue?.push(faintAction);
             return;
         }
-        console.log(`${this.target.name} now has ${this.target.stats.currentHp} HP!`);
+        console.log(`${this.target.displayName} now has ${this.target.stats.currentHp} HP!`);
     }
 }
 export default DamageAction;

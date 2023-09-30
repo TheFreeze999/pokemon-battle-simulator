@@ -2,11 +2,14 @@ import Type from "./Type.js";
 import { random as randomInteger } from "./util.js";
 
 type MoveData =
-	Pick<Move, "name" | "type" | "category" | "basePower"> &
+	/* Required Fields */
+	Pick<Move, "name" | "displayName" | "type" | "category" | "basePower"> &
+	/* Optional Fields */
 	Partial<Pick<Move, "priority">>;
 
 class Move {
 	readonly name: string;
+	readonly displayName: string;
 	readonly type: Type;
 	readonly category: Move.Category;
 	readonly basePower?: number;
@@ -14,6 +17,7 @@ class Move {
 
 	constructor(data: MoveData) {
 		this.name = data.name;
+		this.displayName = data.displayName;
 		this.type = data.type;
 		this.category = data.category;
 		this.basePower = data.basePower;

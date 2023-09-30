@@ -12,7 +12,7 @@ class Battler {
 	moves: Move[] = [];
 	stats: Stats.CreatureStats;
 	statBoosts: Stats.BaseStatsWithoutHP = Stats.BaseStatsWithoutHP.createDefault();
-	name: string;
+	displayName: string;
 	fainted = false;
 
 	constructor(public readonly creature: Creature) {
@@ -20,7 +20,7 @@ class Battler {
 		this.types = creature.species.types;
 		this.moves = creature.moves;
 		this.stats = creature.stats;
-		this.name = creature.species.name;
+		this.displayName = creature.species.displayName;
 	}
 
 	get battle() {

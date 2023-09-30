@@ -9,7 +9,7 @@ class MoveAction extends BattleAction {
 		super();
 	}
 	async execute() {
-		console.log(`${this.user.name} used ${this.move.name} on ${this.target.name}`);
+		console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
 
 		await delay(2000);
 
