@@ -7,7 +7,6 @@ import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
 import { delay } from "./util.js";
 
-
 const battle = new Battle();
 const bulba1 = new Creature(SpeciesDex.bulbasaur);
 const charma1 = new Creature(SpeciesDex.charmander);
@@ -26,14 +25,13 @@ const charma1Battler = new Battler(charma1);
 battle.teams[0].addBattler(bulba1Battler);
 battle.teams[1].addBattler(charma1Battler);
 
-const moveAction = new MoveAction(bulba1Battler, charma1Battler, MoveDex.tackle);
-const moveAction2 = new MoveAction(charma1Battler, bulba1Battler, MoveDex.flamethrower);
+const moveAction = new MoveAction(bulba1Battler, charma1Battler, MoveDex.energy_ball);
+const moveAction2 = new MoveAction(charma1Battler, bulba1Battler, MoveDex.tackle);
 const moveAction3 = new MoveAction(bulba1Battler, charma1Battler, MoveDex.energy_ball);
-const moveAction4 = new MoveAction(charma1Battler, bulba1Battler, MoveDex.tackle);
-const moveAction5 = new MoveAction(bulba1Battler, charma1Battler, MoveDex.energy_ball);
 
 
-battle.queue.push(moveAction, moveAction2, moveAction3, moveAction4, moveAction5);
+
+battle.queue.push(moveAction, moveAction2, moveAction3);
 
 await battle.queue.executeAll();
 

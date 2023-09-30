@@ -12,10 +12,10 @@ class MoveAction extends BattleAction {
 	async execute() {
 		if (this.user.fainted || this.target.fainted) return;
 
+		console.log("-------------")
+
 
 		console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
-
-		await delay(2000);
 
 		if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined) {
 			const userBoostedStats = this.user.calcBoostedStats();
@@ -33,8 +33,10 @@ class MoveAction extends BattleAction {
 			const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
 			const damageAction = new DamageAction(this.target, damageAmount);
 			damageAction.priority = 5;
-			this.queue?.push(damageAction)
+			this.queue?.push(damageAction);
 		}
+
+		this.move.applySecondaryEffects(this.user, this.target);
 	}
 }
 

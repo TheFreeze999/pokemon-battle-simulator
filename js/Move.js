@@ -1,4 +1,4 @@
-import { random as randomInteger } from "./util.js";
+import { randomInteger as randomInteger } from "./util.js";
 class Move {
     name;
     displayName;
@@ -6,6 +6,7 @@ class Move {
     category;
     basePower;
     priority;
+    applySecondaryEffects;
     constructor(data) {
         this.name = data.name;
         this.displayName = data.displayName;
@@ -13,6 +14,7 @@ class Move {
         this.category = data.category;
         this.basePower = data.basePower;
         this.priority = data.priority ?? 0;
+        this.applySecondaryEffects = data.applySecondaryEffects || (() => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {
         const randomMultiplier = randomInteger(85, 100) / 100;

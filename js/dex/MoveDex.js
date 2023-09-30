@@ -1,5 +1,6 @@
 import Move from "../Move.js";
 import Type from "../Type.js";
+import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 var MoveDex;
 (function (MoveDex) {
     MoveDex.tackle = new Move({
@@ -21,7 +22,13 @@ var MoveDex;
         displayName: "Energy Ball",
         type: Type.GRASS,
         category: Move.Category.SPECIAL,
-        basePower: 90
+        basePower: 90,
+        applySecondaryEffects(user, target) {
+            const statDropAction = new StatStageChangeAction(target, "specialDefense", -12);
+            statDropAction.chance = [50, 100];
+            statDropAction.priority = 3;
+            target.battle?.queue.push(statDropAction);
+        }
     });
 })(MoveDex || (MoveDex = {}));
 export default MoveDex;

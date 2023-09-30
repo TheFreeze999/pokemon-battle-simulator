@@ -1,5 +1,8 @@
+import Battler from "../Battler.js";
 import Move from "../Move.js";
 import Type from "../Type.js";
+import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
+import { randomInteger } from '../util.js';
 
 namespace MoveDex {
 	export const tackle = new Move({
@@ -21,7 +24,13 @@ namespace MoveDex {
 		displayName: "Energy Ball",
 		type: Type.GRASS,
 		category: Move.Category.SPECIAL,
-		basePower: 90
+		basePower: 90,
+		applySecondaryEffects(user: Battler, target: Battler) {
+			const statDropAction = new StatStageChangeAction(target, "specialDefense", -12);
+			statDropAction.chance = [50, 100];
+			statDropAction.priority = 3;
+			target.battle?.queue.push(statDropAction);
+		}
 	});
 }
 
