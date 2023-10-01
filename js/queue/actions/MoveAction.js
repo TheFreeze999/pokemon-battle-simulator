@@ -52,6 +52,7 @@ class MoveAction extends BattleAction {
                 const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
                 const damageAction = new DamageAction(this.target, damageAmount);
                 damageAction.priority = 5;
+                damageAction.isDirectDamage = true;
                 this.queue?.push(damageAction);
             }
         }
@@ -63,7 +64,7 @@ class MoveAction extends BattleAction {
         let accuracy = this.move.accuracy;
         if (this.forceMoveHit === true)
             return true;
-        if (accuracy === -1)
+        if (accuracy < 0)
             return true;
         const random = randomInteger(1, 100);
         const attackerAccuracy = this.user.getEffectiveAccuracyAndEvasion().accuracy;

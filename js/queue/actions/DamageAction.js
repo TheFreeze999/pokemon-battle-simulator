@@ -3,6 +3,7 @@ import FaintAction from "./FaintAction.js";
 class DamageAction extends BattleAction {
     target;
     amount;
+    isDirectDamage = false;
     constructor(target, amount) {
         super();
         this.target = target;

@@ -4,6 +4,7 @@ import BattleAction from "../BattleAction.js";
 import FaintAction from "./FaintAction.js";
 
 class DamageAction extends BattleAction {
+	isDirectDamage = false;
 	constructor(public target: Battler, public amount: number) {
 		super();
 	}

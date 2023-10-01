@@ -48,6 +48,22 @@ var AbilityDex;
             }
         ]
     });
+    AbilityDex.compound_eyes = new Ability({
+        name: "compound_eyes",
+        displayName: "Compound Eyes",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.user !== owner)
+                        return;
+                    battleAction.accuracyMultiplier *= 1.3;
+                }
+            }
+        ]
+    });
     AbilityDex.no_guard = new Ability({
         name: "no_guard",
         displayName: "No Guard",

@@ -10,6 +10,7 @@ var MoveDex;
         type: Type.DRAGON,
         category: Move.Category.SPECIAL,
         accuracy: 100,
+        dealStandardDamage: false,
         applySecondaryEffects(moveAction) {
             if (TypeUtils.calculateEffectiveness([Type.DRAGON], moveAction.target.types) === 0) {
                 console.log(TypeUtils.getInfoFromEffectiveness(0));
