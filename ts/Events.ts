@@ -20,6 +20,14 @@ namespace Events {
 			this.events = this.events.filter(event => event.id !== id);
 			return removeCount;
 		}
+
+		async awaitDispatch(id: ID) {
+			return new Promise<void>((resolve, reject) => {
+				this.addEventListener(id, () => {
+					resolve();
+				})
+			})
+		}
 	}
 	export interface Data {
 		id: ID;

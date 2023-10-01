@@ -1,5 +1,6 @@
 import Ability from "../Ability.js";
 import Battler from "../Battler.js";
+import Events from "../Events.js";
 import { randomInteger } from "../util.js";
 import BattleQueue from "./BattleQueue.js";
 
@@ -17,6 +18,8 @@ abstract class BattleAction {
 
 	flags: Record<keyof any, boolean> = {};
 
+	eventHandler = new Events.Handler();
+
 	/** The BattleAction will not be modified or executed if this function returns false */
 	clause() { return true; };
 
@@ -24,7 +27,10 @@ abstract class BattleAction {
 
 	async modifyThenExecuteIfAllowed() {
 		if (!this.clause()) return;
+		this.eventHandler.dispatchEvent('clause passed');
+
 		this.applyModificationsToSelf();
+		this.eventHandler.dispatchEvent('modifications applied');
 
 		if (!this.toExecute) return;
 		const [selected, total] = this.chance;
@@ -32,10 +38,12 @@ abstract class BattleAction {
 		if (randomNum > selected) return;
 
 		this.executionStarted = true;
+		this.eventHandler.dispatchEvent('before execution')
 		await this.execute();
+		this.eventHandler.dispatchEvent('after execution')
 	}
 
-	async applyModificationsToSelf() {
+	applyModificationsToSelf() {
 		if (!this.queue) return;
 		const allBattlers = this.queue.battle.allBattlers;
 		const battlerModifierPairs: { battler: Battler, modifier: BattleAction.Modifier }[] = [];
@@ -59,8 +67,9 @@ abstract class BattleAction {
 	}
 
 	removeSelfFromQueue() {
-		if (!this.queue) return
+		if (!this.queue) return;
 		this.queue.actions.splice(this.queue.actions.indexOf(this), 1);
+		this.eventHandler.dispatchEvent('remove')
 	}
 }
 

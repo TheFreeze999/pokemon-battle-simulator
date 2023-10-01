@@ -8,12 +8,12 @@ import MoveAction from "./queue/actions/MoveAction.js";
 const battle = new Battle();
 
 const creature0 = new Creature(SpeciesDex.squirtle);
-const creature1 = new Creature(SpeciesDex.litwick);
+const creature1 = new Creature(SpeciesDex.jolteon);
 
-creature1.abilitySlot = "secondary";
+// creature1.abilitySlot = "secondary";
 
-creature0.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.dragon_rage, MoveDex.thunder_shock];
-creature1.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.dragon_rage, MoveDex.thunder_shock];
+creature0.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.thunder_shock, MoveDex.energy_ball];
+creature1.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.thunder_shock, MoveDex.energy_ball];
 
 creature0.level = 100;
 creature1.level = 100;
@@ -27,10 +27,7 @@ battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
 
 battle.queue.push(
-	new MoveAction(battler0, battler1, MoveDex.tackle),
-	new MoveAction(battler0, battler1, MoveDex.tackle),
-	new MoveAction(battler0, battler1, MoveDex.tackle),
-	new MoveAction(battler0, battler1, MoveDex.tackle),
+	new MoveAction(battler0, battler1, MoveDex.energy_ball),
 );
 
 await battle.queue.executeAll();

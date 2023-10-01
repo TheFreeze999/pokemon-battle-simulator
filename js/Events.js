@@ -18,6 +18,13 @@ var Events;
             this.events = this.events.filter(event => event.id !== id);
             return removeCount;
         }
+        async awaitDispatch(id) {
+            return new Promise((resolve, reject) => {
+                this.addEventListener(id, () => {
+                    resolve();
+                });
+            });
+        }
     }
     Events.Handler = Handler;
 })(Events || (Events = {}));

@@ -9,6 +9,7 @@ class BattleQueue {
         actions.forEach(action => {
             action.queue = this;
             this.actions.push(action);
+            action.eventHandler.dispatchEvent('add');
         });
     }
     async executeNextActionThenRemove() {

@@ -15,8 +15,6 @@ class MoveAction extends BattleAction {
 	showTypeEffectivenessInfoText = true;
 	missed = false;
 
-	endLogs: string[] = [];
-
 	constructor(public user: Battler, public target: Battler, public move: Move) {
 		super();
 	}
@@ -68,8 +66,6 @@ class MoveAction extends BattleAction {
 		if (this.performSecondaryEffects) {
 			this.move.applySecondaryEffects(this);
 		}
-
-		this.endLogs.forEach(log => console.log(log))
 	}
 
 	didMoveHit() {

@@ -1,3 +1,4 @@
+import Events from "../Events.js";
 import { randomInteger } from "../util.js";
 class BattleAction {
     queue = null;
@@ -8,13 +9,16 @@ class BattleAction {
     executionStarted = false;
     cause = null;
     flags = {};
+    eventHandler = new Events.Handler();
     /** The BattleAction will not be modified or executed if this function returns false */
     clause() { return true; }
     ;
     async modifyThenExecuteIfAllowed() {
         if (!this.clause())
             return;
+        this.eventHandler.dispatchEvent('clause passed');
         this.applyModificationsToSelf();
+        this.eventHandler.dispatchEvent('modifications applied');
         if (!this.toExecute)
             return;
         const [selected, total] = this.chance;
@@ -22,9 +26,11 @@ class BattleAction {
         if (randomNum > selected)
             return;
         this.executionStarted = true;
+        this.eventHandler.dispatchEvent('before execution');
         await this.execute();
+        this.eventHandler.dispatchEvent('after execution');
     }
-    async applyModificationsToSelf() {
+    applyModificationsToSelf() {
         if (!this.queue)
             return;
         const allBattlers = this.queue.battle.allBattlers;
@@ -48,6 +54,7 @@ class BattleAction {
         if (!this.queue)
             return;
         this.queue.actions.splice(this.queue.actions.indexOf(this), 1);
+        this.eventHandler.dispatchEvent('remove');
     }
 }
 export default BattleAction;

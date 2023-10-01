@@ -2,7 +2,6 @@ import BattleAction from "../BattleAction.js";
 class EffectApplicationAction extends BattleAction {
     target;
     effect;
-    reasonText = null;
     constructor(target, effect) {
         super();
         this.target = target;
@@ -16,9 +15,6 @@ class EffectApplicationAction extends BattleAction {
         return true;
     }
     async execute() {
-        if (this.reasonText)
-            console.log(this.reasonText);
-        this.effect.eventHandler.dispatchEvent('application', this.target);
         this.target.addEffect(this.effect);
     }
 }

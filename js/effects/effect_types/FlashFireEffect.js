@@ -6,7 +6,6 @@ class FlashFireEffect extends Effect {
     constructor() {
         super('flash_fire');
         this.eventHandler.addEventListener('application', (battler) => {
-            console.log(`[${battler.displayName}'s Flash Fire]`);
             console.log(`${battler.displayName}'s Fire-type moves were powered up.`);
         });
     }

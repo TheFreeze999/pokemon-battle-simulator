@@ -2,7 +2,6 @@ import BattleAction from "../BattleAction.js";
 class HealAction extends BattleAction {
     target;
     amount;
-    reasonText = null;
     constructor(target, amount) {
         super();
         this.target = target;
@@ -16,8 +15,6 @@ class HealAction extends BattleAction {
         return true;
     }
     async execute() {
-        if (this.reasonText)
-            console.log(this.reasonText);
         let amount = this.amount;
         const maxHealableAmount = this.target.initialStats.hp - this.target.initialStats.currentHp;
         if (amount > maxHealableAmount)

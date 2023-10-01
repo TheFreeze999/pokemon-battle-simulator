@@ -83,12 +83,16 @@ var AbilityDex;
                         return;
                     if (battleAction.move.type !== Type.FIRE)
                         return;
+                    console.log("flashfire should activate");
                     battleAction.negateDirectDamage = true;
                     battleAction.performSecondaryEffects = false;
                     battleAction.showTypeEffectivenessInfoText = false;
                     const flashFireEffectAction = new EffectApplicationAction(owner, new FlashFireEffect());
                     flashFireEffectAction.priority = 15;
                     flashFireEffectAction.cause = battleAction;
+                    flashFireEffectAction.eventHandler.addEventListener('before execution', () => {
+                        console.log(`[${owner.displayName}'s Flash Fire]`);
+                    });
                     battleAction.queue?.push(flashFireEffectAction);
                 }
             }
@@ -113,7 +117,9 @@ var AbilityDex;
                     burnAction.priority = 4;
                     burnAction.cause = battleAction;
                     burnAction.chance = [100, 100];
-                    burnAction.reasonText = `[${owner.displayName}'s Flame Body]`;
+                    burnAction.eventHandler.addEventListener('before execution', () => {
+                        console.log(`[${owner.displayName}'s Flame Body]`);
+                    });
                     battleAction.queue?.push(burnAction);
                 }
             }
@@ -174,9 +180,11 @@ var AbilityDex;
                     battleAction.performSecondaryEffects = false;
                     battleAction.showTypeEffectivenessInfoText = false;
                     const statBoostAction = new StatStageChangeAction(owner, "attack", 1);
-                    statBoostAction.reasonText = `[${owner.displayName}'s Sap Sipper]`;
                     statBoostAction.priority = 15;
                     statBoostAction.cause = battleAction;
+                    statBoostAction.eventHandler.addEventListener('before execution', () => {
+                        console.log(`[${owner.displayName}'s Sap Sipper]`);
+                    });
                     battleAction.queue?.push(statBoostAction);
                 }
             }
@@ -222,9 +230,11 @@ var AbilityDex;
                     battleAction.showTypeEffectivenessInfoText = false;
                     const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
                     const healAction = new HealAction(battleAction.target, healAmount);
-                    healAction.reasonText = `[${owner.displayName}'s Volt Absorb]`;
                     healAction.priority = 15;
                     healAction.cause = battleAction;
+                    healAction.eventHandler.addEventListener('before execution', () => {
+                        console.log(`[${owner.displayName}'s Volt Absorb]`);
+                    });
                     battleAction.queue?.push(healAction);
                 }
             }
@@ -250,9 +260,11 @@ var AbilityDex;
                     battleAction.showTypeEffectivenessInfoText = false;
                     const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
                     const healAction = new HealAction(battleAction.target, healAmount);
-                    healAction.reasonText = `[${owner.displayName}'s Water Absorb]`;
                     healAction.priority = 15;
                     healAction.cause = battleAction;
+                    healAction.eventHandler.addEventListener('before execution', () => {
+                        console.log(`[${owner.displayName}'s Water Absorb]`);
+                    });
                     battleAction.queue?.push(healAction);
                 }
             }

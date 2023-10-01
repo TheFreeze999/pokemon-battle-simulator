@@ -34,7 +34,7 @@ var SpeciesDex;
     SpeciesDex.litwick = new Species({
         name: "litwick",
         displayName: "Litwick",
-        types: [Type.NORMAL, Type.FIRE],
+        types: [Type.GHOST, Type.FIRE],
         baseStats: { hp: 50, attack: 30, defense: 55, specialAttack: 65, specialDefense: 55, speed: 20 },
         abilities: { primary: AbilityDex.flash_fire, secondary: AbilityDex.flame_body },
     });

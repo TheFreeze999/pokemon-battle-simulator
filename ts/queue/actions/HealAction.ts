@@ -4,7 +4,6 @@ import BattleAction from "../BattleAction.js";
 import FaintAction from "./FaintAction.js";
 
 class HealAction extends BattleAction {
-	reasonText: string | null = null;
 	constructor(public target: Battler, public amount: number) {
 		super();
 	}
@@ -14,7 +13,6 @@ class HealAction extends BattleAction {
 		return true;
 	}
 	async execute() {
-		if (this.reasonText) console.log(this.reasonText);
 		let amount = this.amount;
 		const maxHealableAmount = this.target.initialStats.hp - this.target.initialStats.currentHp;
 		if (amount > maxHealableAmount) amount = maxHealableAmount;

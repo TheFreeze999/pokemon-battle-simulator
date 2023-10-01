@@ -82,9 +82,13 @@ class Battler {
 		return this.initialStats.currentHp / this.initialStats.hp * 100;
 	}
 
+	/** @returns true if effect was added successfully */
 	addEffect(effect: Effect) {
+		if (!effect.stackable && this.hasEffect(effect.type)) return false;
 		effect.host = this;
 		this.effects.push(effect);
+		effect.eventHandler.dispatchEvent('application', this);
+		return true;
 	}
 
 	/** @returns true if effect was removed successfully */

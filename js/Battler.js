@@ -72,9 +72,14 @@ class Battler {
     get hpPercentage() {
         return this.initialStats.currentHp / this.initialStats.hp * 100;
     }
+    /** @returns true if effect was added successfully */
     addEffect(effect) {
+        if (!effect.stackable && this.hasEffect(effect.type))
+            return false;
         effect.host = this;
         this.effects.push(effect);
+        effect.eventHandler.dispatchEvent('application', this);
+        return true;
     }
     /** @returns true if effect was removed successfully */
     removeEffect(effect) {
