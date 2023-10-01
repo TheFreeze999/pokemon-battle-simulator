@@ -11,6 +11,11 @@ class StatStageChangeAction extends BattleAction {
         this.stat = stat;
         this.amount = amount;
     }
+    clause() {
+        if (this.target.fainted)
+            return false;
+        return true;
+    }
     async execute() {
         if (this.amount === 0 || this.target.fainted)
             return;

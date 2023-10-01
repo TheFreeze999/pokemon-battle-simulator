@@ -7,7 +7,7 @@ type MoveData =
 	/* Required Fields */
 	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy"> &
 	/* Optional Fields */
-	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects">>;
+	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact">>;
 
 class Move {
 	readonly name: string;
@@ -18,6 +18,7 @@ class Move {
 	readonly priority: number;
 	readonly accuracy: number;
 	readonly dealDirectDamage: boolean;
+	readonly contact: boolean
 	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
 
 	constructor(data: MoveData) {
@@ -29,6 +30,7 @@ class Move {
 		this.priority = data.priority ?? 0;
 		this.accuracy = data.accuracy;
 		this.dealDirectDamage = data.dealDirectDamage ?? true;
+		this.contact = data.contact ?? false;
 		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
 	}
 

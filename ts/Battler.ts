@@ -97,6 +97,10 @@ class Battler {
 
 		return true;
 	}
+
+	hasEffect(type: string) {
+		return this.effects.some(effect => effect.type === type);
+	}
 }
 
 export default Battler;

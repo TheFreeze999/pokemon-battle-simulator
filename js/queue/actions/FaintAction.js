@@ -5,6 +5,11 @@ class FaintAction extends BattleAction {
         super();
         this.target = target;
     }
+    clause() {
+        if (this.target.fainted)
+            return false;
+        return true;
+    }
     async execute() {
         console.log(`${this.target.displayName} fainted!`);
         this.target.fainted = true;

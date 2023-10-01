@@ -1,6 +1,8 @@
 import Move from "../Move.js";
 import Type, { TypeUtils } from "../Type.js";
+import BurnEffect from "../effects/effect_types/status_conditions/BurnEffect.js";
 import DamageAction from "../queue/actions/DamageAction.js";
+import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 var MoveDex;
 (function (MoveDex) {
@@ -44,6 +46,13 @@ var MoveDex;
         category: Move.Category.SPECIAL,
         basePower: 90,
         accuracy: 100,
+        applySecondaryEffects(moveAction) {
+            const burnAction = new EffectApplicationAction(moveAction.target, new BurnEffect());
+            burnAction.chance = [10, 100];
+            burnAction.priority = 3;
+            burnAction.cause = moveAction;
+            moveAction.target.battle?.queue.push(burnAction);
+        }
     });
     MoveDex.hone_claws = new Move({
         name: "hone_claws",
@@ -87,12 +96,29 @@ var MoveDex;
             moveAction.target.battle?.queue.push(statDropAction);
         }
     });
+    MoveDex.surf = new Move({
+        name: "surf",
+        displayName: "Surf",
+        type: Type.WATER,
+        category: Move.Category.SPECIAL,
+        basePower: 90,
+        accuracy: 100,
+    });
     MoveDex.tackle = new Move({
         name: "tackle",
         displayName: "Tackle",
         type: Type.NORMAL,
         category: Move.Category.PHYSICAL,
         basePower: 55,
+        accuracy: 100,
+        contact: true
+    });
+    MoveDex.thunder_shock = new Move({
+        name: "thunder_shock",
+        displayName: "Thunder Shock",
+        type: Type.ELECTRIC,
+        category: Move.Category.SPECIAL,
+        basePower: 40,
         accuracy: 100,
     });
 })(MoveDex || (MoveDex = {}));

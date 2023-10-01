@@ -15,17 +15,21 @@ class MoveAction extends BattleAction {
     performSecondaryEffects = true;
     showTypeEffectivenessInfoText = true;
     missed = false;
+    endLogs = [];
     constructor(user, target, move) {
         super();
         this.user = user;
         this.target = target;
         this.move = move;
     }
-    async execute() {
+    clause() {
         if (this.user.fainted || this.target.fainted)
-            return;
+            return false;
         if (!this.user.moves.includes(this.move))
-            return;
+            return false;
+        return true;
+    }
+    async execute() {
         console.log("-------------");
         if (this.user === this.target)
             console.log(`${this.user.displayName} used ${this.move.displayName}!`);
@@ -60,6 +64,7 @@ class MoveAction extends BattleAction {
         if (this.performSecondaryEffects) {
             this.move.applySecondaryEffects(this);
         }
+        this.endLogs.forEach(log => console.log(log));
     }
     didMoveHit() {
         let accuracy = this.move.accuracy;

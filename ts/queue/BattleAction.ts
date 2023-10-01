@@ -17,9 +17,13 @@ abstract class BattleAction {
 
 	flags: Record<keyof any, boolean> = {};
 
+	/** The BattleAction will not be modified or executed if this function returns false */
+	clause() { return true; };
+
 	protected abstract execute(): Promise<void>;
 
 	async modifyThenExecuteIfAllowed() {
+		if (!this.clause()) return;
 		this.applyModificationsToSelf();
 
 		if (!this.toExecute) return;

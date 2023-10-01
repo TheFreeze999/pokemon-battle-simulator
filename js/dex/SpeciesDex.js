@@ -17,6 +17,27 @@ var SpeciesDex;
         baseStats: { hp: 39, attack: 52, defense: 43, specialAttack: 60, specialDefense: 50, speed: 65 },
         abilities: { primary: AbilityDex.blaze },
     });
+    SpeciesDex.squirtle = new Species({
+        name: "squirtle",
+        displayName: "Squirtle",
+        types: [Type.WATER],
+        baseStats: { hp: 44, attack: 48, defense: 65, specialAttack: 50, specialDefense: 64, speed: 43 },
+        abilities: { primary: AbilityDex.torrent },
+    });
+    SpeciesDex.jolteon = new Species({
+        name: "jolteon",
+        displayName: "Jolteon",
+        types: [Type.ELECTRIC],
+        baseStats: { hp: 65, attack: 65, defense: 60, specialAttack: 110, specialDefense: 95, speed: 130 },
+        abilities: { primary: AbilityDex.volt_absorb },
+    });
+    SpeciesDex.litwick = new Species({
+        name: "litwick",
+        displayName: "Litwick",
+        types: [Type.NORMAL, Type.FIRE],
+        baseStats: { hp: 50, attack: 30, defense: 55, specialAttack: 65, specialDefense: 55, speed: 20 },
+        abilities: { primary: AbilityDex.flash_fire, secondary: AbilityDex.flame_body },
+    });
     SpeciesDex.fletchling = new Species({
         name: "fletchling",
         displayName: "Fletchling",

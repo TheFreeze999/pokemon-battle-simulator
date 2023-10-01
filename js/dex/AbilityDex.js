@@ -1,5 +1,9 @@
 import Ability from "../Ability.js";
 import Type from "../Type.js";
+import FlashFireEffect from "../effects/effect_types/FlashFireEffect.js";
+import BurnEffect from "../effects/effect_types/status_conditions/BurnEffect.js";
+import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js";
+import HealAction from "../queue/actions/HealAction.js";
 import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 var AbilityDex;
@@ -64,6 +68,57 @@ var AbilityDex;
             }
         ]
     });
+    AbilityDex.flash_fire = new Ability({
+        name: "flash_fire",
+        displayName: "Flash Fire",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.target !== owner)
+                        return;
+                    if (battleAction.user === owner)
+                        return;
+                    if (battleAction.move.type !== Type.FIRE)
+                        return;
+                    battleAction.negateDirectDamage = true;
+                    battleAction.performSecondaryEffects = false;
+                    battleAction.showTypeEffectivenessInfoText = false;
+                    const flashFireEffectAction = new EffectApplicationAction(owner, new FlashFireEffect());
+                    flashFireEffectAction.priority = 15;
+                    flashFireEffectAction.cause = battleAction;
+                    battleAction.queue?.push(flashFireEffectAction);
+                }
+            }
+        ]
+    });
+    AbilityDex.flame_body = new Ability({
+        name: "flame_body",
+        displayName: "Flame Body",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.target !== owner)
+                        return;
+                    if (battleAction.user === owner)
+                        return;
+                    if (!battleAction.move.contact)
+                        return;
+                    const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
+                    burnAction.priority = 4;
+                    burnAction.cause = battleAction;
+                    burnAction.chance = [100, 100];
+                    burnAction.reasonText = `[${owner.displayName}'s Flame Body]`;
+                    battleAction.queue?.push(burnAction);
+                }
+            }
+        ]
+    });
     AbilityDex.no_guard = new Ability({
         name: "no_guard",
         displayName: "No Guard",
@@ -111,6 +166,8 @@ var AbilityDex;
                         return;
                     if (battleAction.target !== owner)
                         return;
+                    if (battleAction.user === owner)
+                        return;
                     if (battleAction.move.type !== Type.GRASS)
                         return;
                     battleAction.negateDirectDamage = true;
@@ -141,6 +198,62 @@ var AbilityDex;
                     if (battleAction.move.type !== Type.WATER)
                         return;
                     battleAction.attackStatMultiplier *= 1.5;
+                }
+            }
+        ]
+    });
+    AbilityDex.volt_absorb = new Ability({
+        name: "volt_absorb",
+        displayName: "Volt Absorb",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.target !== owner)
+                        return;
+                    if (battleAction.user === owner)
+                        return;
+                    if (battleAction.move.type !== Type.ELECTRIC)
+                        return;
+                    battleAction.negateDirectDamage = true;
+                    battleAction.performSecondaryEffects = false;
+                    battleAction.showTypeEffectivenessInfoText = false;
+                    const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
+                    const healAction = new HealAction(battleAction.target, healAmount);
+                    healAction.reasonText = `[${owner.displayName}'s Volt Absorb]`;
+                    healAction.priority = 15;
+                    healAction.cause = battleAction;
+                    battleAction.queue?.push(healAction);
+                }
+            }
+        ]
+    });
+    AbilityDex.water_absorb = new Ability({
+        name: "water_absorb",
+        displayName: "Water Absorb",
+        battleActionModifiers: [
+            {
+                priority: 0,
+                modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.target !== owner)
+                        return;
+                    if (battleAction.user === owner)
+                        return;
+                    if (battleAction.move.type !== Type.WATER)
+                        return;
+                    battleAction.negateDirectDamage = true;
+                    battleAction.performSecondaryEffects = false;
+                    battleAction.showTypeEffectivenessInfoText = false;
+                    const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
+                    const healAction = new HealAction(battleAction.target, healAmount);
+                    healAction.reasonText = `[${owner.displayName}'s Water Absorb]`;
+                    healAction.priority = 15;
+                    healAction.cause = battleAction;
+                    battleAction.queue?.push(healAction);
                 }
             }
         ]

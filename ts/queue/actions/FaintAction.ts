@@ -7,6 +7,10 @@ class FaintAction extends BattleAction {
 	constructor(public target: Battler) {
 		super();
 	}
+	clause() {
+		if (this.target.fainted) return false;
+		return true;
+	}
 	async execute() {
 		console.log(`${this.target.displayName} fainted!`);
 		this.target.fainted = true;

@@ -1,3 +1,4 @@
+import Battler from "../../Battler.js";
 import Move from "../../Move.js";
 import Type from "../../Type.js";
 import BattleAction from "../../queue/BattleAction.js";
@@ -7,6 +8,11 @@ import Effect from "../Effect.js";
 class FlashFireEffect extends Effect {
 	constructor() {
 		super('flash_fire');
+
+		this.eventHandler.addEventListener('application', (battler: Battler) => {
+			console.log(`[${battler.displayName}'s Flash Fire]`)
+			console.log(`${battler.displayName}'s Fire-type moves were powered up.`)
+		})
 	}
 
 	battleActionModifiers: BattleAction.Modifier[] = [

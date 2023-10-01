@@ -8,6 +8,7 @@ class Move {
     priority;
     accuracy;
     dealDirectDamage;
+    contact;
     applySecondaryEffects;
     constructor(data) {
         this.name = data.name;
@@ -18,6 +19,7 @@ class Move {
         this.priority = data.priority ?? 0;
         this.accuracy = data.accuracy;
         this.dealDirectDamage = data.dealDirectDamage ?? true;
+        this.contact = data.contact ?? false;
         this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {

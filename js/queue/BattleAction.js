@@ -8,7 +8,12 @@ class BattleAction {
     executionStarted = false;
     cause = null;
     flags = {};
+    /** The BattleAction will not be modified or executed if this function returns false */
+    clause() { return true; }
+    ;
     async modifyThenExecuteIfAllowed() {
+        if (!this.clause())
+            return;
         this.applyModificationsToSelf();
         if (!this.toExecute)
             return;

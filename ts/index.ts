@@ -3,16 +3,17 @@ import Battler from "./Battler.js";
 import Creature from "./Creature.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
-import FlashFireEffect from "./effects/effect_types/FlashFireEffect.js";
 import MoveAction from "./queue/actions/MoveAction.js";
 
 const battle = new Battle();
 
-const creature0 = new Creature(SpeciesDex.honedge);
-const creature1 = new Creature(SpeciesDex.fletchling);
+const creature0 = new Creature(SpeciesDex.squirtle);
+const creature1 = new Creature(SpeciesDex.litwick);
 
-creature0.moves = [MoveDex.tackle, MoveDex.flamethrower, MoveDex.dragon_rage, MoveDex.metal_sound];
-creature1.moves = [MoveDex.tackle, MoveDex.flamethrower, MoveDex.dragon_rage, MoveDex.metal_sound];
+creature1.abilitySlot = "secondary";
+
+creature0.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.dragon_rage, MoveDex.thunder_shock];
+creature1.moves = [MoveDex.tackle, MoveDex.surf, MoveDex.dragon_rage, MoveDex.thunder_shock];
 
 creature0.level = 100;
 creature1.level = 100;
@@ -26,7 +27,10 @@ battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
 
 battle.queue.push(
-	new MoveAction(battler0, battler1, MoveDex.flamethrower)
+	new MoveAction(battler0, battler1, MoveDex.tackle),
+	new MoveAction(battler0, battler1, MoveDex.tackle),
+	new MoveAction(battler0, battler1, MoveDex.tackle),
+	new MoveAction(battler0, battler1, MoveDex.tackle),
 );
 
 await battle.queue.executeAll();

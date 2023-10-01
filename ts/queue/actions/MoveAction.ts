@@ -15,13 +15,18 @@ class MoveAction extends BattleAction {
 	showTypeEffectivenessInfoText = true;
 	missed = false;
 
+	endLogs: string[] = [];
+
 	constructor(public user: Battler, public target: Battler, public move: Move) {
 		super();
 	}
-	async execute() {
-		if (this.user.fainted || this.target.fainted) return;
-		if (!this.user.moves.includes(this.move)) return;
 
+	clause() {
+		if (this.user.fainted || this.target.fainted) return false;
+		if (!this.user.moves.includes(this.move)) return false;
+		return true;
+	}
+	async execute() {
 		console.log("-------------");
 
 		if (this.user === this.target)
@@ -63,6 +68,8 @@ class MoveAction extends BattleAction {
 		if (this.performSecondaryEffects) {
 			this.move.applySecondaryEffects(this);
 		}
+
+		this.endLogs.forEach(log => console.log(log))
 	}
 
 	didMoveHit() {

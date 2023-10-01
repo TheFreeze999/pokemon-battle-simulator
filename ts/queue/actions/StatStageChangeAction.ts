@@ -7,6 +7,10 @@ class StatStageChangeAction extends BattleAction {
 	constructor(public target: Battler, public stat: keyof (Stats.BaseStatsWithoutHP & Stats.AccuracyEvasionStats), public amount: number) {
 		super();
 	}
+	clause() {
+		if (this.target.fainted) return false;
+		return true;
+	}
 	async execute() {
 		if (this.amount === 0 || this.target.fainted) return;
 

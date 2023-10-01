@@ -8,12 +8,18 @@ class DamageAction extends BattleAction {
 	constructor(public target: Battler, public amount: number) {
 		super();
 	}
+	clause() {
+		if (this.target.fainted) return false;
+		if (this.amount <= 0) return false;
+		return true;
+	}
 	async execute() {
-		if (this.amount < 0) return;
+		let amount = this.amount;
+		if (amount > this.target.initialStats.currentHp) amount = this.target.initialStats.currentHp;
 
-		console.log(`${this.target.displayName} took ${this.amount} damage!`);
+		console.log(`${this.target.displayName} took ${amount} damage!`);
 
-		this.target.initialStats.currentHp -= this.amount;
+		this.target.initialStats.currentHp -= amount;
 
 		if (this.target.initialStats.currentHp <= 0) {
 			const faintAction = new FaintAction(this.target);

@@ -85,5 +85,8 @@ class Battler {
         this.effects.splice(index, 1);
         return true;
     }
+    hasEffect(type) {
+        return this.effects.some(effect => effect.type === type);
+    }
 }
 export default Battler;
