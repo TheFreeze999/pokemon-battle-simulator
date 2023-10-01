@@ -32,6 +32,8 @@ class MoveAction extends BattleAction {
 		else
 			console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
 
+		await delay(500);
+
 		const moveHit = this.didMoveHit();
 		if (!moveHit) {
 			console.log(`The move missed!`);

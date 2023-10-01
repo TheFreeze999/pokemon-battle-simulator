@@ -27,7 +27,8 @@ battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
 
 battle.queue.push(
-	new MoveAction(battler0, battler1, MoveDex.energy_ball),
+	new MoveAction(battler0, battler1, MoveDex.thunder_shock),
+	new MoveAction(battler1, battler0, MoveDex.tackle),
 );
 
 await battle.queue.executeAll();

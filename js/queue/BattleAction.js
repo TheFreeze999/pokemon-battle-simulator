@@ -27,6 +27,9 @@ class BattleAction {
             return;
         this.executionStarted = true;
         this.eventHandler.dispatchEvent('before execution');
+        if (this.queue?.paused) {
+            await this.queue.eventHandler.awaitDispatch('resume');
+        }
         await this.execute();
         this.eventHandler.dispatchEvent('after execution');
     }

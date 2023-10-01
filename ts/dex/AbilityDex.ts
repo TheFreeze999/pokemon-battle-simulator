@@ -7,6 +7,7 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import HealAction from "../queue/actions/HealAction.js";
 import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
+import { delay } from "../util.js";
 
 namespace AbilityDex {
 	export const no_ability = new Ability({
@@ -19,13 +20,18 @@ namespace AbilityDex {
 		battleActionModifiers: [
 			{
 				priority: 0,
-				modify(battleAction, owner) {
+				async modify(battleAction, owner) {
 					if (!(battleAction instanceof StatStageChangeAction)) return;
 					if (battleAction.target !== owner) return;
 					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
 					battleAction.toExecute = false;
 					console.log(`[${owner.displayName}'s Big Pecks]`);
 					console.log(`${owner.displayName}'s defense was not lowered.`);
+
+					battleAction.queue?.pause();
+					console.log(`[${owner.displayName}'s Big Pecks]`);
+					await delay(2000)
+					battleAction.queue?.resume();
 				}
 			}
 		]
@@ -83,8 +89,11 @@ namespace AbilityDex {
 					const flashFireEffectAction = new EffectApplicationAction(owner, new FlashFireEffect());
 					flashFireEffectAction.priority = 15;
 					flashFireEffectAction.cause = battleAction;
-					flashFireEffectAction.eventHandler.addEventListener('before execution', () => {
+					flashFireEffectAction.eventHandler.addEventListener('before execution', async () => {
+						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Flash Fire]`);
+						await delay(2000)
+						battleAction.queue?.resume();
 					});
 					battleAction.queue?.push(flashFireEffectAction);
 				}
@@ -107,8 +116,11 @@ namespace AbilityDex {
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
 					burnAction.chance = [100, 100];
-					burnAction.eventHandler.addEventListener('before execution', () => {
+					burnAction.eventHandler.addEventListener('before execution', async () => {
+						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Flame Body]`);
+						await delay(2000)
+						battleAction.queue?.resume();
 					});
 					battleAction.queue?.push(burnAction);
 				}
@@ -165,8 +177,11 @@ namespace AbilityDex {
 					const statBoostAction = new StatStageChangeAction(owner, "attack", 1);
 					statBoostAction.priority = 15;
 					statBoostAction.cause = battleAction;
-					statBoostAction.eventHandler.addEventListener('before execution', () => {
+					statBoostAction.eventHandler.addEventListener('before execution', async () => {
+						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Sap Sipper]`);
+						await delay(2000)
+						battleAction.queue?.resume();
 					});
 					battleAction.queue?.push(statBoostAction);
 				}
@@ -211,8 +226,11 @@ namespace AbilityDex {
 					const healAction = new HealAction(battleAction.target, healAmount)
 					healAction.priority = 15;
 					healAction.cause = battleAction;
-					healAction.eventHandler.addEventListener('before execution', () => {
+					healAction.eventHandler.addEventListener('before execution', async () => {
+						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Volt Absorb]`);
+						await delay(2000)
+						battleAction.queue?.resume();
 					});
 					battleAction.queue?.push(healAction);
 				}
@@ -239,8 +257,11 @@ namespace AbilityDex {
 					const healAction = new HealAction(battleAction.target, healAmount)
 					healAction.priority = 15;
 					healAction.cause = battleAction;
-					healAction.eventHandler.addEventListener('before execution', () => {
+					healAction.eventHandler.addEventListener('before execution', async () => {
+						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Water Absorb]`);
+						await delay(2000)
+						battleAction.queue?.resume();
 					});
 					battleAction.queue?.push(healAction);
 				}

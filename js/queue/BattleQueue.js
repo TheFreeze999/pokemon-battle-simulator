@@ -1,7 +1,10 @@
+import Events from "../Events.js";
 class BattleQueue {
     battle;
     actions = [];
     currentlyBeingExecuted = null;
+    paused = false;
+    eventHandler = new Events.Handler();
     constructor(battle) {
         this.battle = battle;
     }
@@ -21,8 +24,17 @@ class BattleQueue {
     }
     async executeAll() {
         while (this.actions.length > 0) {
-            await this.executeNextActionThenRemove();
+            if (!this.paused)
+                await this.executeNextActionThenRemove();
         }
+    }
+    pause() {
+        this.eventHandler.dispatchEvent('pause');
+        this.paused = true;
+    }
+    resume() {
+        this.eventHandler.dispatchEvent('resume');
+        this.paused = false;
     }
 }
 export default BattleQueue;

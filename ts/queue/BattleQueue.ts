@@ -1,9 +1,12 @@
 import Battle from "../Battle.js";
+import Events from "../Events.js";
 import BattleAction from "./BattleAction.js";
 
 class BattleQueue {
 	actions: BattleAction[] = [];
 	currentlyBeingExecuted: BattleAction | null = null;
+	paused = false;
+	eventHandler = new Events.Handler();
 	constructor(public readonly battle: Battle) {
 
 	}
@@ -26,8 +29,18 @@ class BattleQueue {
 
 	async executeAll() {
 		while (this.actions.length > 0) {
-			await this.executeNextActionThenRemove();
+			if (!this.paused)
+				await this.executeNextActionThenRemove();
 		}
+	}
+
+	pause() {
+		this.eventHandler.dispatchEvent('pause');
+		this.paused = true;
+	}
+	resume() {
+		this.eventHandler.dispatchEvent('resume');
+		this.paused = false;
 	}
 }
 

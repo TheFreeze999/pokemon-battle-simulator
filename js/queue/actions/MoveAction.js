@@ -1,6 +1,6 @@
 import Move from "../../Move.js";
 import { TypeUtils } from "../../Type.js";
-import { randomInteger } from "../../util.js";
+import { delay, randomInteger } from "../../util.js";
 import BattleAction from "../BattleAction.js";
 import DamageAction from "./DamageAction.js";
 class MoveAction extends BattleAction {
@@ -34,6 +34,7 @@ class MoveAction extends BattleAction {
             console.log(`${this.user.displayName} used ${this.move.displayName}!`);
         else
             console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
+        await delay(500);
         const moveHit = this.didMoveHit();
         if (!moveHit) {
             console.log(`The move missed!`);
