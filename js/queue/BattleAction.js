@@ -28,6 +28,11 @@ class BattleAction {
             for (const modifier of battler.ability.battleActionModifiers) {
                 battlerModifierPairs.push({ battler, modifier });
             }
+            for (const effect of battler.effects) {
+                for (const modifier of effect.battleActionModifiers) {
+                    battlerModifierPairs.push({ battler, modifier });
+                }
+            }
         }
         const battlerModifierPairsSorted = battlerModifierPairs.sort((a, b) => b.modifier.priority - a.modifier.priority);
         for (const { battler, modifier } of battlerModifierPairsSorted) {

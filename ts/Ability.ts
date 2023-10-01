@@ -9,20 +9,12 @@ type AbilityData =
 class Ability {
 	readonly name: string;
 	readonly displayName: string;
-	readonly battleActionModifiers: Ability.BattleActionModifier[];
+	readonly battleActionModifiers: BattleAction.Modifier[];
 
 	constructor(data: AbilityData) {
 		this.name = data.name;
 		this.displayName = data.displayName;
 		this.battleActionModifiers = data.battleActionModifiers ?? []
-	}
-}
-
-namespace Ability {
-	export interface BattleActionModifier {
-		/** Highest first */
-		priority: number;
-		modify(battleAction: BattleAction, owner: Battler): void;
 	}
 }
 

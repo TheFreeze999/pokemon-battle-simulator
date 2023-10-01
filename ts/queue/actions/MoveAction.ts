@@ -8,6 +8,7 @@ import DamageAction from "./DamageAction.js";
 class MoveAction extends BattleAction {
 	attackStatMultiplier = 1;
 	accuracyMultiplier = 1;
+	directDamageMultiplier = 1;
 	forceMoveHit = false;
 	negateDirectDamage = false;
 	performSecondaryEffects = true;
@@ -36,7 +37,7 @@ class MoveAction extends BattleAction {
 		}
 
 
-		if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealStandardDamage) {
+		if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
 			const userBoostedStats = this.user.getEffectiveStats();
 			const targetBoostedStats = this.target.getEffectiveStats();
 			let attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
@@ -46,7 +47,7 @@ class MoveAction extends BattleAction {
 
 			const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
 			const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
-			const multiplier = typeEffectiveness * stab;
+			const multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
 
 			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
 			if (typeEffectivenessInfoText && this.showTypeEffectivenessInfoText) console.log(typeEffectivenessInfoText);

@@ -5,6 +5,7 @@ import { objectClone, removeNullAndUndefined } from "./util.js";
 import Move from "./Move.js";
 import Stats from './Stats.js';
 import Ability from "./Ability.js";
+import Effect from "./effects/Effect.js";
 
 class Battler {
 	team: Team | null = null;
@@ -15,9 +16,11 @@ class Battler {
 	accuracyEvasionBoosts = Stats.AccuracyEvasionStats.createDefault();
 	displayName: string;
 	ability: Ability;
+	fainted = false;
 
 	moves: Move[] = [];
-	fainted = false;
+
+	effects: Effect[] = [];
 
 	constructor(public readonly creature: Creature) {
 		this.level = this.creature.level;
@@ -77,6 +80,22 @@ class Battler {
 
 	get hpPercentage() {
 		return this.initialStats.currentHp / this.initialStats.hp * 100;
+	}
+
+	addEffect(effect: Effect) {
+		effect.host = this;
+		this.effects.push(effect);
+	}
+
+	/** @returns true if effect was removed successfully */
+	removeEffect(effect: Effect) {
+		const index = this.effects.indexOf(effect);
+		if (index < 0) return false;
+
+		effect.host = null;
+		this.effects.splice(index, 1);
+
+		return true;
 	}
 }
 

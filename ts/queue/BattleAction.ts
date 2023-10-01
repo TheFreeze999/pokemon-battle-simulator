@@ -34,10 +34,16 @@ abstract class BattleAction {
 	async applyModificationsToSelf() {
 		if (!this.queue) return;
 		const allBattlers = this.queue.battle.allBattlers;
-		const battlerModifierPairs: { battler: Battler, modifier: Ability.BattleActionModifier }[] = [];
+		const battlerModifierPairs: { battler: Battler, modifier: BattleAction.Modifier }[] = [];
 		for (const battler of allBattlers) {
 			for (const modifier of battler.ability.battleActionModifiers) {
-				battlerModifierPairs.push({ battler, modifier })
+				battlerModifierPairs.push({ battler, modifier });
+			}
+
+			for (const effect of battler.effects) {
+				for (const modifier of effect.battleActionModifiers) {
+					battlerModifierPairs.push({ battler, modifier });
+				}
 			}
 		}
 
@@ -51,6 +57,14 @@ abstract class BattleAction {
 	removeSelfFromQueue() {
 		if (!this.queue) return
 		this.queue.actions.splice(this.queue.actions.indexOf(this), 1);
+	}
+}
+
+namespace BattleAction {
+	export interface Modifier {
+		/** Highest first */
+		priority: number;
+		modify(battleAction: BattleAction, owner: Battler): void;
 	}
 }
 

@@ -10,8 +10,9 @@ class Battler {
     accuracyEvasionBoosts = Stats.AccuracyEvasionStats.createDefault();
     displayName;
     ability;
-    moves = [];
     fainted = false;
+    moves = [];
+    effects = [];
     constructor(creature) {
         this.creature = creature;
         this.level = this.creature.level;
@@ -70,6 +71,19 @@ class Battler {
     }
     get hpPercentage() {
         return this.initialStats.currentHp / this.initialStats.hp * 100;
+    }
+    addEffect(effect) {
+        effect.host = this;
+        this.effects.push(effect);
+    }
+    /** @returns true if effect was removed successfully */
+    removeEffect(effect) {
+        const index = this.effects.indexOf(effect);
+        if (index < 0)
+            return false;
+        effect.host = null;
+        this.effects.splice(index, 1);
+        return true;
     }
 }
 export default Battler;
