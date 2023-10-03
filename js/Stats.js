@@ -25,6 +25,21 @@ var Stats;
             return normalizeStats(stats);
         }
         BaseStatsWithoutHP.normalize = normalize;
+        /**
+         * @param mode Input 1 to only return positive stats, input -1 to only return negative stats.
+         */
+        function getOnlyPositiveOrNegative(stats, mode) {
+            const onlyPositiveStats = Stats.BaseStatsWithoutHP.createDefault();
+            for (const _stat in stats) {
+                const stat = _stat;
+                if (mode === 1)
+                    onlyPositiveStats[stat] = clamp(stats[stat], 0, 6);
+                else
+                    onlyPositiveStats[stat] = clamp(stats[stat], -6, 0);
+            }
+            return onlyPositiveStats;
+        }
+        BaseStatsWithoutHP.getOnlyPositiveOrNegative = getOnlyPositiveOrNegative;
     })(BaseStatsWithoutHP = Stats.BaseStatsWithoutHP || (Stats.BaseStatsWithoutHP = {}));
     let BaseStats;
     (function (BaseStats) {

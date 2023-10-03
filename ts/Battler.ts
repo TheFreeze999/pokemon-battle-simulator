@@ -1,7 +1,7 @@
 import Team from "./Team.js";
 import Creature from "./Creature.js";
 import Type from "./Type.js";
-import { objectClone, removeNullAndUndefined } from "./util.js";
+import { clamp, objectClone, removeNullAndUndefined } from "./util.js";
 import Move from "./Move.js";
 import Stats from './Stats.js';
 import Ability from "./Ability.js";
@@ -14,6 +14,7 @@ class Battler {
 	initialStats: Stats.CreatureStats;
 	statBoosts = Stats.BaseStatsWithoutHP.createDefault();
 	accuracyEvasionBoosts = Stats.AccuracyEvasionStats.createDefault();
+	criticalHitRatio = 0;
 	displayName: string;
 	ability: Ability;
 	fainted = false;
@@ -44,11 +45,12 @@ class Battler {
 		return this.team.enemyTeam.battlers;
 	}
 
-	getEffectiveStats() {
+	getEffectiveStats(statBoosts = this.statBoosts) {
 		const stats = objectClone(this.initialStats);
-		const boostableStatNames = Object.keys(this.statBoosts) as (keyof Stats.BaseStatsWithoutHP)[]
+
+		const boostableStatNames = Object.keys(statBoosts) as (keyof Stats.BaseStatsWithoutHP)[]
 		for (const statName of boostableStatNames) {
-			const boost = this.statBoosts[statName];
+			const boost = statBoosts[statName];
 			const boostAbs = Math.abs(boost);
 			let numerator = 2;
 			let denominator = 2;

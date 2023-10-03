@@ -32,6 +32,21 @@ namespace Stats {
 		export function normalize(stats: BaseStatsWithoutHP) {
 			return normalizeStats(stats) as BaseStatsWithoutHP;
 		}
+
+		/**
+		 * @param mode Input 1 to only return positive stats, input -1 to only return negative stats.
+		 */
+		export function getOnlyPositiveOrNegative(stats: BaseStatsWithoutHP, mode: 1 | -1) {
+			const onlyPositiveStats = Stats.BaseStatsWithoutHP.createDefault();
+			for (const _stat in stats) {
+				const stat = _stat as keyof BaseStatsWithoutHP;
+				if (mode === 1)
+					onlyPositiveStats[stat] = clamp(stats[stat], 0, 6);
+				else
+					onlyPositiveStats[stat] = clamp(stats[stat], -6, 0);
+			}
+			return onlyPositiveStats;
+		}
 	}
 
 	export interface BaseStats extends BaseStatsWithoutHP {

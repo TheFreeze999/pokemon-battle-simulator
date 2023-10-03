@@ -9,6 +9,7 @@ class Move {
     accuracy;
     dealDirectDamage;
     contact;
+    criticalHitRatio;
     applySecondaryEffects;
     constructor(data) {
         this.name = data.name;
@@ -20,10 +21,11 @@ class Move {
         this.accuracy = data.accuracy;
         this.dealDirectDamage = data.dealDirectDamage ?? true;
         this.contact = data.contact ?? false;
+        this.criticalHitRatio = data.criticalHitRatio ?? 0;
         this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {
-        const randomMultiplier = randomInteger(100, 100) / 100;
+        const randomMultiplier = randomInteger(85, 100) / 100;
         return Math.round(((2 * attackerLevel / 5 + 2) * power * attackingStat / defendingStat / 50 + 2) * randomMultiplier * multiplier);
     }
 }

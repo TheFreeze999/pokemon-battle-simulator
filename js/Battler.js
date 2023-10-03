@@ -8,6 +8,7 @@ class Battler {
     initialStats;
     statBoosts = Stats.BaseStatsWithoutHP.createDefault();
     accuracyEvasionBoosts = Stats.AccuracyEvasionStats.createDefault();
+    criticalHitRatio = 0;
     displayName;
     ability;
     fainted = false;
@@ -35,11 +36,11 @@ class Battler {
             return [];
         return this.team.enemyTeam.battlers;
     }
-    getEffectiveStats() {
+    getEffectiveStats(statBoosts = this.statBoosts) {
         const stats = objectClone(this.initialStats);
-        const boostableStatNames = Object.keys(this.statBoosts);
+        const boostableStatNames = Object.keys(statBoosts);
         for (const statName of boostableStatNames) {
-            const boost = this.statBoosts[statName];
+            const boost = statBoosts[statName];
             const boostAbs = Math.abs(boost);
             let numerator = 2;
             let denominator = 2;

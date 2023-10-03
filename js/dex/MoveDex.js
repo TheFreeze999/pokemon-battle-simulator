@@ -6,6 +6,15 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 var MoveDex;
 (function (MoveDex) {
+    MoveDex.bite = new Move({
+        name: "bite",
+        displayName: "Bite",
+        type: Type.DARK,
+        category: Move.Category.PHYSICAL,
+        basePower: 60,
+        accuracy: 100,
+        contact: true,
+    });
     MoveDex.dragon_rage = new Move({
         name: "dragon_rage",
         displayName: "Dragon Rage",

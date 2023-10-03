@@ -7,6 +7,15 @@ import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 
 namespace MoveDex {
+	export const bite = new Move({
+		name: "bite",
+		displayName: "Bite",
+		type: Type.DARK,
+		category: Move.Category.PHYSICAL,
+		basePower: 60,
+		accuracy: 100,
+		contact: true,
+	});
 	export const dragon_rage = new Move({
 		name: "dragon_rage",
 		displayName: "Dragon Rage",

@@ -7,7 +7,7 @@ type MoveData =
 	/* Required Fields */
 	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy"> &
 	/* Optional Fields */
-	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact">>;
+	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact" | "criticalHitRatio">>;
 
 class Move {
 	readonly name: string;
@@ -18,7 +18,8 @@ class Move {
 	readonly priority: number;
 	readonly accuracy: number;
 	readonly dealDirectDamage: boolean;
-	readonly contact: boolean
+	readonly contact: boolean;
+	readonly criticalHitRatio: number;
 	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
 
 	constructor(data: MoveData) {
@@ -31,11 +32,12 @@ class Move {
 		this.accuracy = data.accuracy;
 		this.dealDirectDamage = data.dealDirectDamage ?? true;
 		this.contact = data.contact ?? false;
+		this.criticalHitRatio = data.criticalHitRatio ?? 0;
 		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
 	}
 
 	static standardDamageCalculation(attackerLevel: number, attackingStat: number, defendingStat: number, power: number, multiplier: number): number {
-		const randomMultiplier = randomInteger(100, 100) / 100;
+		const randomMultiplier = randomInteger(85, 100) / 100;
 
 		return Math.round(((2 * attackerLevel / 5 + 2) * power * attackingStat / defendingStat / 50 + 2) * randomMultiplier * multiplier);
 	}

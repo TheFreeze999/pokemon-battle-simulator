@@ -115,7 +115,7 @@ namespace AbilityDex {
 					const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
-					burnAction.chance = [100, 100];
+					burnAction.chance = [30, 100];
 					burnAction.eventHandler.addEventListener('before execution', async () => {
 						battleAction.queue?.pause();
 						console.log(`[${owner.displayName}'s Flame Body]`);
