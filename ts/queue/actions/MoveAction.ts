@@ -88,6 +88,7 @@ class MoveAction extends BattleAction {
 			const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
 			const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
 			let multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
+			if (typeEffectiveness === 0) this.isCriticalHit = false;
 			if (this.isCriticalHit) multiplier *= 1.5;
 
 			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
