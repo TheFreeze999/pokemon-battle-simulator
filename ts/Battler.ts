@@ -18,6 +18,7 @@ class Battler {
 	displayName: string;
 	ability: Ability;
 	fainted = false;
+	switchedIn = true;
 
 	moves: Move[] = [];
 

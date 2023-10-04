@@ -12,6 +12,7 @@ class Battler {
     displayName;
     ability;
     fainted = false;
+    switchedIn = true;
     moves = [];
     effects = [];
     constructor(creature) {

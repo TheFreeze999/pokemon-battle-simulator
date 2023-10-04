@@ -7,6 +7,16 @@ import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 
 namespace MoveDex {
+	export const accelerock = new Move({
+		name: "accelerock",
+		displayName: "Accelerock",
+		type: Type.ROCK,
+		category: Move.Category.PHYSICAL,
+		basePower: 40,
+		accuracy: 100,
+		contact: true,
+		priority: 1
+	});
 	export const bite = new Move({
 		name: "bite",
 		displayName: "Bite",

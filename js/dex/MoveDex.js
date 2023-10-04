@@ -6,6 +6,16 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 var MoveDex;
 (function (MoveDex) {
+    MoveDex.accelerock = new Move({
+        name: "accelerock",
+        displayName: "Accelerock",
+        type: Type.ROCK,
+        category: Move.Category.PHYSICAL,
+        basePower: 40,
+        accuracy: 100,
+        contact: true,
+        priority: 1
+    });
     MoveDex.bite = new Move({
         name: "bite",
         displayName: "Bite",
