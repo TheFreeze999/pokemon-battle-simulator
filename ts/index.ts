@@ -13,7 +13,7 @@ const creature1 = new Creature(SpeciesDex.litwick);
 creature1.abilitySlot = "secondary";
 
 creature0.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
-creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
+creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.willowisp, MoveDex.energy_ball];
 
 creature0.level = 100;
 creature1.level = 100;

@@ -8,6 +8,7 @@ class DamageAction extends BattleAction {
         super();
         this.target = target;
         this.amount = amount;
+        this.amount = Math.floor(amount);
     }
     clause() {
         if (this.target.fainted)

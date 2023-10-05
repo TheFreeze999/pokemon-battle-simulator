@@ -50,6 +50,19 @@ class Turn {
 	async concludeMainActionPhase() {
 		if (this.phase !== Turn.Phase.MAIN_ACTION) return;
 		this.incrementPhase();
+
+
+		const allBattlers = this.battle.allBattlers;
+		for (const battler of allBattlers) {
+			battler.ability.applyPostActionBattleActions(battler);
+
+			for (const effect of battler.effects) {
+				console.log({ effect })
+				effect.applyPostActionBattleActions(battler);
+			}
+		}
+		await this.battle.queue.executeAll();
+		console.log("post action phase finished");
 	}
 	async concludePostActionPhase() {
 		if (this.phase !== Turn.Phase.POST_ACTION) return;

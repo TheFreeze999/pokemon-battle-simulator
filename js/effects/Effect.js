@@ -9,5 +9,6 @@ class Effect {
     constructor(type) {
         this.type = type;
     }
+    applyPostActionBattleActions(owner) { }
 }
 export default Effect;

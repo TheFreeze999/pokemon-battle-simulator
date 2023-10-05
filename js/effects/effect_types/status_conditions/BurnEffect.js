@@ -1,5 +1,7 @@
 import Move from "../../../Move.js";
+import DamageAction from "../../../queue/actions/DamageAction.js";
 import MoveAction from "../../../queue/actions/MoveAction.js";
+import { delay } from "../../../util.js";
 import Effect from "../../Effect.js";
 class BurnEffect extends Effect {
     constructor() {
@@ -22,5 +24,16 @@ class BurnEffect extends Effect {
             }
         }
     ];
+    applyPostActionBattleActions(owner) {
+        const damageAmount = owner.initialStats.hp / 16;
+        const damageAction = new DamageAction(owner, damageAmount);
+        damageAction.eventHandler.addEventListener('before execution', async () => {
+            owner.battle?.queue.pause();
+            console.log(`${owner.displayName} was hurt by its burn.`);
+            await delay(1000);
+            owner.battle?.queue.resume();
+        });
+        owner.battle?.queue.push(damageAction);
+    }
 }
 export default BurnEffect;

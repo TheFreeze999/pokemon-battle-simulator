@@ -140,5 +140,18 @@ var MoveDex;
         basePower: 40,
         accuracy: 100,
     });
+    MoveDex.willowisp = new Move({
+        name: "willowisp",
+        displayName: "Will-O-Wisp",
+        type: Type.FIRE,
+        category: Move.Category.STATUS,
+        accuracy: 85,
+        applySecondaryEffects(moveAction) {
+            const burnAction = new EffectApplicationAction(moveAction.target, new BurnEffect());
+            burnAction.priority = 3;
+            burnAction.cause = moveAction;
+            moveAction.target.battle?.queue.push(burnAction);
+        }
+    });
 })(MoveDex || (MoveDex = {}));
 export default MoveDex;
