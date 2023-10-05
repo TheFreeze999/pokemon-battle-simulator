@@ -1,12 +1,4 @@
 import { clamp } from "./util.js";
-function normalizeStats(stats) {
-    const modifiedStats = { ...stats };
-    for (const stat in modifiedStats) {
-        modifiedStats[stat] = Math.round(modifiedStats[stat]);
-        modifiedStats[stat] = clamp(modifiedStats[stat], -6, 6);
-    }
-    return modifiedStats;
-}
 var Stats;
 (function (Stats) {
     let BaseStatsWithoutHP;
@@ -21,10 +13,6 @@ var Stats;
             };
         }
         BaseStatsWithoutHP.createDefault = createDefault;
-        function normalize(stats) {
-            return normalizeStats(stats);
-        }
-        BaseStatsWithoutHP.normalize = normalize;
         /**
          * @param mode Input 1 to only return positive stats, input -1 to only return negative stats.
          */
@@ -54,10 +42,6 @@ var Stats;
             };
         }
         BaseStats.createDefault = createDefault;
-        function normalize(stats) {
-            return normalizeStats(stats);
-        }
-        BaseStats.normalize = normalize;
     })(BaseStats = Stats.BaseStats || (Stats.BaseStats = {}));
     let CreatureStats;
     (function (CreatureStats) {
@@ -73,10 +57,6 @@ var Stats;
             };
         }
         CreatureStats.createDefault = createDefault;
-        function normalize(stats) {
-            return normalizeStats(stats);
-        }
-        CreatureStats.normalize = normalize;
     })(CreatureStats = Stats.CreatureStats || (Stats.CreatureStats = {}));
     let AccuracyEvasionStats;
     (function (AccuracyEvasionStats) {
@@ -87,11 +67,16 @@ var Stats;
             };
         }
         AccuracyEvasionStats.createDefault = createDefault;
-        function normalize(stats) {
-            return normalizeStats(stats);
-        }
-        AccuracyEvasionStats.normalize = normalize;
     })(AccuracyEvasionStats = Stats.AccuracyEvasionStats || (Stats.AccuracyEvasionStats = {}));
+    function normalize(stats) {
+        const modifiedStats = { ...stats };
+        for (const stat in modifiedStats) {
+            modifiedStats[stat] = Math.round(modifiedStats[stat]);
+            modifiedStats[stat] = clamp(modifiedStats[stat], -6, 6);
+        }
+        return modifiedStats;
+    }
+    Stats.normalize = normalize;
     function toDisplayName(stat) {
         if (stat === "currentHp")
             return "Current HP";

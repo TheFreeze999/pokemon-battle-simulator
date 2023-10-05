@@ -1,16 +1,7 @@
 import { clamp } from "./util.js";
 
 
-function normalizeStats(stats: Record<string, number>) {
-	const modifiedStats = { ...stats };
 
-	for (const stat in modifiedStats) {
-		modifiedStats[stat] = Math.round(modifiedStats[stat]);
-		modifiedStats[stat] = clamp(modifiedStats[stat], -6, 6);
-	}
-
-	return modifiedStats;
-}
 namespace Stats {
 	export interface BaseStatsWithoutHP {
 		attack: number;
@@ -29,10 +20,6 @@ namespace Stats {
 				speed: 0,
 			}
 		}
-		export function normalize(stats: BaseStatsWithoutHP) {
-			return normalizeStats(stats) as BaseStatsWithoutHP;
-		}
-
 		/**
 		 * @param mode Input 1 to only return positive stats, input -1 to only return negative stats.
 		 */
@@ -63,9 +50,6 @@ namespace Stats {
 				speed: 0,
 			}
 		}
-		export function normalize(stats: BaseStats) {
-			return normalizeStats(stats) as BaseStats;
-		}
 	}
 
 	export interface CreatureStats extends BaseStats {
@@ -83,9 +67,6 @@ namespace Stats {
 				speed: 0,
 			}
 		}
-		export function normalize(stats: CreatureStats) {
-			return normalizeStats(stats) as CreatureStats;
-		}
 	}
 
 	export interface AccuracyEvasionStats {
@@ -99,9 +80,23 @@ namespace Stats {
 				evasion: 0
 			}
 		}
-		export function normalize(stats: AccuracyEvasionStats) {
-			return normalizeStats(stats) as AccuracyEvasionStats;
+	}
+
+	export type AnyTypeOfStats = BaseStatsWithoutHP | BaseStats | CreatureStats | AccuracyEvasionStats;
+
+	export function normalize(stats: BaseStatsWithoutHP): BaseStatsWithoutHP;
+	export function normalize(stats: BaseStats): BaseStats;
+	export function normalize(stats: CreatureStats): CreatureStats;
+	export function normalize(stats: AccuracyEvasionStats): AccuracyEvasionStats;
+	export function normalize(stats: Record<string, number>) {
+		const modifiedStats = { ...stats };
+
+		for (const stat in modifiedStats) {
+			modifiedStats[stat] = Math.round(modifiedStats[stat]);
+			modifiedStats[stat] = clamp(modifiedStats[stat], -6, 6);
 		}
+
+		return modifiedStats;
 	}
 
 	export function toDisplayName(stat: keyof (CreatureStats & AccuracyEvasionStats)) {

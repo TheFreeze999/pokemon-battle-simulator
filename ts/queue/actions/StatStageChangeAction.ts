@@ -18,11 +18,11 @@ class StatStageChangeAction extends BattleAction {
 
 		if (this.stat === "accuracy" || this.stat === "evasion") {
 			this.target.accuracyEvasionBoosts[this.stat] += this.amount;
-			this.target.accuracyEvasionBoosts = Stats.AccuracyEvasionStats.normalize(this.target.accuracyEvasionBoosts);
 		} else {
 			this.target.statBoosts[this.stat] += this.amount;
-			this.target.statBoosts = Stats.BaseStatsWithoutHP.normalize(this.target.statBoosts);
 		}
+		this.target.accuracyEvasionBoosts = Stats.normalize(this.target.accuracyEvasionBoosts);
+		this.target.statBoosts = Stats.normalize(this.target.statBoosts);
 	}
 }
 
