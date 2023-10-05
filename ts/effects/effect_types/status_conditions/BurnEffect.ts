@@ -10,8 +10,11 @@ class BurnEffect extends Effect {
 	constructor() {
 		super('burn');
 
-		this.eventHandler.addEventListener('application', (battler: Battler) => {
-			console.log(`${battler.displayName} was burned.`)
+		this.eventHandler.addEventListener('application', async (battler: Battler) => {
+			battler.battle?.queue.pause();
+			console.log(`${battler.displayName} was burned.`);
+			await delay(500);
+			battler.battle?.queue.resume();
 		})
 	}
 

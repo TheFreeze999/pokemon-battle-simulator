@@ -1,3 +1,4 @@
+import Events from "./Events.js";
 import Team from "./Team.js";
 import Turn from "./Turn.js";
 import BattleQueue from "./queue/BattleQueue.js";
@@ -8,6 +9,10 @@ class Battle {
     ];
     queue = new BattleQueue(this);
     turn = new Turn(this, 0);
+    eventHandler = new Events.Handler();
+    constructor() {
+        this.eventHandler.dispatchEvent('new turn');
+    }
     get allBattlers() {
         return this.teams.flatMap(team => team.battlers);
     }

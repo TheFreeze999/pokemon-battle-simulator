@@ -26,6 +26,8 @@ class BattleQueue {
         while (this.actions.length > 0) {
             if (!this.paused)
                 await this.executeNextActionThenRemove();
+            else
+                await this.eventHandler.awaitDispatch('resume');
         }
     }
     pause() {

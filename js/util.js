@@ -4,9 +4,11 @@ export function removeNullAndUndefined(array) {
 export function objectClone(object) {
     return { ...object };
 }
-export async function delay(ms) {
+export function delay(ms) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), ms);
+        setTimeout(() => {
+            resolve();
+        }, ms);
     });
 }
 export function randomInteger(min, max) {

@@ -4,6 +4,7 @@ import Events from "./Events.js";
 import Move from "./Move.js";
 import BattleAction from "./queue/BattleAction.js";
 import MoveAction from "./queue/actions/MoveAction.js";
+import { delay } from "./util.js";
 
 class Turn {
 	private _phase = Turn.Phase.ACTION_SELECTION;
@@ -32,6 +33,7 @@ class Turn {
 
 	async concludeActionSelectionPhase() {
 		if (this.phase !== Turn.Phase.ACTION_SELECTION) return;
+		console.log("-------------------------------------")
 		this.incrementPhase();
 		for (const [battler, selection] of this.battlerSelections) {
 			if (battler !== selection.user) continue;
@@ -44,11 +46,12 @@ class Turn {
 			selection.user.battle?.queue.push(action);
 		}
 		await this.battle.queue.executeAll();
-		console.log("main action phase finished.")
 	}
 
 	async concludeMainActionPhase() {
 		if (this.phase !== Turn.Phase.MAIN_ACTION) return;
+		console.log("------");
+		await delay(1000);
 		this.incrementPhase();
 
 
@@ -57,16 +60,15 @@ class Turn {
 			battler.ability.applyPostActionBattleActions(battler);
 
 			for (const effect of battler.effects) {
-				console.log({ effect })
 				effect.applyPostActionBattleActions(battler);
 			}
 		}
 		await this.battle.queue.executeAll();
-		console.log("post action phase finished");
 	}
 	async concludePostActionPhase() {
 		if (this.phase !== Turn.Phase.POST_ACTION) return;
 		this.battle.turn = new Turn(this.battle, this.number + 1);
+		this.battle.eventHandler.dispatchEvent('new turn');
 	}
 }
 

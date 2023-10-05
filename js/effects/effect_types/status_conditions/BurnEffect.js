@@ -6,8 +6,11 @@ import Effect from "../../Effect.js";
 class BurnEffect extends Effect {
     constructor() {
         super('burn');
-        this.eventHandler.addEventListener('application', (battler) => {
+        this.eventHandler.addEventListener('application', async (battler) => {
+            battler.battle?.queue.pause();
             console.log(`${battler.displayName} was burned.`);
+            await delay(500);
+            battler.battle?.queue.resume();
         });
     }
     battleActionModifiers = [
