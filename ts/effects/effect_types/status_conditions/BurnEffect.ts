@@ -32,10 +32,7 @@ class BurnEffect extends Effect {
 		const damageAmount = owner.initialStats.hp / 16;
 		const damageAction = new DamageAction(owner, damageAmount);
 		damageAction.eventHandler.addEventListener('before execution', async () => {
-			owner.battle?.queue.pause();
 			console.log(`${owner.displayName} was hurt by its burn.`);
-			await delay(1000);
-			owner.battle?.queue.resume();
 		})
 		owner.battle?.queue.push(damageAction);
 	}
