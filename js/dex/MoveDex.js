@@ -34,7 +34,6 @@ var MoveDex;
         dealDirectDamage: false,
         applySecondaryEffects(moveAction) {
             if (TypeUtils.calculateEffectiveness([Type.DRAGON], moveAction.target.types) === 0) {
-                console.log(TypeUtils.getInfoFromEffectiveness(0));
                 return;
             }
             const damageAction = new DamageAction(moveAction.target, 40);
@@ -114,6 +113,16 @@ var MoveDex;
             statDropAction.cause = moveAction;
             moveAction.target.battle?.queue.push(statDropAction);
         }
+    });
+    MoveDex.shadow_sneak = new Move({
+        name: "shadow_sneak",
+        displayName: "Shadow Sneak",
+        type: Type.GHOST,
+        category: Move.Category.PHYSICAL,
+        basePower: 40,
+        accuracy: 100,
+        contact: true,
+        priority: 1
     });
     MoveDex.surf = new Move({
         name: "surf",

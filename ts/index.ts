@@ -7,13 +7,13 @@ import MoveAction from "./queue/actions/MoveAction.js";
 
 const battle = new Battle();
 
-const creature0 = new Creature(SpeciesDex.squirtle);
+const creature0 = new Creature(SpeciesDex.fletchling);
 const creature1 = new Creature(SpeciesDex.litwick);
 
 creature1.abilitySlot = "secondary";
 
 creature0.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
-creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.willowisp, MoveDex.energy_ball];
+creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.shadow_sneak];
 
 creature0.level = 100;
 creature1.level = 100;
@@ -47,7 +47,7 @@ battle.turn.makeSelection(battler1, {
 	type: 'move',
 	user: battler1,
 	target: battler0,
-	move: MoveDex.accelerock
+	move: MoveDex.thunder_shock
 });
 
 await battle.turn.concludeActionSelectionPhase();
@@ -64,7 +64,24 @@ battle.turn.makeSelection(battler1, {
 	type: 'move',
 	user: battler1,
 	target: battler0,
-	move: MoveDex.accelerock
+	move: MoveDex.thunder_shock
+});
+
+await battle.turn.concludeActionSelectionPhase();
+await battle.turn.concludeMainActionPhase();
+await battle.turn.concludePostActionPhase();
+
+battle.turn.makeSelection(battler0, {
+	type: 'move',
+	user: battler0,
+	target: battler1,
+	move: MoveDex.bite
+});
+battle.turn.makeSelection(battler1, {
+	type: 'move',
+	user: battler1,
+	target: battler0,
+	move: MoveDex.thunder_shock
 });
 
 await battle.turn.concludeActionSelectionPhase();

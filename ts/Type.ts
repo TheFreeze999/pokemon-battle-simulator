@@ -156,6 +156,13 @@ export namespace TypeUtils {
 		else if (effectiveness < 1) return "It's not very effective.";
 		else if (effectiveness > 1) return "It's super effective!";
 	}
+
+	export function getNameFromEffectiveness(effectiveness: number) {
+		if (effectiveness === 1) return "neutral";
+		else if (effectiveness === 0) return "immune";
+		else if (effectiveness < 1) return "resist";
+		return "weak";
+	}
 }
 
 

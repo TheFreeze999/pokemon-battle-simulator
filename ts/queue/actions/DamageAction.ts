@@ -1,5 +1,4 @@
 import Battler from "../../Battler.js";
-import { delay } from "../../util.js";
 import BattleAction from "../BattleAction.js";
 import FaintAction from "./FaintAction.js";
 
@@ -18,7 +17,7 @@ class DamageAction extends BattleAction {
 		let amount = this.amount;
 		if (amount > this.target.initialStats.currentHp) amount = this.target.initialStats.currentHp;
 
-		console.log(`${this.target.displayName} took ${amount} damage!`);
+		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} took ${amount} damage!`);
 
 		this.target.initialStats.currentHp -= amount;
 
@@ -29,7 +28,7 @@ class DamageAction extends BattleAction {
 			return;
 		}
 
-		console.log(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
+		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
 	}
 }
 

@@ -1,4 +1,5 @@
 import Ability from "../Ability.js";
+import Move from "../Move.js";
 import Type from "../Type.js";
 import FlashFireEffect from "../effects/effect_types/FlashFireEffect.js";
 import BurnEffect from "../effects/effect_types/status_conditions/BurnEffect.js";
@@ -7,7 +8,6 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import HealAction from "../queue/actions/HealAction.js";
 import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
-import { delay } from "../util.js";
 
 namespace AbilityDex {
 	export const no_ability = new Ability({
@@ -24,14 +24,11 @@ namespace AbilityDex {
 					if (!(battleAction instanceof StatStageChangeAction)) return;
 					if (battleAction.target !== owner) return;
 					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
+					if (battleAction.cause instanceof MoveAction && battleAction.cause.user === owner) return;
 					battleAction.toExecute = false;
-					console.log(`[${owner.displayName}'s Big Pecks]`);
-					console.log(`${owner.displayName}'s defense was not lowered.`);
-
-					battleAction.queue?.pause();
-					console.log(`[${owner.displayName}'s Big Pecks]`);
-					await delay(2000)
-					battleAction.queue?.resume();
+					if (battleAction.cause instanceof MoveAction && battleAction.cause.move.category !== Move.Category.STATUS) return;
+					await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Big Pecks]`, ["ability"], 1000);
+					await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName}'s defense was not lowered.`);
 				}
 			}
 		]
@@ -80,8 +77,6 @@ namespace AbilityDex {
 					if (battleAction.user === owner) return;
 					if (battleAction.move.type !== Type.FIRE) return;
 
-					console.log("flashfire should activate")
-
 					battleAction.negateDirectDamage = true;
 					battleAction.performSecondaryEffects = false;
 					battleAction.showTypeEffectivenessInfoText = false;
@@ -90,10 +85,7 @@ namespace AbilityDex {
 					flashFireEffectAction.priority = 15;
 					flashFireEffectAction.cause = battleAction;
 					flashFireEffectAction.eventHandler.addEventListener('before execution', async () => {
-						battleAction.queue?.pause();
-						console.log(`[${owner.displayName}'s Flash Fire]`);
-						await delay(2000)
-						battleAction.queue?.resume();
+						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flash Fire]`, ["ability"], 1000);
 					});
 					battleAction.queue?.push(flashFireEffectAction);
 				}
@@ -115,12 +107,9 @@ namespace AbilityDex {
 					const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
-					burnAction.chance = [100, 100];
+					burnAction.chance = [30, 100];
 					burnAction.eventHandler.addEventListener('before execution', async () => {
-						battleAction.queue?.pause();
-						console.log(`[${owner.displayName}'s Flame Body]`);
-						await delay(2000)
-						battleAction.queue?.resume();
+						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flame Body]`, ["ability"], 1000);
 					});
 					battleAction.queue?.push(burnAction);
 				}
@@ -178,10 +167,7 @@ namespace AbilityDex {
 					statBoostAction.priority = 15;
 					statBoostAction.cause = battleAction;
 					statBoostAction.eventHandler.addEventListener('before execution', async () => {
-						battleAction.queue?.pause();
-						console.log(`[${owner.displayName}'s Sap Sipper]`);
-						await delay(2000)
-						battleAction.queue?.resume();
+						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Sap Sipper]`, ["ability"], 1000);
 					});
 					battleAction.queue?.push(statBoostAction);
 				}
@@ -227,10 +213,7 @@ namespace AbilityDex {
 					healAction.priority = 15;
 					healAction.cause = battleAction;
 					healAction.eventHandler.addEventListener('before execution', async () => {
-						battleAction.queue?.pause();
-						console.log(`[${owner.displayName}'s Volt Absorb]`);
-						await delay(2000)
-						battleAction.queue?.resume();
+						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Volt Absorb]`, ["ability"], 1000);
 					});
 					battleAction.queue?.push(healAction);
 				}
@@ -258,10 +241,7 @@ namespace AbilityDex {
 					healAction.priority = 15;
 					healAction.cause = battleAction;
 					healAction.eventHandler.addEventListener('before execution', async () => {
-						battleAction.queue?.pause();
-						console.log(`[${owner.displayName}'s Water Absorb]`);
-						await delay(2000)
-						battleAction.queue?.resume();
+						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Water Absorb]`, ["ability"], 1000);
 					});
 					battleAction.queue?.push(healAction);
 				}

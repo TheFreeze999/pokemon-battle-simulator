@@ -9,8 +9,8 @@ class FlashFireEffect extends Effect {
 	constructor() {
 		super('flash_fire');
 
-		this.eventHandler.addEventListener('application', (battler: Battler) => {
-			console.log(`${battler.displayName}'s Fire-type moves were powered up.`);
+		this.eventHandler.addEventListener('application', async (battler: Battler) => {
+			await battler.battle?.renderer.showTextWhilePausingQueue(`${battler.displayName}'s Fire-type moves were powered up.`);
 		})
 	}
 

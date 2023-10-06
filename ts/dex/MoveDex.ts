@@ -35,7 +35,6 @@ namespace MoveDex {
 		dealDirectDamage: false,
 		applySecondaryEffects(moveAction: MoveAction) {
 			if (TypeUtils.calculateEffectiveness([Type.DRAGON], moveAction.target.types) === 0) {
-				console.log(TypeUtils.getInfoFromEffectiveness(0));
 				return;
 			}
 
@@ -116,6 +115,16 @@ namespace MoveDex {
 			statDropAction.cause = moveAction;
 			moveAction.target.battle?.queue.push(statDropAction);
 		}
+	});
+	export const shadow_sneak = new Move({
+		name: "shadow_sneak",
+		displayName: "Shadow Sneak",
+		type: Type.GHOST,
+		category: Move.Category.PHYSICAL,
+		basePower: 40,
+		accuracy: 100,
+		contact: true,
+		priority: 1
 	});
 	export const surf = new Move({
 		name: "surf",

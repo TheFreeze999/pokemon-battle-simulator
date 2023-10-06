@@ -1,4 +1,5 @@
 import Events from "./Events.js";
+import Renderer from "./Renderer.js";
 import Team from "./Team.js";
 import Turn from "./Turn.js";
 import BattleQueue from "./queue/BattleQueue.js";
@@ -11,6 +12,7 @@ class Battle {
 	queue = new BattleQueue(this);
 	turn = new Turn(this, 0);
 	eventHandler = new Events.Handler();
+	renderer = new Renderer(this, document.querySelector('.container') as HTMLDivElement);
 
 	constructor() {
 		this.eventHandler.dispatchEvent('new turn');

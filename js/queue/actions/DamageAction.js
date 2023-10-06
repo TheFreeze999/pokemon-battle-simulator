@@ -21,7 +21,7 @@ class DamageAction extends BattleAction {
         let amount = this.amount;
         if (amount > this.target.initialStats.currentHp)
             amount = this.target.initialStats.currentHp;
-        console.log(`${this.target.displayName} took ${amount} damage!`);
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} took ${amount} damage!`);
         this.target.initialStats.currentHp -= amount;
         if (this.target.initialStats.currentHp <= 0) {
             const faintAction = new FaintAction(this.target);
@@ -29,7 +29,7 @@ class DamageAction extends BattleAction {
             this.queue?.push(faintAction);
             return;
         }
-        console.log(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }
 export default DamageAction;

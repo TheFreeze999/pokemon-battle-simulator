@@ -19,9 +19,9 @@ class HealAction extends BattleAction {
         const maxHealableAmount = this.target.initialStats.hp - this.target.initialStats.currentHp;
         if (amount > maxHealableAmount)
             amount = maxHealableAmount;
-        console.log(`${this.target.displayName} was healed by ${amount} HP!`);
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} was healed by ${amount} HP!`);
         this.target.initialStats.currentHp += amount;
-        console.log(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }
 export default HealAction;

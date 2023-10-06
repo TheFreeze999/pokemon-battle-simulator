@@ -14,7 +14,7 @@ class StatStageChangeAction extends BattleAction {
 		if (this.amount === 0 || this.target.fainted) return;
 
 		const infoText = Stats.getStatStageChangeInfoText(this.target.displayName, this.stat, this.amount);
-		if (infoText) console.log(infoText);
+		if (infoText) await this.queue?.battle.renderer.showTextWhilePausingQueue(infoText);
 
 		if (this.stat === "accuracy" || this.stat === "evasion") {
 			this.target.accuracyEvasionBoosts[this.stat] += this.amount;

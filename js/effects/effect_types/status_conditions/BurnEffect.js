@@ -6,7 +6,7 @@ class BurnEffect extends Effect {
     constructor() {
         super('burn');
         this.eventHandler.addEventListener('application', async (battler) => {
-            console.log(`${battler.displayName} was burned.`);
+            await battler.battle?.renderer.showTextWhilePausingQueue(`${battler.displayName} was burned.`);
         });
     }
     battleActionModifiers = [
@@ -27,7 +27,7 @@ class BurnEffect extends Effect {
         const damageAmount = owner.initialStats.hp / 16;
         const damageAction = new DamageAction(owner, damageAmount);
         damageAction.eventHandler.addEventListener('before execution', async () => {
-            console.log(`${owner.displayName} was hurt by its burn.`);
+            await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName} was hurt by its burn.`);
         });
         owner.battle?.queue.push(damageAction);
     }

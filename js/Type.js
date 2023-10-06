@@ -152,5 +152,15 @@ export var TypeUtils;
             return "It's super effective!";
     }
     TypeUtils.getInfoFromEffectiveness = getInfoFromEffectiveness;
+    function getNameFromEffectiveness(effectiveness) {
+        if (effectiveness === 1)
+            return "neutral";
+        else if (effectiveness === 0)
+            return "immune";
+        else if (effectiveness < 1)
+            return "resist";
+        return "weak";
+    }
+    TypeUtils.getNameFromEffectiveness = getNameFromEffectiveness;
 })(TypeUtils || (TypeUtils = {}));
 export default Type;

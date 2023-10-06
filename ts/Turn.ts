@@ -4,7 +4,6 @@ import Events from "./Events.js";
 import Move from "./Move.js";
 import BattleAction from "./queue/BattleAction.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { delay } from "./util.js";
 
 class Turn {
 	private _phase = Turn.Phase.ACTION_SELECTION;
@@ -33,7 +32,6 @@ class Turn {
 
 	async concludeActionSelectionPhase() {
 		if (this.phase !== Turn.Phase.ACTION_SELECTION) return;
-		console.log("------------------------------------------------------")
 		this.incrementPhase();
 		for (const [battler, selection] of this.battlerSelections) {
 			if (battler !== selection.user) continue;
@@ -50,8 +48,6 @@ class Turn {
 
 	async concludeMainActionPhase() {
 		if (this.phase !== Turn.Phase.MAIN_ACTION) return;
-		console.log("------");
-		await delay(1000);
 		this.incrementPhase();
 
 

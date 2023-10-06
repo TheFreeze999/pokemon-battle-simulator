@@ -61,16 +61,13 @@ class MoveAction extends BattleAction {
 		return false;
 	}
 	async execute() {
-		console.log("---------------------");
+		let moveUsedText = `${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`;
 		if (this.user === this.target)
-			console.log(`${this.user.displayName} used ${this.move.displayName}!`);
-		else
-			console.log(`${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`);
-
-		await delay(500);
+			moveUsedText = `${this.user.displayName} used ${this.move.displayName}!`;
+		await this.queue?.battle.renderer.showTextWhilePausingQueue(moveUsedText);
 
 		if (this.missed) {
-			console.log(`The move missed!`);
+			await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
 			return;
 		}
 
@@ -91,11 +88,13 @@ class MoveAction extends BattleAction {
 			if (this.isCriticalHit) multiplier *= 1.5;
 
 			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
-			if (typeEffectivenessInfoText && this.showTypeEffectivenessInfoText) console.log(typeEffectivenessInfoText);
+			if (typeEffectivenessInfoText && this.showTypeEffectivenessInfoText) {
+				const name = TypeUtils.getNameFromEffectiveness(typeEffectiveness)
+				await this.queue?.battle.renderer.showTextWhilePausingQueue(typeEffectivenessInfoText, ["type-effectiveness", name]);
+			}
 
 			if (this.isCriticalHit) {
-				console.log(`A critical hit!`);
-				await delay(500);
+				await this.queue?.battle.renderer.showTextWhilePausingQueue(`A critical hit!`, ["critical"]);
 			}
 
 			if (typeEffectiveness !== 0 && !this.negateDirectDamage) {
