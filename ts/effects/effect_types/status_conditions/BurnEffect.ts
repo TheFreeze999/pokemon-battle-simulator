@@ -11,10 +11,7 @@ class BurnEffect extends Effect {
 		super('burn');
 
 		this.eventHandler.addEventListener('application', async (battler: Battler) => {
-			battler.battle?.queue.pause();
 			console.log(`${battler.displayName} was burned.`);
-			await delay(500);
-			battler.battle?.queue.resume();
 		})
 	}
 

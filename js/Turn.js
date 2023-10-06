@@ -26,7 +26,7 @@ class Turn {
     async concludeActionSelectionPhase() {
         if (this.phase !== Turn.Phase.ACTION_SELECTION)
             return;
-        console.log("-------------------------------------");
+        console.log("------------------------------------------------------");
         this.incrementPhase();
         for (const [battler, selection] of this.battlerSelections) {
             if (battler !== selection.user)

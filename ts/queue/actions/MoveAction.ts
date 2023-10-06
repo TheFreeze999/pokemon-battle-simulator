@@ -61,6 +61,7 @@ class MoveAction extends BattleAction {
 		return false;
 	}
 	async execute() {
+		console.log("---------------------");
 		if (this.user === this.target)
 			console.log(`${this.user.displayName} used ${this.move.displayName}!`);
 		else
