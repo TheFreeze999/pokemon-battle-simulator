@@ -4,6 +4,8 @@ import BurnEffect from "../effects/effect_types/status_conditions/BurnEffect.js"
 import DamageAction from "../queue/actions/DamageAction.js";
 import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
+import RemoveItemAction from '../queue/actions/RemoveItemAction.js';
+import GiveItemAction from "../queue/actions/GiveItemAction.js";
 var MoveDex;
 (function (MoveDex) {
     MoveDex.accelerock = new Move({
@@ -160,12 +162,21 @@ var MoveDex;
                 return;
             const userItem = moveAction.user.heldItem;
             const targetItem = moveAction.target.heldItem;
-            moveAction.user.heldItem = targetItem;
-            moveAction.target.heldItem = userItem;
-            if (userItem)
-                await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.target.displayName} received a ${userItem.displayName}!`);
-            if (targetItem)
-                await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.user.displayName} received a ${targetItem.displayName}!`);
+            const userItemRemovalAction = new RemoveItemAction(moveAction.user);
+            const targetItemRemovalAction = new RemoveItemAction(moveAction.target);
+            userItemRemovalAction.priority = 3.1;
+            targetItemRemovalAction.priority = 3.1;
+            moveAction.queue?.push(userItemRemovalAction, targetItemRemovalAction);
+            if (targetItem) {
+                const userItemGiveAction = new GiveItemAction(moveAction.user, targetItem);
+                userItemGiveAction.priority = 3;
+                moveAction.queue?.push(userItemGiveAction);
+            }
+            if (userItem) {
+                const targetItemGiveAction = new GiveItemAction(moveAction.target, userItem);
+                targetItemGiveAction.priority = 3;
+                moveAction.queue?.push(targetItemGiveAction);
+            }
         }
     });
     MoveDex.willowisp = new Move({

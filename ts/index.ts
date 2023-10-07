@@ -14,7 +14,7 @@ const creature1 = new Creature(SpeciesDex.bulbasaur);
 
 
 creature0.moves = [MoveDex.thunder_shock, MoveDex.willowisp, MoveDex.dragon_rage, MoveDex.bite];
-creature1.moves = [MoveDex.thunder_shock, MoveDex.willowisp, MoveDex.dragon_rage, MoveDex.trick];
+creature1.moves = [MoveDex.dragon_rage, MoveDex.trick];
 
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.black_sludge;
