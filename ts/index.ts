@@ -12,7 +12,7 @@ const creature1 = new Creature(SpeciesDex.litwick);
 
 creature1.abilitySlot = "secondary";
 
-creature0.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
+creature0.moves = [MoveDex.tackle, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
 creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.shadow_sneak];
 
 creature0.level = 100;
@@ -37,17 +37,19 @@ battle.teams[1].addBattler(battler1);
 
 await battle.queue.executeAll(); */
 
+// fix bug where flame body will activate even when the move used was stopped by type immunity.
+
 battle.turn.makeSelection(battler0, {
 	type: 'move',
 	user: battler0,
 	target: battler1,
-	move: MoveDex.bite
+	move: MoveDex.tackle
 });
 battle.turn.makeSelection(battler1, {
 	type: 'move',
 	user: battler1,
 	target: battler0,
-	move: MoveDex.thunder_shock
+	move: MoveDex.shadow_sneak
 });
 
 await battle.turn.concludeActionSelectionPhase();
@@ -58,13 +60,13 @@ battle.turn.makeSelection(battler0, {
 	type: 'move',
 	user: battler0,
 	target: battler1,
-	move: MoveDex.bite
+	move: MoveDex.tackle
 });
 battle.turn.makeSelection(battler1, {
 	type: 'move',
 	user: battler1,
 	target: battler0,
-	move: MoveDex.thunder_shock
+	move: MoveDex.shadow_sneak
 });
 
 await battle.turn.concludeActionSelectionPhase();
@@ -75,13 +77,13 @@ battle.turn.makeSelection(battler0, {
 	type: 'move',
 	user: battler0,
 	target: battler1,
-	move: MoveDex.bite
+	move: MoveDex.tackle
 });
 battle.turn.makeSelection(battler1, {
 	type: 'move',
 	user: battler1,
 	target: battler0,
-	move: MoveDex.thunder_shock
+	move: MoveDex.shadow_sneak
 });
 
 await battle.turn.concludeActionSelectionPhase();
