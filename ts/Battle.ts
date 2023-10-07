@@ -13,6 +13,8 @@ class Battle {
 	turn = new Turn(this, 0);
 	eventHandler = new Events.Handler();
 	renderer = new Renderer(this, document.querySelector('.container') as HTMLDivElement);
+	winner: Team | null = null;
+	get ended() { return this.winner !== null }
 
 	constructor() {
 		this.eventHandler.dispatchEvent('new turn');
@@ -24,6 +26,7 @@ class Battle {
 
 	start() {
 		this.teams.forEach(team => team.battlers[0].switchedIn = true);
+		this.renderer.setSpritesToSwitchedInBattlers();
 	}
 
 	sortSwitchedInBattlersBySpeedDescending() {

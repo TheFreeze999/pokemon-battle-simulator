@@ -18,6 +18,43 @@
 
 	.scene {
 		flex: 3;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+
+		.battler {
+			width: 300px;
+			height: 300px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			padding: 30px 30px 80px 30px;
+
+			.sprite {
+				width: 100px;
+				transform-origin: bottom;
+				animation-timing-function: ease-in-out;
+
+				&.flipped {
+					transform: scaleX(-1);
+				}
+			}
+
+			.hp {
+				width: 200px;
+				height: 30px;
+
+				background: #bbb;
+				outline: 3px solid black;
+
+				.value {
+					height: 30px;
+					width: calc(2px * var(--percent, 100));
+					background-color: hsl(var(--hue, 120), 100%, 45%);
+				}
+			}
+		}
 	}
 
 	.textbox {

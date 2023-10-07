@@ -14,5 +14,8 @@ class Team {
         this.battlers.push(battler);
         battler.team = this;
     }
+    get allBattlersFainted() {
+        return this.battlers.every(battler => battler.fainted);
+    }
 }
 export default Team;

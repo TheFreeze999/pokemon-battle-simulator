@@ -23,3 +23,20 @@ export function clamp(value: number, min: number, max: number) {
 	if (value > max) return max;
 	return value;
 }
+
+export function mapNumberInRange(number: number, fromRange: [number, number], toRange: [number, number]): number {
+	const [fromMin, fromMax] = fromRange
+	const [toMin, toMax] = toRange;
+
+	const fromDiff = fromMax - fromMin;
+	const toDiff = toMax - toMin;
+	if (fromDiff === 0) return number;
+
+	const minDiff = toMin - fromMin;
+
+	return number / fromDiff * toDiff + minDiff;
+}
+
+export function randomArrayElement<T>(arr: T[]): T {
+	return arr[randomInteger(0, arr.length - 1)];
+}

@@ -65,6 +65,15 @@ class Turn {
 		if (this.phase !== Turn.Phase.FINAL) return;
 		this.battle.turn = new Turn(this.battle, this.number + 1);
 		this.battle.eventHandler.dispatchEvent('new turn');
+		await this.battle.renderer.showTextWhilePausingQueue("----------------------------", [], 2000);
+
+		for (const team of this.battle.teams) {
+			if (team.allBattlersFainted) {
+				this.battle.winner = team.enemyTeam;
+				this.battle.eventHandler.dispatchEvent('end')
+				await this.battle.renderer.showTextWhilePausingQueue(`Team ${this.battle.winner.index} wins!`);
+			}
+		}
 	}
 }
 

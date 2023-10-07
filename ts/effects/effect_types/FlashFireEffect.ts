@@ -8,10 +8,6 @@ import Effect from "../Effect.js";
 class FlashFireEffect extends Effect {
 	constructor() {
 		super('flash_fire');
-
-		this.eventHandler.addEventListener('application', async (battler: Battler) => {
-			await battler.battle?.renderer.showTextWhilePausingQueue(`${battler.displayName}'s Fire-type moves were powered up.`);
-		})
 	}
 
 	preExecutionModifiers: BattleAction.Modifier[] = [

@@ -1,4 +1,4 @@
-import { objectClone } from "./util.js";
+import { clamp, objectClone } from "./util.js";
 import Stats from './Stats.js';
 class Battler {
     creature;
@@ -72,7 +72,12 @@ class Battler {
         return stats;
     }
     get hpPercentage() {
-        return this.initialStats.currentHp / this.initialStats.hp * 100;
+        if (this.initialStats.currentHp === 0)
+            return 0;
+        else if (this.initialStats.currentHp === this.initialStats.hp)
+            return 100;
+        else
+            return clamp(Math.floor(this.initialStats.currentHp / this.initialStats.hp * 100), 1, 99);
     }
     /** @returns true if effect was added successfully */
     addEffect(effect) {

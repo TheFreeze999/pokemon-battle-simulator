@@ -7,6 +7,7 @@ class DamageAction extends BattleAction {
 	constructor(public target: Battler, public amount: number) {
 		super();
 		this.amount = Math.floor(amount);
+		if (amount > 0 && this.amount <= 0) this.amount = 1;
 	}
 	clause() {
 		if (this.target.fainted) return false;
@@ -17,9 +18,12 @@ class DamageAction extends BattleAction {
 		let amount = this.amount;
 		if (amount > this.target.initialStats.currentHp) amount = this.target.initialStats.currentHp;
 
-		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} took ${amount} damage!`);
+		const oldHpPercentage = this.target.hpPercentage;
 
+		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} took ${amount} damage!`);
 		this.target.initialStats.currentHp -= amount;
+		await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage)
+
 
 		if (this.target.initialStats.currentHp <= 0) {
 			const faintAction = new FaintAction(this.target);

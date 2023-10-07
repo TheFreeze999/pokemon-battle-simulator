@@ -87,6 +87,7 @@ namespace AbilityDex {
 					flashFireEffectAction.cause = battleAction;
 					flashFireEffectAction.eventHandler.addEventListener('before execution', async () => {
 						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flash Fire]`, ["ability"], 1000);
+						await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName}'s Fire-type moves were powered up.`);
 					});
 					battleAction.queue?.push(flashFireEffectAction);
 				}
@@ -107,6 +108,7 @@ namespace AbilityDex {
 					if (!battleAction.isSuccessful()) return;
 
 					const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
+					if (burnAction.effect.isImmune(battleAction.user)) return;
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
 					burnAction.chance = [30, 100];

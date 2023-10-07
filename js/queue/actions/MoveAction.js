@@ -67,6 +67,7 @@ class MoveAction extends BattleAction {
         let moveUsedText = `${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`;
         if (this.user === this.target)
             moveUsedText = `${this.user.displayName} used ${this.move.displayName}!`;
+        await this.queue?.battle.renderer.shakeBattler(this.user);
         await this.queue?.battle.renderer.showTextWhilePausingQueue(moveUsedText);
         if (this.missed) {
             await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
