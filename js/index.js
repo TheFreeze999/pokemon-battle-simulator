@@ -7,8 +7,8 @@ const battle = new Battle();
 const creature0 = new Creature(SpeciesDex.fletchling);
 const creature1 = new Creature(SpeciesDex.litwick);
 creature1.abilitySlot = "secondary";
-creature0.moves = [MoveDex.tackle, MoveDex.bite, MoveDex.thunder_shock, MoveDex.energy_ball];
-creature1.moves = [MoveDex.accelerock, MoveDex.bite, MoveDex.thunder_shock, MoveDex.shadow_sneak];
+creature0.moves = [MoveDex.flamethrower, MoveDex.bite, MoveDex.thunder_shock, MoveDex.tackle];
+creature1.moves = [MoveDex.energy_ball, MoveDex.accelerock, MoveDex.surf, MoveDex.shadow_sneak];
 creature0.level = 100;
 creature1.level = 100;
 creature0.calcStats();
@@ -32,7 +32,7 @@ battle.turn.makeSelection(battler0, {
     type: 'move',
     user: battler0,
     target: battler1,
-    move: MoveDex.tackle
+    move: MoveDex.flamethrower
 });
 battle.turn.makeSelection(battler1, {
     type: 'move',
@@ -47,13 +47,28 @@ battle.turn.makeSelection(battler0, {
     type: 'move',
     user: battler0,
     target: battler1,
-    move: MoveDex.tackle
+    move: MoveDex.bite
 });
 battle.turn.makeSelection(battler1, {
     type: 'move',
     user: battler1,
     target: battler0,
-    move: MoveDex.shadow_sneak
+    move: MoveDex.surf
+});
+await battle.turn.concludeActionSelectionPhase();
+await battle.turn.concludeMainActionPhase();
+await battle.turn.concludeFinalPhase();
+battle.turn.makeSelection(battler0, {
+    type: 'move',
+    user: battler0,
+    target: battler1,
+    move: MoveDex.thunder_shock
+});
+battle.turn.makeSelection(battler1, {
+    type: 'move',
+    user: battler1,
+    target: battler0,
+    move: MoveDex.accelerock
 });
 await battle.turn.concludeActionSelectionPhase();
 await battle.turn.concludeMainActionPhase();
@@ -68,7 +83,7 @@ battle.turn.makeSelection(battler1, {
     type: 'move',
     user: battler1,
     target: battler0,
-    move: MoveDex.shadow_sneak
+    move: MoveDex.energy_ball
 });
 await battle.turn.concludeActionSelectionPhase();
 await battle.turn.concludeMainActionPhase();

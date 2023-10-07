@@ -11,5 +11,6 @@ class Effect {
         this.type = type;
     }
     applyFinalPhaseBattleActions(owner) { }
+    isImmune(battler) { return false; }
 }
 export default Effect;

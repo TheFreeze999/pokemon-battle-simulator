@@ -26,6 +26,7 @@ namespace AbilityDex {
 					if (battleAction.stat !== "defense" || battleAction.amount > 0) return;
 					if (battleAction.cause instanceof MoveAction && battleAction.cause.user === owner) return;
 					battleAction.toExecute = false;
+
 					if (battleAction.cause instanceof MoveAction && battleAction.cause.move.category !== Move.Category.STATUS) return;
 					await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Big Pecks]`, ["ability"], 1000);
 					await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName}'s defense was not lowered.`);
@@ -108,7 +109,7 @@ namespace AbilityDex {
 					const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
-					burnAction.chance = [100, 100];
+					burnAction.chance = [30, 100];
 					burnAction.eventHandler.addEventListener('before execution', async () => {
 						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flame Body]`, ["ability"], 1000);
 					});
@@ -178,7 +179,7 @@ namespace AbilityDex {
 	export const torrent = new Ability({
 		name: "torrent",
 		displayName: "Torrent",
-		preExecutionModifiers: [
+		postExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -186,6 +187,7 @@ namespace AbilityDex {
 					if (battleAction.user !== owner) return;
 					if (owner.hpPercentage > (100 / 3)) return;
 					if (battleAction.move.type !== Type.WATER) return;
+					if (!battleAction.isSuccessful()) return;
 
 					battleAction.attackStatMultiplier *= 1.5;
 				}
@@ -195,7 +197,7 @@ namespace AbilityDex {
 	export const volt_absorb = new Ability({
 		name: "volt_absorb",
 		displayName: "Volt Absorb",
-		preExecutionModifiers: [
+		postExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -203,7 +205,7 @@ namespace AbilityDex {
 					if (battleAction.target !== owner) return;
 					if (battleAction.user === owner) return;
 					if (battleAction.move.type !== Type.ELECTRIC) return;
-
+					if (!battleAction.isSuccessful()) return;
 
 					battleAction.negateDirectDamage = true;
 					battleAction.performSecondaryEffects = false;

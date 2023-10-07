@@ -14,6 +14,8 @@ abstract class Effect {
 	constructor(public type: string) { }
 
 	applyFinalPhaseBattleActions(owner: Battler) { }
+
+	isImmune(battler: Battler): boolean { return false; }
 }
 
 export default Effect;

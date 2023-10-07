@@ -12,6 +12,7 @@ class EffectApplicationAction extends BattleAction {
 		return true;
 	}
 	async execute() {
+		if (this.effect.isImmune(this.target)) return;
 		this.target.addEffect(this.effect);
 	}
 }

@@ -122,7 +122,7 @@ var AbilityDex;
                     const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
                     burnAction.priority = 4;
                     burnAction.cause = battleAction;
-                    burnAction.chance = [100, 100];
+                    burnAction.chance = [30, 100];
                     burnAction.eventHandler.addEventListener('before execution', async () => {
                         await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flame Body]`, ["ability"], 1000);
                     });
@@ -199,7 +199,7 @@ var AbilityDex;
     AbilityDex.torrent = new Ability({
         name: "torrent",
         displayName: "Torrent",
-        preExecutionModifiers: [
+        postExecutionModifiers: [
             {
                 priority: 0,
                 modify(battleAction, owner) {
@@ -211,6 +211,8 @@ var AbilityDex;
                         return;
                     if (battleAction.move.type !== Type.WATER)
                         return;
+                    if (!battleAction.isSuccessful())
+                        return;
                     battleAction.attackStatMultiplier *= 1.5;
                 }
             }
@@ -219,7 +221,7 @@ var AbilityDex;
     AbilityDex.volt_absorb = new Ability({
         name: "volt_absorb",
         displayName: "Volt Absorb",
-        preExecutionModifiers: [
+        postExecutionModifiers: [
             {
                 priority: 0,
                 modify(battleAction, owner) {
@@ -230,6 +232,8 @@ var AbilityDex;
                     if (battleAction.user === owner)
                         return;
                     if (battleAction.move.type !== Type.ELECTRIC)
+                        return;
+                    if (!battleAction.isSuccessful())
                         return;
                     battleAction.negateDirectDamage = true;
                     battleAction.performSecondaryEffects = false;

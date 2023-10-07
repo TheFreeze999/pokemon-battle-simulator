@@ -1,4 +1,5 @@
 import Move from "../../../Move.js";
+import Type from "../../../Type.js";
 import DamageAction from "../../../queue/actions/DamageAction.js";
 import MoveAction from "../../../queue/actions/MoveAction.js";
 import Effect from "../../Effect.js";
@@ -30,6 +31,9 @@ class BurnEffect extends Effect {
             await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName} was hurt by its burn.`);
         });
         owner.battle?.queue.push(damageAction);
+    }
+    isImmune(battler) {
+        return battler.types.includes(Type.FIRE);
     }
 }
 export default BurnEffect;
