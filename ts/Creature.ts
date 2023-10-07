@@ -1,3 +1,4 @@
+import Item from "./Item.js";
 import Move from "./Move.js";
 import Species from "./Species.js";
 import Stats from "./Stats.js";
@@ -10,6 +11,7 @@ class Creature {
 	evSpread = Stats.BaseStats.createDefault();
 	ivSpread = Stats.BaseStats.createDefault();
 	abilitySlot: keyof Required<Species["abilities"]> = "primary";
+	heldItem: Item | null = null;
 
 	constructor(public readonly species: Species) {
 		this.calcStats();

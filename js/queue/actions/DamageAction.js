@@ -20,6 +20,8 @@ class DamageAction extends BattleAction {
         return true;
     }
     async execute() {
+        if (this.amount === 0)
+            return;
         let amount = this.amount;
         if (amount > this.target.initialStats.currentHp)
             amount = this.target.initialStats.currentHp;

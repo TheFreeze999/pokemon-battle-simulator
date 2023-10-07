@@ -11,6 +11,7 @@ class Battler {
     criticalHitRatio = 0;
     displayName;
     ability;
+    heldItem;
     fainted = false;
     switchedIn = true;
     moves = [];
@@ -23,6 +24,7 @@ class Battler {
         this.initialStats = this.creature.stats;
         this.displayName = this.creature.species.displayName;
         this.ability = this.creature.ability;
+        this.heldItem = this.creature.heldItem;
     }
     get battle() {
         return this.team?.battle || null;

@@ -6,6 +6,7 @@ import Move from "./Move.js";
 import Stats from './Stats.js';
 import Ability from "./Ability.js";
 import Effect from "./effects/Effect.js";
+import Item from "./Item.js";
 
 class Battler {
 	team: Team | null = null;
@@ -17,6 +18,7 @@ class Battler {
 	criticalHitRatio = 0;
 	displayName: string;
 	ability: Ability;
+	heldItem: Item | null;
 	fainted = false;
 	switchedIn = true;
 
@@ -31,6 +33,7 @@ class Battler {
 		this.initialStats = this.creature.stats;
 		this.displayName = this.creature.species.displayName;
 		this.ability = this.creature.ability;
+		this.heldItem = this.creature.heldItem;
 	}
 
 	get battle() {

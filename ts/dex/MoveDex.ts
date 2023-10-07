@@ -151,6 +151,27 @@ namespace MoveDex {
 		basePower: 40,
 		accuracy: 100,
 	});
+	export const trick = new Move({
+		name: "trick",
+		displayName: "Trick",
+		type: Type.PSYCHIC,
+		category: Move.Category.STATUS,
+		accuracy: 100,
+		async applySecondaryEffects(moveAction: MoveAction) {
+			if (moveAction.user === moveAction.target) return;
+
+			const userItem = moveAction.user.heldItem;
+			const targetItem = moveAction.target.heldItem;
+
+			moveAction.user.heldItem = targetItem;
+			moveAction.target.heldItem = userItem;
+
+			if (userItem)
+				await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.target.displayName} received a ${userItem.displayName}!`);
+			if (targetItem)
+				await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.user.displayName} received a ${targetItem.displayName}!`);
+		}
+	});
 	export const willowisp = new Move({
 		name: "willowisp",
 		displayName: "Will-O-Wisp",

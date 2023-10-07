@@ -45,7 +45,7 @@ class Renderer {
 			if (!switchedInBattler) return;
 			const battlerEl = this.getBattlerElFromBattler(switchedInBattler);
 			const spriteEl = battlerEl.querySelector('.sprite') as HTMLImageElement;
-			spriteEl.src = `https://play.pokemonshowdown.com/sprites/gen6/${switchedInBattler.creature.species.name}.png`;
+			spriteEl.src = `http://play.pokemonshowdown.com/sprites/ani/${switchedInBattler.creature.species.name}.gif`;
 		})
 	}
 
@@ -54,23 +54,32 @@ class Renderer {
 		return this.battlerEls[battlerNumberInUI]
 	}
 
+	private async animateHpBarTo(currentPercentage: number, hpValueEl: HTMLDivElement) {
+		const hue = mapNumberInRange(currentPercentage, [0, 100], [0, 120])
+		hpValueEl.style.setProperty('--percent', currentPercentage.toString());
+		hpValueEl.style.setProperty('--hue', hue.toString());
+		await delay(5)
+	}
+
 	async setHPPercentageTo(battler: Battler, oldPercentage: number, newPercentage: number) {
+		const isHpChangePositive = newPercentage > oldPercentage;
+		const color = isHpChangePositive ? '#00ffff55' : '#ffff0055';
 		const battlerEl = this.getBattlerElFromBattler(battler);
 		battlerEl.animate([
 			{ backgroundColor: 'transparent' },
-			{ backgroundColor: '#ffff0055' },
+			{ backgroundColor: color },
 			{ backgroundColor: 'transparent' },
 		], 200);
 		await delay(200);
 		const hpValueEl = battlerEl.querySelector('.hp .value') as HTMLDivElement;
 
-
-		if (oldPercentage > newPercentage) {
+		if (isHpChangePositive) {
+			for (let currentPercentage = oldPercentage; currentPercentage <= newPercentage; currentPercentage++) {
+				await this.animateHpBarTo(currentPercentage, hpValueEl);
+			}
+		} else {
 			for (let currentPercentage = oldPercentage; currentPercentage >= newPercentage; currentPercentage--) {
-				const hue = mapNumberInRange(currentPercentage, [0, 100], [0, 120])
-				hpValueEl.style.setProperty('--percent', currentPercentage.toString());
-				hpValueEl.style.setProperty('--hue', hue.toString());
-				await delay(5)
+				await this.animateHpBarTo(currentPercentage, hpValueEl);
 			}
 		}
 	}

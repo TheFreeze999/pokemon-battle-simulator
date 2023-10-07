@@ -54,6 +54,7 @@ class Turn {
 		const allBattlers = this.battle.allBattlers;
 		for (const battler of allBattlers) {
 			battler.ability.applyFinalPhaseBattleActions(battler);
+			battler.heldItem?.applyFinalPhaseBattleActions(battler);
 
 			for (const effect of battler.effects) {
 				effect.applyFinalPhaseBattleActions(battler);

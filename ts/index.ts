@@ -1,6 +1,7 @@
 import Battle from "./Battle.js";
 import Battler from "./Battler.js";
 import Creature from "./Creature.js";
+import ItemDex from "./dex/ItemDex.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
@@ -9,11 +10,14 @@ import { randomArrayElement } from './util.js';
 const battle = new Battle();
 
 const creature0 = new Creature(SpeciesDex.fletchling);
-const creature1 = new Creature(SpeciesDex.squirtle);
+const creature1 = new Creature(SpeciesDex.bulbasaur);
 
 
 creature0.moves = [MoveDex.thunder_shock, MoveDex.willowisp, MoveDex.dragon_rage, MoveDex.bite];
-creature1.moves = [MoveDex.thunder_shock, MoveDex.willowisp, MoveDex.dragon_rage, MoveDex.bite];
+creature1.moves = [MoveDex.thunder_shock, MoveDex.willowisp, MoveDex.dragon_rage, MoveDex.trick];
+
+creature0.heldItem = ItemDex.leftovers;
+creature1.heldItem = ItemDex.black_sludge;
 
 creature0.level = 100;
 creature1.level = 100;

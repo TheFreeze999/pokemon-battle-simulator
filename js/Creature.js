@@ -8,6 +8,7 @@ class Creature {
     evSpread = Stats.BaseStats.createDefault();
     ivSpread = Stats.BaseStats.createDefault();
     abilitySlot = "primary";
+    heldItem = null;
     constructor(species) {
         this.species = species;
         this.calcStats();

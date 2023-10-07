@@ -17,7 +17,7 @@ class BattleAction {
         if (!this.clause())
             return;
         this.eventHandler.dispatchEvent('clause passed');
-        this.applyPreExecutionModificationsToSelf();
+        this.applyModificationsToSelf("preExecutionModifiers");
         this.eventHandler.dispatchEvent('pre execution modifications applied');
         if (!this.toExecute)
             return;
@@ -32,40 +32,25 @@ class BattleAction {
         }
         await this.execute();
         this.eventHandler.dispatchEvent('after execution');
-        this.applyPostExecutionModificationsToSelf();
+        this.applyModificationsToSelf("postExecutionModifiers");
         this.eventHandler.dispatchEvent('post execution modifications applied');
     }
-    applyPreExecutionModificationsToSelf() {
+    applyModificationsToSelf(type) {
         if (!this.queue)
             return;
         const allBattlers = this.queue.battle.allBattlers;
         const battlerModifierPairs = [];
         for (const battler of allBattlers) {
-            for (const modifier of battler.ability.preExecutionModifiers) {
+            for (const modifier of battler.ability[type]) {
                 battlerModifierPairs.push({ battler, modifier });
             }
-            for (const effect of battler.effects) {
-                for (const modifier of effect.preExecutionModifiers) {
+            if (battler.heldItem) {
+                for (const modifier of battler.heldItem[type]) {
                     battlerModifierPairs.push({ battler, modifier });
                 }
             }
-        }
-        const battlerModifierPairsSorted = battlerModifierPairs.sort((a, b) => b.modifier.priority - a.modifier.priority);
-        for (const { battler, modifier } of battlerModifierPairsSorted) {
-            modifier.modify(this, battler);
-        }
-    }
-    applyPostExecutionModificationsToSelf() {
-        if (!this.queue)
-            return;
-        const allBattlers = this.queue.battle.allBattlers;
-        const battlerModifierPairs = [];
-        for (const battler of allBattlers) {
-            for (const modifier of battler.ability.postExecutionModifiers) {
-                battlerModifierPairs.push({ battler, modifier });
-            }
             for (const effect of battler.effects) {
-                for (const modifier of effect.postExecutionModifiers) {
+                for (const modifier of effect[type]) {
                     battlerModifierPairs.push({ battler, modifier });
                 }
             }

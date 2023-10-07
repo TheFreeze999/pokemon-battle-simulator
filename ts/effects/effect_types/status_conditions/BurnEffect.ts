@@ -29,8 +29,10 @@ class BurnEffect extends Effect {
 	];
 
 	applyFinalPhaseBattleActions(owner: Battler): void {
+		if (!owner.switchedIn) return;
 		const damageAmount = owner.initialStats.hp / 16;
 		const damageAction = new DamageAction(owner, damageAmount);
+		damageAction.priority = 4;
 		damageAction.eventHandler.addEventListener('before execution', async () => {
 			await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName} was hurt by its burn.`);
 		})
