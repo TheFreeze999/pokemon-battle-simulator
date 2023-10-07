@@ -3,12 +3,13 @@ class Effect {
     type;
     host = null;
     eventHandler = new Events.Handler();
-    battleActionModifiers = [];
+    preExecutionModifiers = [];
+    postExecutionModifiers = [];
     canBeAppliedOnFaintedBattler = false;
     stackable = false;
     constructor(type) {
         this.type = type;
     }
-    applyPostActionBattleActions(owner) { }
+    applyFinalPhaseBattleActions(owner) { }
 }
 export default Effect;

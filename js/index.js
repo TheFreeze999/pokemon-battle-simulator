@@ -42,7 +42,7 @@ battle.turn.makeSelection(battler1, {
 });
 await battle.turn.concludeActionSelectionPhase();
 await battle.turn.concludeMainActionPhase();
-await battle.turn.concludePostActionPhase();
+await battle.turn.concludeFinalPhase();
 battle.turn.makeSelection(battler0, {
     type: 'move',
     user: battler0,
@@ -57,7 +57,7 @@ battle.turn.makeSelection(battler1, {
 });
 await battle.turn.concludeActionSelectionPhase();
 await battle.turn.concludeMainActionPhase();
-await battle.turn.concludePostActionPhase();
+await battle.turn.concludeFinalPhase();
 battle.turn.makeSelection(battler0, {
     type: 'move',
     user: battler0,
@@ -72,5 +72,5 @@ battle.turn.makeSelection(battler1, {
 });
 await battle.turn.concludeActionSelectionPhase();
 await battle.turn.concludeMainActionPhase();
-await battle.turn.concludePostActionPhase();
+await battle.turn.concludeFinalPhase();
 console.log(battle);

@@ -17,7 +17,7 @@ namespace AbilityDex {
 	export const big_pecks = new Ability({
 		name: "big_pecks",
 		displayName: "Big Pecks",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				async modify(battleAction, owner) {
@@ -36,7 +36,7 @@ namespace AbilityDex {
 	export const blaze = new Ability({
 		name: "blaze",
 		displayName: "Blaze",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -53,7 +53,7 @@ namespace AbilityDex {
 	export const compound_eyes = new Ability({
 		name: "compound_eyes",
 		displayName: "Compound Eyes",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -68,7 +68,7 @@ namespace AbilityDex {
 	export const flash_fire = new Ability({
 		name: "flash_fire",
 		displayName: "Flash Fire",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -95,7 +95,7 @@ namespace AbilityDex {
 	export const flame_body = new Ability({
 		name: "flame_body",
 		displayName: "Flame Body",
-		battleActionModifiers: [
+		postExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -103,11 +103,12 @@ namespace AbilityDex {
 					if (battleAction.target !== owner) return;
 					if (battleAction.user === owner) return;
 					if (!battleAction.move.contact) return;
+					if (!battleAction.isSuccessful()) return;
 
 					const burnAction = new EffectApplicationAction(battleAction.user, new BurnEffect());
 					burnAction.priority = 4;
 					burnAction.cause = battleAction;
-					burnAction.chance = [30, 100];
+					burnAction.chance = [100, 100];
 					burnAction.eventHandler.addEventListener('before execution', async () => {
 						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Flame Body]`, ["ability"], 1000);
 					});
@@ -119,7 +120,7 @@ namespace AbilityDex {
 	export const no_guard = new Ability({
 		name: "no_guard",
 		displayName: "No Guard",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -134,7 +135,7 @@ namespace AbilityDex {
 	export const overgrow = new Ability({
 		name: "overgrow",
 		displayName: "Overgrow",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -151,7 +152,7 @@ namespace AbilityDex {
 	export const sap_sipper = new Ability({
 		name: "sap_sipper",
 		displayName: "Sap Sipper",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -177,7 +178,7 @@ namespace AbilityDex {
 	export const torrent = new Ability({
 		name: "torrent",
 		displayName: "Torrent",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -194,7 +195,7 @@ namespace AbilityDex {
 	export const volt_absorb = new Ability({
 		name: "volt_absorb",
 		displayName: "Volt Absorb",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -223,7 +224,7 @@ namespace AbilityDex {
 	export const water_absorb = new Ability({
 		name: "water_absorb",
 		displayName: "Water Absorb",
-		battleActionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {

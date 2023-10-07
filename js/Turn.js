@@ -44,15 +44,15 @@ class Turn {
         this.incrementPhase();
         const allBattlers = this.battle.allBattlers;
         for (const battler of allBattlers) {
-            battler.ability.applyPostActionBattleActions(battler);
+            battler.ability.applyFinalPhaseBattleActions(battler);
             for (const effect of battler.effects) {
-                effect.applyPostActionBattleActions(battler);
+                effect.applyFinalPhaseBattleActions(battler);
             }
         }
         await this.battle.queue.executeAll();
     }
-    async concludePostActionPhase() {
-        if (this.phase !== Turn.Phase.POST_ACTION)
+    async concludeFinalPhase() {
+        if (this.phase !== Turn.Phase.FINAL)
             return;
         this.battle.turn = new Turn(this.battle, this.number + 1);
         this.battle.eventHandler.dispatchEvent('new turn');
@@ -63,7 +63,7 @@ class Turn {
     (function (Phase) {
         Phase[Phase["ACTION_SELECTION"] = 0] = "ACTION_SELECTION";
         Phase[Phase["MAIN_ACTION"] = 1] = "MAIN_ACTION";
-        Phase[Phase["POST_ACTION"] = 2] = "POST_ACTION";
+        Phase[Phase["FINAL"] = 2] = "FINAL";
     })(Phase = Turn.Phase || (Turn.Phase = {}));
     let Selection;
     (function (Selection) {

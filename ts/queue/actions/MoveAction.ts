@@ -15,6 +15,7 @@ class MoveAction extends BattleAction {
 	performSecondaryEffects = true;
 	showTypeEffectivenessInfoText = true;
 	missed = false;
+	stoppedByTypeImmunity = false;
 	isCriticalHit = false;
 
 	constructor(public user: Battler, public target: Battler, public move: Move) {
@@ -84,7 +85,10 @@ class MoveAction extends BattleAction {
 			const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
 			const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
 			let multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
-			if (typeEffectiveness === 0) this.isCriticalHit = false;
+			if (typeEffectiveness === 0) {
+				this.stoppedByTypeImmunity = true;
+				this.isCriticalHit = false;
+			}
 			if (this.isCriticalHit) multiplier *= 1.5;
 
 			const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
@@ -110,7 +114,9 @@ class MoveAction extends BattleAction {
 		}
 	}
 
-
+	isSuccessful() {
+		return !this.missed && !this.stoppedByTypeImmunity
+	}
 }
 
 export default MoveAction;

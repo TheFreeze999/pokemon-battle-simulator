@@ -53,16 +53,16 @@ class Turn {
 
 		const allBattlers = this.battle.allBattlers;
 		for (const battler of allBattlers) {
-			battler.ability.applyPostActionBattleActions(battler);
+			battler.ability.applyFinalPhaseBattleActions(battler);
 
 			for (const effect of battler.effects) {
-				effect.applyPostActionBattleActions(battler);
+				effect.applyFinalPhaseBattleActions(battler);
 			}
 		}
 		await this.battle.queue.executeAll();
 	}
-	async concludePostActionPhase() {
-		if (this.phase !== Turn.Phase.POST_ACTION) return;
+	async concludeFinalPhase() {
+		if (this.phase !== Turn.Phase.FINAL) return;
 		this.battle.turn = new Turn(this.battle, this.number + 1);
 		this.battle.eventHandler.dispatchEvent('new turn');
 	}
@@ -72,7 +72,7 @@ namespace Turn {
 	export enum Phase {
 		ACTION_SELECTION,
 		MAIN_ACTION,
-		POST_ACTION
+		FINAL
 	}
 
 	export interface MoveSelection {

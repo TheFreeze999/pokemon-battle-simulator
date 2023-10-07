@@ -6,19 +6,21 @@ type AbilityData =
 	/* Required Fields */
 	Pick<Ability, "name" | "displayName"> &
 	/* Optional Fields */
-	Partial<Pick<Ability, "battleActionModifiers" | "applyPostActionBattleActions">>;
+	Partial<Pick<Ability, "preExecutionModifiers" | "postExecutionModifiers" | "applyFinalPhaseBattleActions">>;
 
 class Ability {
 	readonly name: string;
 	readonly displayName: string;
-	readonly battleActionModifiers: BattleAction.Modifier[];
-	readonly applyPostActionBattleActions: (owner: Battler) => void;
+	readonly preExecutionModifiers: BattleAction.Modifier[];
+	readonly postExecutionModifiers: BattleAction.Modifier[];
+	readonly applyFinalPhaseBattleActions: (owner: Battler) => void;
 
 	constructor(data: AbilityData) {
 		this.name = data.name;
 		this.displayName = data.displayName;
-		this.battleActionModifiers = data.battleActionModifiers ?? [];
-		this.applyPostActionBattleActions = data.applyPostActionBattleActions ?? (() => { });
+		this.preExecutionModifiers = data.preExecutionModifiers ?? [];
+		this.postExecutionModifiers = data.postExecutionModifiers ?? [];
+		this.applyFinalPhaseBattleActions = data.applyFinalPhaseBattleActions ?? (() => { });
 	}
 }
 

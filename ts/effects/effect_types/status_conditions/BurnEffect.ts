@@ -14,7 +14,7 @@ class BurnEffect extends Effect {
 		})
 	}
 
-	battleActionModifiers: BattleAction.Modifier[] = [
+	preExecutionModifiers: BattleAction.Modifier[] = [
 		{
 			priority: 0,
 			modify(battleAction, owner) {
@@ -27,7 +27,7 @@ class BurnEffect extends Effect {
 		}
 	];
 
-	applyPostActionBattleActions(owner: Battler): void {
+	applyFinalPhaseBattleActions(owner: Battler): void {
 		const damageAmount = owner.initialStats.hp / 16;
 		const damageAction = new DamageAction(owner, damageAmount);
 		damageAction.eventHandler.addEventListener('before execution', async () => {

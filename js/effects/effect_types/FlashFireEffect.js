@@ -9,7 +9,7 @@ class FlashFireEffect extends Effect {
             await battler.battle?.renderer.showTextWhilePausingQueue(`${battler.displayName}'s Fire-type moves were powered up.`);
         });
     }
-    battleActionModifiers = [
+    preExecutionModifiers = [
         {
             priority: 0,
             modify(battleAction, owner) {

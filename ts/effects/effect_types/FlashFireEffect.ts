@@ -14,7 +14,7 @@ class FlashFireEffect extends Effect {
 		})
 	}
 
-	battleActionModifiers: BattleAction.Modifier[] = [
+	preExecutionModifiers: BattleAction.Modifier[] = [
 		{
 			priority: 0,
 			modify(battleAction, owner) {

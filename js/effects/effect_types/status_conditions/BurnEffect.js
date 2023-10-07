@@ -9,7 +9,7 @@ class BurnEffect extends Effect {
             await battler.battle?.renderer.showTextWhilePausingQueue(`${battler.displayName} was burned.`);
         });
     }
-    battleActionModifiers = [
+    preExecutionModifiers = [
         {
             priority: 0,
             modify(battleAction, owner) {
@@ -23,7 +23,7 @@ class BurnEffect extends Effect {
             }
         }
     ];
-    applyPostActionBattleActions(owner) {
+    applyFinalPhaseBattleActions(owner) {
         const damageAmount = owner.initialStats.hp / 16;
         const damageAction = new DamageAction(owner, damageAmount);
         damageAction.eventHandler.addEventListener('before execution', async () => {
