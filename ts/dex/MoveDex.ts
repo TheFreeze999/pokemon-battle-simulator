@@ -170,6 +170,8 @@ namespace MoveDex {
 
 			userItemRemovalAction.priority = 3.1;
 			targetItemRemovalAction.priority = 3.1;
+			userItemRemovalAction.showText = false;
+			targetItemRemovalAction.showText = false;
 
 			moveAction.queue?.push(userItemRemovalAction, targetItemRemovalAction);
 

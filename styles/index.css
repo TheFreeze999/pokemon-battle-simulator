@@ -12,7 +12,9 @@
 .container {
   width: 100vw;
   height: 100vh;
-  background: rgb(230, 230, 230);
+  background: -webkit-linear-gradient(300deg, hsl(120, 30%, 74%), hsl(120, 37%, 39%));
+  background: -moz-linear-gradient(300deg, hsl(120, 30%, 74%), hsl(120, 37%, 39%));
+  background: linear-gradient(150deg, hsl(120, 30%, 74%), hsl(120, 37%, 39%));
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -92,6 +94,9 @@
   height: 30px;
   background: #bbb;
   outline: 3px solid black;
+  -webkit-box-shadow: black 0px 0px 10px 0px;
+     -moz-box-shadow: black 0px 0px 10px 0px;
+          box-shadow: black 0px 0px 10px 0px;
 }
 .container .scene .battler .hp .value {
   height: 30px;
@@ -99,6 +104,9 @@
   width: -moz-calc(2px * var(--percent, 100));
   width: calc(2px * var(--percent, 100));
   background-color: hsl(var(--hue, 120), 100%, 45%);
+  -webkit-box-shadow: black 2px 0px;
+     -moz-box-shadow: black 2px 0px;
+          box-shadow: black 2px 0px;
 }
 .container .textbox {
   background: white;
@@ -151,6 +159,7 @@
   font-weight: bold;
   font-style: italic;
   font-family: monospace;
+  text-shadow: hsla(20, 100%, 50%, 0.5) 0px 5px 10px;
 }
 .container .textbox .text.type-effectiveness {
   font-style: italic;

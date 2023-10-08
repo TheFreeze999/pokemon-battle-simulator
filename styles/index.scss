@@ -11,7 +11,7 @@
 .container {
 	width: 100vw;
 	height: 100vh;
-	background: rgb(230, 230, 230);
+	background: linear-gradient(150deg, hsl(120, 30%, 74%), hsl(120, 37%, 39%));
 	display: flex;
 	align-items: stretch;
 
@@ -47,11 +47,16 @@
 
 				background: #bbb;
 				outline: 3px solid black;
+				box-shadow: black 0px 0px 10px 0px;
+
 
 				.value {
 					height: 30px;
 					width: calc(2px * var(--percent, 100));
 					background-color: hsl(var(--hue, 120), 100%, 45%);
+					box-shadow: black 2px 0px;
+
+
 				}
 			}
 		}
@@ -86,6 +91,7 @@
 				font-weight: bold;
 				font-style: italic;
 				font-family: monospace;
+				text-shadow: hsla(20, 100%, 50%, 50%) 0px 5px 10px;
 			}
 
 			&.type-effectiveness {

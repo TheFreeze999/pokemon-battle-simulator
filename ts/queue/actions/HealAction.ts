@@ -10,6 +10,7 @@ class HealAction extends BattleAction {
 	clause() {
 		if (this.target.fainted) return false;
 		if (this.amount <= 0) return false;
+		if (this.target.initialStats.currentHp >= this.target.initialStats.hp) return false;
 		return true;
 	}
 	async execute() {

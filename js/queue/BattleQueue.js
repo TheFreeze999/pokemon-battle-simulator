@@ -24,10 +24,10 @@ class BattleQueue {
     }
     async executeAll() {
         while (this.actions.length > 0) {
-            if (!this.paused)
-                await this.executeNextActionThenRemove();
-            else
+            if (this.paused)
                 await this.eventHandler.awaitDispatch('resume');
+            else
+                await this.executeNextActionThenRemove();
         }
     }
     pause() {

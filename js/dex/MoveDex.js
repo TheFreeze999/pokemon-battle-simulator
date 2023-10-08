@@ -166,6 +166,8 @@ var MoveDex;
             const targetItemRemovalAction = new RemoveItemAction(moveAction.target);
             userItemRemovalAction.priority = 3.1;
             targetItemRemovalAction.priority = 3.1;
+            userItemRemovalAction.showText = false;
+            targetItemRemovalAction.showText = false;
             moveAction.queue?.push(userItemRemovalAction, targetItemRemovalAction);
             if (targetItem) {
                 const userItemGiveAction = new GiveItemAction(moveAction.user, targetItem);

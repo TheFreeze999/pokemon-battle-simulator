@@ -17,7 +17,7 @@ class GiveItemAction extends BattleAction {
     }
     async execute() {
         if (this.showText)
-            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName}'s received a ${this.item.displayName}!`);
+            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} received a ${this.item.displayName}!`);
         this.target.heldItem = this.item;
     }
 }
