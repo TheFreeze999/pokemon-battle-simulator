@@ -6,7 +6,7 @@ import BattleAction from "../BattleAction.js";
 import DamageAction from "./DamageAction.js";
 class MoveAction extends BattleAction {
     user;
-    target;
+    targets;
     move;
     attackStatMultiplier = 1;
     accuracyMultiplier = 1;
@@ -15,26 +15,36 @@ class MoveAction extends BattleAction {
     negateDirectDamage = false;
     performSecondaryEffects = true;
     showTypeEffectivenessInfoText = true;
-    missed = false;
-    stoppedByTypeImmunity = false;
-    isCriticalHit = false;
-    constructor(user, target, move) {
+    missedOnTargets = new Map();
+    criticalHitOnTargets = new Map();
+    stoppedByTypeImmunityOnTargets = new Map();
+    constructor(user, targets, move) {
         super();
         this.user = user;
-        this.target = target;
+        this.targets = targets;
         this.move = move;
-        this.missed = this.calculateMiss();
-        this.isCriticalHit = this.calculateCriticalHit();
+        this.targets.forEach(target => {
+            this.missedOnTargets.set(target, this.calculateMiss(target));
+            this.criticalHitOnTargets.set(target, this.calculateCriticalHit());
+        });
     }
     clause() {
-        if (this.user.fainted || this.target.fainted)
+        if (this.user.fainted || this.targets.every(target => target.fainted))
             return false;
         if (!this.user.usableMoves.includes(this.move))
+            return false;
+        if (this.move.targeting === Move.Targeting.NONE && this.targets.length !== 0)
+            return false;
+        if (this.move.targeting === Move.Targeting.SELF && !(this.targets.length === 1 && this.targets[0] === this.user))
+            return false;
+        if (this.move.targeting === Move.Targeting.SINGLE_OTHER && !(this.targets.length === 1 && this.targets[0] !== this.user))
+            return false;
+        if (this.move.targeting === Move.Targeting.ALL_OTHERS && this.targets.length !== this.queue?.battle.allSwitchedIn.length)
             return false;
         return true;
     }
     /** Calculates the chance of a miss and returns true if the move should miss. */
-    calculateMiss() {
+    calculateMiss(target) {
         let accuracy = this.move.accuracy;
         if (this.forceMoveHit)
             return false;
@@ -42,7 +52,7 @@ class MoveAction extends BattleAction {
             return false;
         const random = randomInteger(1, 100);
         const attackerAccuracy = this.user.getEffectiveAccuracyAndEvasion().accuracy;
-        const defenderEvasion = this.target.getEffectiveAccuracyAndEvasion().evasion;
+        const defenderEvasion = target.getEffectiveAccuracyAndEvasion().evasion;
         if (defenderEvasion > 0) {
             const fraction = attackerAccuracy / defenderEvasion;
             accuracy *= fraction;
@@ -64,48 +74,51 @@ class MoveAction extends BattleAction {
         return false;
     }
     async execute() {
-        let moveUsedText = `${this.user.displayName} used ${this.move.displayName} on ${this.target.displayName}!`;
-        if (this.user === this.target)
-            moveUsedText = `${this.user.displayName} used ${this.move.displayName}!`;
-        await this.queue?.battle.renderer.shakeBattler(this.user);
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(moveUsedText);
-        if (this.missed) {
-            await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
-            return;
-        }
-        if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
-            const userStatBoosts = this.isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(this.user.statBoosts, 1) : this.user.statBoosts;
-            const targetStatBoosts = this.isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(this.target.statBoosts, -1) : this.target.statBoosts;
-            const userBoostedStats = this.user.getEffectiveStats(userStatBoosts);
-            const targetBoostedStats = this.target.getEffectiveStats(targetStatBoosts);
-            let attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
-            const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
-            attackingStat *= this.attackStatMultiplier;
-            let typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
-            if (this.move.ignoreTypeEffectiveness)
-                typeEffectiveness = 1;
-            const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
-            let multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
-            if (typeEffectiveness === 0) {
-                this.stoppedByTypeImmunity = true;
-                this.isCriticalHit = false;
-            }
-            if (this.isCriticalHit)
-                multiplier *= 1.5;
-            const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
-            if (typeEffectivenessInfoText && this.showTypeEffectivenessInfoText) {
-                const name = TypeUtils.getNameFromEffectiveness(typeEffectiveness);
-                await this.queue?.battle.renderer.showTextWhilePausingQueue(typeEffectivenessInfoText, ["type-effectiveness", name]);
-            }
-            if (this.isCriticalHit) {
-                await this.queue?.battle.renderer.showTextWhilePausingQueue(`A critical hit!`, ["critical"]);
-            }
-            if (typeEffectiveness !== 0 && !this.negateDirectDamage) {
-                const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
-                const damageAction = new DamageAction(this.target, damageAmount);
-                damageAction.priority = 5;
-                damageAction.isDirectDamage = true;
-                this.queue?.push(damageAction);
+        if (this.move.targeting === Move.Targeting.SINGLE_OTHER || this.move.targeting === Move.Targeting.ALL_OTHERS) {
+            for (const target of this.targets) {
+                const isMissed = this.missedOnTargets.get(target) === true;
+                const isCriticalHit = this.criticalHitOnTargets.get(target) === true;
+                await this.queue?.battle.renderer.shakeBattler(this.user);
+                await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName} on ${target.displayName}!`);
+                if (isMissed) {
+                    await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
+                    return;
+                }
+                if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
+                    const userStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(this.user.statBoosts, 1) : this.user.statBoosts;
+                    const targetStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(target.statBoosts, -1) : target.statBoosts;
+                    const userBoostedStats = this.user.getEffectiveStats(userStatBoosts);
+                    const targetBoostedStats = target.getEffectiveStats(targetStatBoosts);
+                    let attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
+                    attackingStat *= this.attackStatMultiplier;
+                    const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
+                    let typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], target.types);
+                    if (this.move.ignoreTypeEffectiveness)
+                        typeEffectiveness = 1;
+                    const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
+                    let multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
+                    if (typeEffectiveness === 0) {
+                        this.stoppedByTypeImmunityOnTargets.set(target, true);
+                        this.criticalHitOnTargets.set(target, false);
+                    }
+                    if (this.criticalHitOnTargets.get(target) === true)
+                        multiplier *= 1.5;
+                    const typeEffectivenessInfoText = TypeUtils.getInfoFromEffectiveness(typeEffectiveness);
+                    if (typeEffectivenessInfoText && this.showTypeEffectivenessInfoText) {
+                        const name = TypeUtils.getNameFromEffectiveness(typeEffectiveness);
+                        await this.queue?.battle.renderer.showTextWhilePausingQueue(typeEffectivenessInfoText, ["type-effectiveness", name]);
+                    }
+                    if (this.criticalHitOnTargets.get(target) === true) {
+                        await this.queue?.battle.renderer.showTextWhilePausingQueue(`A critical hit!`, ["critical"]);
+                    }
+                    if (typeEffectiveness !== 0 && !this.negateDirectDamage) {
+                        const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
+                        const damageAction = new DamageAction(target, damageAmount);
+                        damageAction.priority = 5;
+                        damageAction.isDirectDamage = true;
+                        this.queue?.push(damageAction);
+                    }
+                }
             }
         }
         if (this.performSecondaryEffects) {
@@ -113,8 +126,14 @@ class MoveAction extends BattleAction {
         }
         this.user.movePp.set(this.move, (this.user.movePp.get(this.move) ?? 0) - 1);
     }
+    get allMissed() {
+        return Array.from(this.missedOnTargets).every((battler, missed) => missed);
+    }
+    get allStoppedByTypeImmunity() {
+        return Array.from(this.stoppedByTypeImmunityOnTargets).every((battler, stoppedByTypeImmunity) => stoppedByTypeImmunity);
+    }
     isSuccessful() {
-        return !this.missed && !this.stoppedByTypeImmunity;
+        return !this.allMissed && !this.allStoppedByTypeImmunity;
     }
 }
 export default MoveAction;

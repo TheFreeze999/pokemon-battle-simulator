@@ -13,8 +13,8 @@ const creature0 = new Creature(SpeciesDex.jolteon);
 const creature1 = new Creature(SpeciesDex.jolteon);
 
 
-creature0.addMoves(MoveDex.thunder_shock, MoveDex.energy_ball, MoveDex.recover, MoveDex.flamethrower);
-creature1.addMoves(MoveDex.thunder_shock, MoveDex.energy_ball, MoveDex.recover, MoveDex.flamethrower);
+creature0.addMoves(MoveDex.accelerock);
+creature1.addMoves(MoveDex.accelerock);
 
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.leftovers;
@@ -47,13 +47,13 @@ while (true) {
 	battle.turn.makeSelection(battler0, {
 		type: 'move',
 		user: battler0,
-		target: battler1,
+		targets: [battler1],
 		move: randomArrayElement(battler0.usableMoves)
 	});
 	battle.turn.makeSelection(battler1, {
 		type: 'move',
 		user: battler1,
-		target: battler0,
+		targets: [battler0],
 		move: randomArrayElement(battler1.usableMoves)
 	});
 

@@ -27,8 +27,8 @@ class Battle {
         this.renderer.updateTurnEl();
         this.teams.find(team => team.isOpposing)?.battlers.forEach(battler => battler.displayName = `The opposing ${battler.displayName}`);
     }
-    sortSwitchedInBattlersBySpeedDescending() {
-        return this.allBattlers.filter(battler => battler.switchedIn).toSorted((a, b) => b.getEffectiveStats().speed - a.getEffectiveStats().speed);
+    get allSwitchedIn() {
+        return this.allBattlers.filter(battler => battler.switchedIn);
     }
 }
 export default Battle;

@@ -1,5 +1,6 @@
 import Events from "./Events.js";
 import MoveAction from "./queue/actions/MoveAction.js";
+import { randomArrayElement } from "./util.js";
 class Turn {
     battle;
     number;
@@ -31,7 +32,7 @@ class Turn {
                 continue;
             let action;
             // if (selection.type === "move") {
-            action = new MoveAction(selection.user, selection.target, selection.move);
+            action = new MoveAction(selection.user, selection.targets, selection.move);
             // }
             action.priority = Turn.Selection.getPriority(selection);
             selection.user.battle?.queue.push(action);
@@ -68,6 +69,15 @@ class Turn {
         this.battle.eventHandler.dispatchEvent('new turn');
         this.battle.renderer.updateTurnEl();
     }
+    get speedOrderDesc() {
+        return this.battle.allSwitchedIn.toSorted((a, b) => {
+            const aSpeed = a.getEffectiveStats().speed;
+            const bSpeed = b.getEffectiveStats().speed;
+            if (aSpeed === bSpeed)
+                return randomArrayElement([-1, 1]);
+            return bSpeed - aSpeed;
+        });
+    }
 }
 (function (Turn) {
     let Phase;
@@ -83,9 +93,10 @@ class Turn {
                 if (!selection.user.battle)
                     return 0;
                 const movePriority = selection.move.priority;
-                const switchedInBattlersSortedDesc = selection.user.battle.sortSwitchedInBattlersBySpeedDescending();
-                const speedOrder = switchedInBattlersSortedDesc.toReversed().indexOf(selection.user);
-                return (movePriority * 0.5) + (speedOrder * 0.1);
+                // move priority will be between -7 and 6
+                // user acting priority will be between -0.1 and 0
+                // this value will be between -3.6 and 3
+                return (movePriority * 0.5) + selection.user.actingPriority;
             }
             return 0;
         }

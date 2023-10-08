@@ -1,6 +1,5 @@
 import { clamp, objectClone } from "./util.js";
 import Stats from './Stats.js';
-import MoveDex from "./dex/MoveDex.js";
 class Battler {
     creature;
     team = null;
@@ -112,7 +111,13 @@ class Battler {
                 return false;
             return pp > 0;
         });
-        return usableMoves.length > 0 ? usableMoves : [MoveDex.struggle];
+        return usableMoves.length > 0 ? usableMoves : [ /* MoveDex.struggle */];
+    }
+    get placeInSpeedOrder() {
+        return this.battle?.turn.speedOrderDesc.indexOf(this) ?? 0;
+    }
+    get actingPriority() {
+        return this.placeInSpeedOrder * -0.1;
     }
 }
 export default Battler;

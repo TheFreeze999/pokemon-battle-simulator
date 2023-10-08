@@ -7,7 +7,7 @@ type MoveData =
 	/* Required Fields */
 	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy" | "pp"> &
 	/* Optional Fields */
-	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact" | "criticalHitRatio" | "ignoreTypeEffectiveness">>;
+	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact" | "criticalHitRatio" | "ignoreTypeEffectiveness" | "targeting">>;
 
 class Move {
 	readonly name: string;
@@ -16,6 +16,7 @@ class Move {
 	readonly category: Move.Category;
 	readonly basePower?: number;
 	readonly priority: number;
+	readonly targeting: Move.Targeting;
 	readonly accuracy: number;
 	readonly dealDirectDamage: boolean;
 	readonly contact: boolean;
@@ -31,6 +32,7 @@ class Move {
 		this.category = data.category;
 		this.basePower = data.basePower;
 		this.priority = data.priority ?? 0;
+		this.targeting = data.targeting ?? Move.Targeting.SINGLE_OTHER;
 		this.accuracy = data.accuracy;
 		this.dealDirectDamage = data.dealDirectDamage ?? true;
 		this.contact = data.contact ?? false;
@@ -52,6 +54,12 @@ namespace Move {
 		PHYSICAL,
 		SPECIAL,
 		STATUS
+	}
+	export enum Targeting {
+		SELF,
+		SINGLE_OTHER,
+		ALL_OTHERS,
+		NONE
 	}
 }
 
