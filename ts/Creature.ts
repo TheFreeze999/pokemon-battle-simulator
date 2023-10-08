@@ -7,6 +7,7 @@ import AbilityDex from "./dex/AbilityDex.js";
 class Creature {
 	level = 1;
 	moves: Move[] = [];
+	movePp = new Map<Move, number>();
 	stats = Stats.CreatureStats.createDefault();
 	evSpread = Stats.BaseStats.createDefault();
 	ivSpread = Stats.BaseStats.createDefault();
@@ -39,6 +40,13 @@ class Creature {
 		this.stats = { currentHp, ...stats };
 
 		return stats;
+	}
+
+	addMoves(...moves: Move[]) {
+		moves.forEach(move => {
+			this.moves.push(move);
+			this.movePp.set(move, move.pp);
+		})
 	}
 
 	get ability() {

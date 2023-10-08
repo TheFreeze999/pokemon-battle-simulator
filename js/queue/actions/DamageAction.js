@@ -4,6 +4,8 @@ class DamageAction extends BattleAction {
     target;
     amount;
     isDirectDamage = false;
+    showText = true;
+    showHpRemainingText = true;
     constructor(target, amount) {
         super();
         this.target = target;
@@ -26,7 +28,8 @@ class DamageAction extends BattleAction {
         if (amount > this.target.initialStats.currentHp)
             amount = this.target.initialStats.currentHp;
         const oldHpPercentage = this.target.hpPercentage;
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} took ${amount} damage!`);
+        if (this.showText)
+            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} lost ${amount} HP!`);
         this.target.initialStats.currentHp -= amount;
         await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage);
         if (this.target.initialStats.currentHp <= 0) {
@@ -35,7 +38,8 @@ class DamageAction extends BattleAction {
             this.queue?.push(faintAction);
             return;
         }
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
+        if (this.showHpRemainingText)
+            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }
 export default DamageAction;

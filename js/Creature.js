@@ -4,6 +4,7 @@ class Creature {
     species;
     level = 1;
     moves = [];
+    movePp = new Map();
     stats = Stats.CreatureStats.createDefault();
     evSpread = Stats.BaseStats.createDefault();
     ivSpread = Stats.BaseStats.createDefault();
@@ -30,6 +31,12 @@ class Creature {
         const currentHp = Math.floor(oldHpPercentage * stats.hp);
         this.stats = { currentHp, ...stats };
         return stats;
+    }
+    addMoves(...moves) {
+        moves.forEach(move => {
+            this.moves.push(move);
+            this.movePp.set(move, move.pp);
+        });
     }
     get ability() {
         return this.species.abilities[this.abilitySlot] || AbilityDex.no_ability;

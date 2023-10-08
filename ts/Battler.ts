@@ -7,6 +7,7 @@ import Stats from './Stats.js';
 import Ability from "./Ability.js";
 import Effect from "./effects/Effect.js";
 import Item from "./Item.js";
+import MoveDex from "./dex/MoveDex.js";
 
 class Battler {
 	team: Team | null = null;
@@ -23,6 +24,7 @@ class Battler {
 	switchedIn = true;
 
 	moves: Move[] = [];
+	movePp: Map<Move, number>;
 
 	effects: Effect[] = [];
 
@@ -30,6 +32,7 @@ class Battler {
 		this.level = this.creature.level;
 		this.types = this.creature.species.types;
 		this.moves = this.creature.moves;
+		this.movePp = this.creature.movePp;
 		this.initialStats = this.creature.stats;
 		this.displayName = this.creature.species.displayName;
 		this.ability = this.creature.ability;
@@ -112,6 +115,16 @@ class Battler {
 
 	hasEffect(type: string) {
 		return this.effects.some(effect => effect.type === type);
+	}
+
+	get usableMoves() {
+		const usableMoves = this.moves.filter(move => {
+			const pp = this.movePp.get(move);
+			if (pp === undefined) return false;
+			return pp > 0;
+		});
+
+		return usableMoves.length > 0 ? usableMoves : [MoveDex.struggle];
 	}
 }
 

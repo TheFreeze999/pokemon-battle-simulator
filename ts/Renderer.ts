@@ -104,7 +104,7 @@ class Renderer {
 	}
 
 	updateTurnEl() {
-		this.turnEl.innerHTML = `Turn ${this.battle.turn.number + 1}`;
+		this.turnEl.innerHTML = `Turn ${this.battle.turn.number}`;
 	}
 }
 

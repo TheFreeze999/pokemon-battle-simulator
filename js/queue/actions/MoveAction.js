@@ -29,7 +29,7 @@ class MoveAction extends BattleAction {
     clause() {
         if (this.user.fainted || this.target.fainted)
             return false;
-        if (!this.user.moves.includes(this.move))
+        if (!this.user.usableMoves.includes(this.move))
             return false;
         return true;
     }
@@ -81,7 +81,9 @@ class MoveAction extends BattleAction {
             let attackingStat = this.move.category === Move.Category.PHYSICAL ? userBoostedStats.attack : userBoostedStats.specialAttack;
             const defendingStat = this.move.category === Move.Category.PHYSICAL ? targetBoostedStats.defense : targetBoostedStats.specialDefense;
             attackingStat *= this.attackStatMultiplier;
-            const typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
+            let typeEffectiveness = TypeUtils.calculateEffectiveness([this.move.type], this.target.types);
+            if (this.move.ignoreTypeEffectiveness)
+                typeEffectiveness = 1;
             const stab = this.user.types.includes(this.move.type) ? 1.5 : 1;
             let multiplier = typeEffectiveness * stab * this.directDamageMultiplier;
             if (typeEffectiveness === 0) {
@@ -109,6 +111,7 @@ class MoveAction extends BattleAction {
         if (this.performSecondaryEffects) {
             this.move.applySecondaryEffects(this);
         }
+        this.user.movePp.set(this.move, (this.user.movePp.get(this.move) ?? 0) - 1);
     }
     isSuccessful() {
         return !this.missed && !this.stoppedByTypeImmunity;

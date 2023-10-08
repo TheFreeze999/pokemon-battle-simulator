@@ -1,5 +1,6 @@
 import { clamp, objectClone } from "./util.js";
 import Stats from './Stats.js';
+import MoveDex from "./dex/MoveDex.js";
 class Battler {
     creature;
     team = null;
@@ -15,12 +16,14 @@ class Battler {
     fainted = false;
     switchedIn = true;
     moves = [];
+    movePp;
     effects = [];
     constructor(creature) {
         this.creature = creature;
         this.level = this.creature.level;
         this.types = this.creature.species.types;
         this.moves = this.creature.moves;
+        this.movePp = this.creature.movePp;
         this.initialStats = this.creature.stats;
         this.displayName = this.creature.species.displayName;
         this.ability = this.creature.ability;
@@ -101,6 +104,15 @@ class Battler {
     }
     hasEffect(type) {
         return this.effects.some(effect => effect.type === type);
+    }
+    get usableMoves() {
+        const usableMoves = this.moves.filter(move => {
+            const pp = this.movePp.get(move);
+            if (pp === undefined)
+                return false;
+            return pp > 0;
+        });
+        return usableMoves.length > 0 ? usableMoves : [MoveDex.struggle];
     }
 }
 export default Battler;

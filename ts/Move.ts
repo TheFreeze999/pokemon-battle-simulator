@@ -5,9 +5,9 @@ import { randomInteger as randomInteger } from "./util.js";
 
 type MoveData =
 	/* Required Fields */
-	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy"> &
+	Pick<Move, "name" | "displayName" | "type" | "category" | "accuracy" | "pp"> &
 	/* Optional Fields */
-	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact" | "criticalHitRatio">>;
+	Partial<Pick<Move, "priority" | "basePower" | "dealDirectDamage" | "applySecondaryEffects" | "contact" | "criticalHitRatio" | "ignoreTypeEffectiveness">>;
 
 class Move {
 	readonly name: string;
@@ -20,6 +20,8 @@ class Move {
 	readonly dealDirectDamage: boolean;
 	readonly contact: boolean;
 	readonly criticalHitRatio: number;
+	readonly pp: number;
+	readonly ignoreTypeEffectiveness: boolean;
 	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
 
 	constructor(data: MoveData) {
@@ -33,6 +35,8 @@ class Move {
 		this.dealDirectDamage = data.dealDirectDamage ?? true;
 		this.contact = data.contact ?? false;
 		this.criticalHitRatio = data.criticalHitRatio ?? 0;
+		this.pp = data.pp;
+		this.ignoreTypeEffectiveness = data.ignoreTypeEffectiveness ?? false;
 		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
 	}
 

@@ -10,6 +10,8 @@ class Move {
     dealDirectDamage;
     contact;
     criticalHitRatio;
+    pp;
+    ignoreTypeEffectiveness;
     applySecondaryEffects;
     constructor(data) {
         this.name = data.name;
@@ -22,6 +24,8 @@ class Move {
         this.dealDirectDamage = data.dealDirectDamage ?? true;
         this.contact = data.contact ?? false;
         this.criticalHitRatio = data.criticalHitRatio ?? 0;
+        this.pp = data.pp;
+        this.ignoreTypeEffectiveness = data.ignoreTypeEffectiveness ?? false;
         this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {

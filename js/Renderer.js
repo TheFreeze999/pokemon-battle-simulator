@@ -97,7 +97,7 @@ class Renderer {
         await delay(500);
     }
     updateTurnEl() {
-        this.turnEl.innerHTML = `Turn ${this.battle.turn.number + 1}`;
+        this.turnEl.innerHTML = `Turn ${this.battle.turn.number}`;
     }
 }
 export default Renderer;

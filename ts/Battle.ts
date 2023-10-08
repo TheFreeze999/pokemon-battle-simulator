@@ -10,7 +10,7 @@ class Battle {
 		new Team(this)
 	];
 	queue = new BattleQueue(this);
-	turn = new Turn(this, 0);
+	turn = new Turn(this, 1);
 	eventHandler = new Events.Handler();
 	renderer = new Renderer(this, document.querySelector('.container') as HTMLDivElement);
 	winner: Team | null = null;

@@ -7,9 +7,9 @@ import SpeciesDex from "./dex/SpeciesDex.js";
 import { randomArrayElement } from './util.js';
 const battle = new Battle();
 const creature0 = new Creature(SpeciesDex.fletchling);
-const creature1 = new Creature(SpeciesDex.bulbasaur);
-creature0.moves = [MoveDex.energy_ball, MoveDex.flamethrower, MoveDex.thunder_shock, MoveDex.accelerock];
-creature1.moves = [MoveDex.energy_ball, MoveDex.flamethrower, MoveDex.thunder_shock, MoveDex.accelerock];
+const creature1 = new Creature(SpeciesDex.honedge);
+creature0.addMoves(MoveDex.energy_ball);
+creature1.addMoves(MoveDex.energy_ball, MoveDex.flamethrower, MoveDex.thunder_shock, MoveDex.accelerock);
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.black_sludge;
 creature0.level = 100;
@@ -36,13 +36,13 @@ while (true) {
         type: 'move',
         user: battler0,
         target: battler1,
-        move: randomArrayElement(battler0.moves)
+        move: randomArrayElement(battler0.usableMoves)
     });
     battle.turn.makeSelection(battler1, {
         type: 'move',
         user: battler1,
         target: battler0,
-        move: randomArrayElement(battler1.moves)
+        move: randomArrayElement(battler1.usableMoves)
     });
     await battle.turn.concludeActionSelectionPhase();
     await battle.turn.concludeMainActionPhase();

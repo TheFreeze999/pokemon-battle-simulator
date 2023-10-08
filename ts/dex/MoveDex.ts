@@ -17,7 +17,8 @@ namespace MoveDex {
 		basePower: 40,
 		accuracy: 100,
 		contact: true,
-		priority: 1
+		priority: 1,
+		pp: 20,
 	});
 	export const bite = new Move({
 		name: "bite",
@@ -27,6 +28,7 @@ namespace MoveDex {
 		basePower: 60,
 		accuracy: 100,
 		contact: true,
+		pp: 25,
 	});
 	export const dragon_rage = new Move({
 		name: "dragon_rage",
@@ -35,6 +37,7 @@ namespace MoveDex {
 		category: Move.Category.SPECIAL,
 		accuracy: 100,
 		dealDirectDamage: false,
+		pp: 10,
 		applySecondaryEffects(moveAction: MoveAction) {
 			if (TypeUtils.calculateEffectiveness([Type.DRAGON], moveAction.target.types) === 0) {
 				return;
@@ -53,6 +56,7 @@ namespace MoveDex {
 		category: Move.Category.SPECIAL,
 		basePower: 90,
 		accuracy: 100,
+		pp: 10,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const statDropAction = new StatStageChangeAction(moveAction.target, "specialDefense", -1);
 			statDropAction.chance = [10, 100];
@@ -68,6 +72,7 @@ namespace MoveDex {
 		category: Move.Category.SPECIAL,
 		basePower: 90,
 		accuracy: 100,
+		pp: 15,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const burnAction = new EffectApplicationAction(moveAction.target, new BurnEffect());
 			burnAction.chance = [10, 100];
@@ -82,6 +87,7 @@ namespace MoveDex {
 		type: Type.DARK,
 		category: Move.Category.STATUS,
 		accuracy: -1,
+		pp: 15,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const attackStatDropAction = new StatStageChangeAction(moveAction.user, "attack", 1);
 			const accuracyStatDropAction = new StatStageChangeAction(moveAction.user, "accuracy", 1);
@@ -98,6 +104,7 @@ namespace MoveDex {
 		type: Type.STEEL,
 		category: Move.Category.STATUS,
 		accuracy: 85,
+		pp: 40,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const statDropAction = new StatStageChangeAction(moveAction.target, "specialDefense", -2);
 			statDropAction.priority = 3;
@@ -111,6 +118,7 @@ namespace MoveDex {
 		type: Type.NORMAL,
 		category: Move.Category.STATUS,
 		accuracy: 85,
+		pp: 40,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const statDropAction = new StatStageChangeAction(moveAction.target, "defense", -2);
 			statDropAction.priority = 3;
@@ -126,7 +134,30 @@ namespace MoveDex {
 		basePower: 40,
 		accuracy: 100,
 		contact: true,
-		priority: 1
+		priority: 1,
+		pp: 30,
+	});
+	export const struggle = new Move({
+		name: "struggle",
+		displayName: "Struggle",
+		type: Type.NORMAL,
+		category: Move.Category.PHYSICAL,
+		basePower: 50,
+		accuracy: -1,
+		pp: -1,
+		ignoreTypeEffectiveness: true,
+		applySecondaryEffects(moveAction: MoveAction) {
+			const recoilAmount = moveAction.user.initialStats.hp / 4;
+			const recoilAction = new DamageAction(moveAction.user, recoilAmount);
+			recoilAction.priority = 4;
+			recoilAction.cause = moveAction;
+			recoilAction.showText = false;
+			recoilAction.showHpRemainingText = false;
+			recoilAction.eventHandler.addEventListener('before execution', async () => {
+				await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.user.displayName} lost some HP due to recoil.`);
+			});
+			moveAction.target.battle?.queue.push(recoilAction);
+		}
 	});
 	export const surf = new Move({
 		name: "surf",
@@ -135,6 +166,7 @@ namespace MoveDex {
 		category: Move.Category.SPECIAL,
 		basePower: 90,
 		accuracy: 100,
+		pp: 15,
 	});
 	export const tackle = new Move({
 		name: "tackle",
@@ -143,7 +175,8 @@ namespace MoveDex {
 		category: Move.Category.PHYSICAL,
 		basePower: 55,
 		accuracy: 100,
-		contact: true
+		contact: true,
+		pp: 35,
 	});
 	export const thunder_shock = new Move({
 		name: "thunder_shock",
@@ -152,6 +185,7 @@ namespace MoveDex {
 		category: Move.Category.SPECIAL,
 		basePower: 40,
 		accuracy: 100,
+		pp: 30,
 	});
 	export const trick = new Move({
 		name: "trick",
@@ -159,6 +193,7 @@ namespace MoveDex {
 		type: Type.PSYCHIC,
 		category: Move.Category.STATUS,
 		accuracy: 100,
+		pp: 10,
 		async applySecondaryEffects(moveAction: MoveAction) {
 			if (moveAction.user === moveAction.target) return;
 
@@ -195,6 +230,7 @@ namespace MoveDex {
 		type: Type.FIRE,
 		category: Move.Category.STATUS,
 		accuracy: 85,
+		pp: 15,
 		applySecondaryEffects(moveAction: MoveAction) {
 			const burnAction = new EffectApplicationAction(moveAction.target, new BurnEffect());
 			burnAction.priority = 3;
