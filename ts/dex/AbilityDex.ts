@@ -196,10 +196,11 @@ namespace AbilityDex {
 			}
 		]
 	});
+	const VOLT_ABSORB_ACTIVATED = Symbol('VOLT_ABSORB_ACTIVATED');
 	export const volt_absorb = new Ability({
 		name: "volt_absorb",
 		displayName: "Volt Absorb",
-		postExecutionModifiers: [
+		preExecutionModifiers: [
 			{
 				priority: 0,
 				modify(battleAction, owner) {
@@ -213,15 +214,27 @@ namespace AbilityDex {
 					battleAction.performSecondaryEffects = false;
 					battleAction.showTypeEffectivenessInfoText = false;
 
+					battleAction.flags[VOLT_ABSORB_ACTIVATED] = true;
+				}
+			}
+		],
+		postExecutionModifiers: [
+			{
+				priority: 0,
+				async modify(battleAction, owner) {
+					if (battleAction.flags[VOLT_ABSORB_ACTIVATED] !== true) return;
+					if (!(battleAction instanceof MoveAction)) return;
+					if (battleAction.target !== owner) return;
+
 					const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
 					const healAction = new HealAction(battleAction.target, healAmount)
 					healAction.priority = 15;
 					healAction.cause = battleAction;
-					healAction.eventHandler.addEventListener('before execution', async () => {
-						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Volt Absorb]`, ["ability"], 1000);
-					});
 					battleAction.queue?.push(healAction);
-				}
+					// healAction.eventHandler.addEventListener('before execution', async () => {
+					await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Volt Absorb]`, ["ability"], 1000);
+					// });
+				},
 			}
 		]
 	});
@@ -236,20 +249,33 @@ namespace AbilityDex {
 					if (battleAction.target !== owner) return;
 					if (battleAction.user === owner) return;
 					if (battleAction.move.type !== Type.WATER) return;
+					if (!battleAction.isSuccessful()) return;
 
 					battleAction.negateDirectDamage = true;
 					battleAction.performSecondaryEffects = false;
 					battleAction.showTypeEffectivenessInfoText = false;
 
+					battleAction.flags[VOLT_ABSORB_ACTIVATED] = true;
+				}
+			}
+		],
+		postExecutionModifiers: [
+			{
+				priority: 0,
+				async modify(battleAction, owner) {
+					if (battleAction.flags[VOLT_ABSORB_ACTIVATED] !== true) return;
+					if (!(battleAction instanceof MoveAction)) return;
+					if (battleAction.target !== owner) return;
+
 					const healAmount = Math.floor(battleAction.target.initialStats.hp / 4);
 					const healAction = new HealAction(battleAction.target, healAmount)
 					healAction.priority = 15;
 					healAction.cause = battleAction;
-					healAction.eventHandler.addEventListener('before execution', async () => {
-						await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Water Absorb]`, ["ability"], 1000);
-					});
 					battleAction.queue?.push(healAction);
-				}
+					// healAction.eventHandler.addEventListener('before execution', async () => {
+					await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Volt Absorb]`, ["ability"], 1000);
+					// });
+				},
 			}
 		]
 	});

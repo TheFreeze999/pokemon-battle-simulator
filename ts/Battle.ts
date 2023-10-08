@@ -18,6 +18,8 @@ class Battle {
 
 	constructor() {
 		this.eventHandler.dispatchEvent('new turn');
+
+		this.teams[1].isOpposing = true;
 	}
 
 	get allBattlers() {
@@ -28,6 +30,8 @@ class Battle {
 		this.teams.forEach(team => team.battlers[0].switchedIn = true);
 		this.renderer.setSpritesToSwitchedInBattlers();
 		this.renderer.updateTurnEl();
+
+		this.teams.find(team => team.isOpposing)?.battlers.forEach(battler => battler.displayName = `The opposing ${battler.displayName}`)
 	}
 
 	sortSwitchedInBattlersBySpeedDescending() {

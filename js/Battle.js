@@ -16,6 +16,7 @@ class Battle {
     get ended() { return this.winner !== null; }
     constructor() {
         this.eventHandler.dispatchEvent('new turn');
+        this.teams[1].isOpposing = true;
     }
     get allBattlers() {
         return this.teams.flatMap(team => team.battlers);
@@ -24,6 +25,7 @@ class Battle {
         this.teams.forEach(team => team.battlers[0].switchedIn = true);
         this.renderer.setSpritesToSwitchedInBattlers();
         this.renderer.updateTurnEl();
+        this.teams.find(team => team.isOpposing)?.battlers.forEach(battler => battler.displayName = `The opposing ${battler.displayName}`);
     }
     sortSwitchedInBattlersBySpeedDescending() {
         return this.allBattlers.filter(battler => battler.switchedIn).toSorted((a, b) => b.getEffectiveStats().speed - a.getEffectiveStats().speed);

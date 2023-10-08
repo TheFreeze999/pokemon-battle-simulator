@@ -2,7 +2,8 @@ import Battle from "./Battle.js";
 import Battler from './Battler.js';
 
 class Team {
-	battlers: Battler[] = []
+	battlers: Battler[] = [];
+	isOpposing = false;
 
 	constructor(public battle: Battle) {
 

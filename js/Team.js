@@ -1,6 +1,7 @@
 class Team {
     battle;
     battlers = [];
+    isOpposing = false;
     constructor(battle) {
         this.battle = battle;
     }

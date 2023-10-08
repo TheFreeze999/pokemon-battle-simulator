@@ -9,15 +9,15 @@ import { randomArrayElement } from './util.js';
 
 const battle = new Battle();
 
-const creature0 = new Creature(SpeciesDex.fletchling);
-const creature1 = new Creature(SpeciesDex.honedge);
+const creature0 = new Creature(SpeciesDex.jolteon);
+const creature1 = new Creature(SpeciesDex.jolteon);
 
 
-creature0.addMoves(MoveDex.energy_ball);
-creature1.addMoves(MoveDex.energy_ball, MoveDex.flamethrower, MoveDex.thunder_shock, MoveDex.accelerock);
+creature0.addMoves(MoveDex.thunder_shock, MoveDex.energy_ball, MoveDex.recover, MoveDex.flamethrower);
+creature1.addMoves(MoveDex.thunder_shock, MoveDex.energy_ball, MoveDex.recover, MoveDex.flamethrower);
 
 creature0.heldItem = ItemDex.leftovers;
-creature1.heldItem = ItemDex.black_sludge;
+creature1.heldItem = ItemDex.leftovers;
 
 creature0.level = 100;
 creature1.level = 100;

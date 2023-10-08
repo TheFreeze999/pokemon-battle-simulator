@@ -7,6 +7,7 @@ import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 import RemoveItemAction from '../queue/actions/RemoveItemAction.js';
 import GiveItemAction from "../queue/actions/GiveItemAction.js";
+import HealAction from "../queue/actions/HealAction.js";
 
 namespace MoveDex {
 	export const accelerock = new Move({
@@ -110,6 +111,21 @@ namespace MoveDex {
 			statDropAction.priority = 3;
 			statDropAction.cause = moveAction;
 			moveAction.target.battle?.queue.push(statDropAction);
+		}
+	});
+	export const recover = new Move({
+		name: "recover",
+		displayName: "Recover",
+		type: Type.NORMAL,
+		category: Move.Category.STATUS,
+		accuracy: -1,
+		pp: 10,
+		applySecondaryEffects(moveAction: MoveAction) {
+			const healAmount = moveAction.user.initialStats.hp / 2;
+			const healAction = new HealAction(moveAction.user, healAmount);
+			healAction.priority = 3;
+			healAction.cause = moveAction;
+			moveAction.target.battle?.queue.push(healAction);
 		}
 	});
 	export const screech = new Move({

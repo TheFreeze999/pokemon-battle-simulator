@@ -6,6 +6,7 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 import RemoveItemAction from '../queue/actions/RemoveItemAction.js';
 import GiveItemAction from "../queue/actions/GiveItemAction.js";
+import HealAction from "../queue/actions/HealAction.js";
 var MoveDex;
 (function (MoveDex) {
     MoveDex.accelerock = new Move({
@@ -108,6 +109,21 @@ var MoveDex;
             statDropAction.priority = 3;
             statDropAction.cause = moveAction;
             moveAction.target.battle?.queue.push(statDropAction);
+        }
+    });
+    MoveDex.recover = new Move({
+        name: "recover",
+        displayName: "Recover",
+        type: Type.NORMAL,
+        category: Move.Category.STATUS,
+        accuracy: -1,
+        pp: 10,
+        applySecondaryEffects(moveAction) {
+            const healAmount = moveAction.user.initialStats.hp / 2;
+            const healAction = new HealAction(moveAction.user, healAmount);
+            healAction.priority = 3;
+            healAction.cause = moveAction;
+            moveAction.target.battle?.queue.push(healAction);
         }
     });
     MoveDex.screech = new Move({
