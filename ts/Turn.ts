@@ -64,8 +64,6 @@ class Turn {
 	}
 	async concludeFinalPhase() {
 		if (this.phase !== Turn.Phase.FINAL) return;
-		this.battle.turn = new Turn(this.battle, this.number + 1);
-		this.battle.eventHandler.dispatchEvent('new turn');
 		await this.battle.renderer.showTextWhilePausingQueue("----------------------------", [], 2000);
 
 		for (const team of this.battle.teams) {
@@ -73,8 +71,12 @@ class Turn {
 				this.battle.winner = team.enemyTeam;
 				this.battle.eventHandler.dispatchEvent('end')
 				await this.battle.renderer.showTextWhilePausingQueue(`Team ${this.battle.winner.index} wins!`);
+				return;
 			}
 		}
+		this.battle.turn = new Turn(this.battle, this.number + 1);
+		this.battle.eventHandler.dispatchEvent('new turn');
+		this.battle.renderer.updateTurnEl();
 	}
 }
 

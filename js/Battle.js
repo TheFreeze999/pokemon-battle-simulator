@@ -23,6 +23,7 @@ class Battle {
     start() {
         this.teams.forEach(team => team.battlers[0].switchedIn = true);
         this.renderer.setSpritesToSwitchedInBattlers();
+        this.renderer.updateTurnEl();
     }
     sortSwitchedInBattlersBySpeedDescending() {
         return this.allBattlers.filter(battler => battler.switchedIn).toSorted((a, b) => b.getEffectiveStats().speed - a.getEffectiveStats().speed);

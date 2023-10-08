@@ -6,11 +6,13 @@ class Renderer {
 	private textboxEl: HTMLDivElement;
 	private sceneEl: HTMLDivElement;
 	private battlerEls: HTMLDivElement[];
+	private turnEl: HTMLParagraphElement;
 
 	constructor(public battle: Battle, public container: HTMLDivElement) {
 		this.textboxEl = this.container.querySelector('.textbox') as HTMLDivElement;
 		this.sceneEl = this.container.querySelector('.scene') as HTMLDivElement;
 		this.battlerEls = Array.from(this.sceneEl.querySelectorAll('.battler')) as HTMLDivElement[];
+		this.turnEl = this.sceneEl.querySelector('.turn') as HTMLParagraphElement;
 	}
 
 	private async showText(text: string, classes: string[], delayAfter: number) {
@@ -99,6 +101,10 @@ class Renderer {
 			{ translate: "0 0" },
 		], 500);
 		await delay(500);
+	}
+
+	updateTurnEl() {
+		this.turnEl.innerHTML = `Turn ${this.battle.turn.number + 1}`;
 	}
 }
 

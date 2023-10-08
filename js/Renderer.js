@@ -5,12 +5,14 @@ class Renderer {
     textboxEl;
     sceneEl;
     battlerEls;
+    turnEl;
     constructor(battle, container) {
         this.battle = battle;
         this.container = container;
         this.textboxEl = this.container.querySelector('.textbox');
         this.sceneEl = this.container.querySelector('.scene');
         this.battlerEls = Array.from(this.sceneEl.querySelectorAll('.battler'));
+        this.turnEl = this.sceneEl.querySelector('.turn');
     }
     async showText(text, classes, delayAfter) {
         const pEl = document.createElement('p');
@@ -93,6 +95,9 @@ class Renderer {
             { translate: "0 0" },
         ], 500);
         await delay(500);
+    }
+    updateTurnEl() {
+        this.turnEl.innerHTML = `Turn ${this.battle.turn.number + 1}`;
     }
 }
 export default Renderer;
