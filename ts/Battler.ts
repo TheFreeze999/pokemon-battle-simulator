@@ -123,7 +123,7 @@ class Battler {
 			return pp > 0;
 		});
 
-		return usableMoves.length > 0 ? usableMoves : [/* MoveDex.struggle */];
+		return usableMoves.length > 0 ? usableMoves : [MoveDex.struggle];
 	}
 
 	get switchedIn() {

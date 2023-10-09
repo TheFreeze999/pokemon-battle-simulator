@@ -1,5 +1,6 @@
 import { clamp, objectClone } from "./util.js";
 import Stats from './Stats.js';
+import MoveDex from "./dex/MoveDex.js";
 class Battler {
     creature;
     team = null;
@@ -110,7 +111,7 @@ class Battler {
                 return false;
             return pp > 0;
         });
-        return usableMoves.length > 0 ? usableMoves : [ /* MoveDex.struggle */];
+        return usableMoves.length > 0 ? usableMoves : [MoveDex.struggle];
     }
     get switchedIn() {
         return this.team?.switchedInBattler === this;

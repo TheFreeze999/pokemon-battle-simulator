@@ -113,7 +113,7 @@ class MoveAction extends BattleAction {
 					if (typeEffectiveness !== 0 && !this.negateDirectDamage) {
 						const damageAmount = Move.standardDamageCalculation(this.user.level, attackingStat, defendingStat, this.move.basePower, multiplier);
 						const damageAction = new DamageAction(target, damageAmount);
-						damageAction.priority = 5;
+						damageAction.priority = 50;
 						damageAction.isDirectDamage = true;
 						this.queue?.push(damageAction);
 					}
