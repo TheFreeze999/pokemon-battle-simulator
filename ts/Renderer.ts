@@ -43,8 +43,7 @@ class Renderer {
 
 	setSpritesToSwitchedInBattlers() {
 		this.battle.teams.forEach((team) => {
-			const switchedInBattler = team.battlers.find((battler) => battler.switchedIn);
-			if (!switchedInBattler) return;
+			const switchedInBattler = team.switchedInBattler;
 			const battlerEl = this.getBattlerElFromBattler(switchedInBattler);
 			const spriteEl = battlerEl.querySelector('.sprite') as HTMLImageElement;
 			spriteEl.src = `http://play.pokemonshowdown.com/sprites/ani/${switchedInBattler.creature.species.name}.gif`;

@@ -37,9 +37,7 @@ class MoveAction extends BattleAction {
             return false;
         if (this.move.targeting === Move.Targeting.SELF && !(this.targets.length === 1 && this.targets[0] === this.user))
             return false;
-        if (this.move.targeting === Move.Targeting.SINGLE_OTHER && !(this.targets.length === 1 && this.targets[0] !== this.user))
-            return false;
-        if (this.move.targeting === Move.Targeting.ALL_OTHERS && this.targets.length !== this.queue?.battle.allSwitchedIn.length)
+        if (this.move.targeting === Move.Targeting.ENEMY && !(this.targets.length === 1 && this.targets[0] !== this.user))
             return false;
         return true;
     }
@@ -74,7 +72,7 @@ class MoveAction extends BattleAction {
         return false;
     }
     async execute() {
-        if (this.move.targeting === Move.Targeting.SINGLE_OTHER || this.move.targeting === Move.Targeting.ALL_OTHERS) {
+        if (this.move.targeting === Move.Targeting.ENEMY) {
             for (const target of this.targets) {
                 const isMissed = this.missedOnTargets.get(target) === true;
                 const isCriticalHit = this.criticalHitOnTargets.get(target) === true;

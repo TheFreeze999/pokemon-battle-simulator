@@ -4,6 +4,7 @@ import Battler from './Battler.js';
 class Team {
 	battlers: Battler[] = [];
 	isOpposing = false;
+	switchedInBattler = this.battlers[0];
 
 	constructor(public battle: Battle) {
 

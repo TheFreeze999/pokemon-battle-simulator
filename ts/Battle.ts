@@ -27,7 +27,6 @@ class Battle {
 	}
 
 	start() {
-		this.teams.forEach(team => team.battlers[0].switchedIn = true);
 		this.renderer.setSpritesToSwitchedInBattlers();
 		this.renderer.updateTurnEl();
 

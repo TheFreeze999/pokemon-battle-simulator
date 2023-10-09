@@ -31,8 +31,7 @@ class MoveAction extends BattleAction {
 		if (!this.user.usableMoves.includes(this.move)) return false;
 		if (this.move.targeting === Move.Targeting.NONE && this.targets.length !== 0) return false;
 		if (this.move.targeting === Move.Targeting.SELF && !(this.targets.length === 1 && this.targets[0] === this.user)) return false;
-		if (this.move.targeting === Move.Targeting.SINGLE_OTHER && !(this.targets.length === 1 && this.targets[0] !== this.user)) return false;
-		if (this.move.targeting === Move.Targeting.ALL_OTHERS && this.targets.length !== this.queue?.battle.allSwitchedIn.length) return false;
+		if (this.move.targeting === Move.Targeting.ENEMY && !(this.targets.length === 1 && this.targets[0] !== this.user)) return false;
 		return true;
 	}
 	/** Calculates the chance of a miss and returns true if the move should miss. */
@@ -69,7 +68,7 @@ class MoveAction extends BattleAction {
 	}
 
 	async execute() {
-		if (this.move.targeting === Move.Targeting.SINGLE_OTHER || this.move.targeting === Move.Targeting.ALL_OTHERS) {
+		if (this.move.targeting === Move.Targeting.ENEMY) {
 			for (const target of this.targets) {
 				const isMissed = this.missedOnTargets.get(target) === true;
 				const isCriticalHit = this.criticalHitOnTargets.get(target) === true;

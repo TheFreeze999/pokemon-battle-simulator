@@ -83,7 +83,7 @@ class Turn {
 		return this.battle.allSwitchedIn.toSorted((a, b) => {
 			const aSpeed = a.getEffectiveStats().speed;
 			const bSpeed = b.getEffectiveStats().speed;
-			if (aSpeed === bSpeed) return randomArrayElement([-1, 1]);
+			if (aSpeed === bSpeed) return randomArrayElement([1, -1]);
 			return bSpeed - aSpeed;
 		});
 	}

@@ -1,11 +1,12 @@
 import Battle from "./Battle.js";
 import Battler from "./Battler.js";
 import Creature from "./Creature.js";
+import Move from "./Move.js";
 import ItemDex from "./dex/ItemDex.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { randomArrayElement } from './util.js';
+import { randomArrayElement, mapNumberInRange } from './util.js';
 
 const battle = new Battle();
 
@@ -29,6 +30,8 @@ const battler1 = new Battler(creature1);
 
 battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
+battle.teams[0].switchedInBattler = battler0;
+battle.teams[1].switchedInBattler = battler1;
 
 /* battle.queue.push(
 	new MoveAction(battler0, battler1, MoveDex.bite),
@@ -43,18 +46,24 @@ await battle.queue.executeAll(); */
 
 battle.start();
 
+console.log(battle.allSwitchedIn)
+
 while (true) {
-	battle.turn.makeSelection(battler0, {
-		type: 'move',
-		user: battler0,
-		targets: [battler1],
-		move: randomArrayElement(battler0.usableMoves)
-	});
-	battle.turn.makeSelection(battler1, {
-		type: 'move',
-		user: battler1,
-		targets: [battler0],
-		move: randomArrayElement(battler1.usableMoves)
+	battle.allSwitchedIn.forEach(battler => {
+		const move = randomArrayElement(battler.usableMoves);
+		let targets: Battler[];
+		const opponent = battler.team?.enemyTeam.switchedInBattler;
+
+		if (move.targeting === Move.Targeting.ENEMY && opponent) targets = [opponent];
+		else if (move.targeting === Move.Targeting.SELF) targets = [battler];
+		else targets = [];
+
+		battle.turn.makeSelection(battler, {
+			type: 'move',
+			user: battler,
+			targets,
+			move
+		});
 	});
 
 	await battle.turn.concludeActionSelectionPhase();

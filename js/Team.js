@@ -2,6 +2,7 @@ class Team {
     battle;
     battlers = [];
     isOpposing = false;
+    switchedInBattler = this.battlers[0];
     constructor(battle) {
         this.battle = battle;
     }

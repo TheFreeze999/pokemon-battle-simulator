@@ -74,7 +74,7 @@ class Turn {
             const aSpeed = a.getEffectiveStats().speed;
             const bSpeed = b.getEffectiveStats().speed;
             if (aSpeed === bSpeed)
-                return randomArrayElement([-1, 1]);
+                return randomArrayElement([1, -1]);
             return bSpeed - aSpeed;
         });
     }
