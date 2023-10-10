@@ -21,7 +21,7 @@ class Move {
         this.category = data.category;
         this.basePower = data.basePower;
         this.priority = data.priority ?? 0;
-        this.targeting = data.targeting ?? Move.Targeting.ENEMY;
+        this.targeting = data.targeting ?? Move.Targeting.ONE_OTHER;
         this.accuracy = data.accuracy;
         this.dealDirectDamage = data.dealDirectDamage ?? true;
         this.contact = data.contact ?? false;
@@ -45,7 +45,7 @@ class Move {
     let Targeting;
     (function (Targeting) {
         Targeting[Targeting["SELF"] = 0] = "SELF";
-        Targeting[Targeting["ENEMY"] = 1] = "ENEMY";
+        Targeting[Targeting["ONE_OTHER"] = 1] = "ONE_OTHER";
         Targeting[Targeting["NONE"] = 2] = "NONE";
     })(Targeting = Move.Targeting || (Move.Targeting = {}));
 })(Move || (Move = {}));

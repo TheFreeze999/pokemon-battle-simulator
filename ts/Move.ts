@@ -32,7 +32,7 @@ class Move {
 		this.category = data.category;
 		this.basePower = data.basePower;
 		this.priority = data.priority ?? 0;
-		this.targeting = data.targeting ?? Move.Targeting.ENEMY;
+		this.targeting = data.targeting ?? Move.Targeting.ONE_OTHER;
 		this.accuracy = data.accuracy;
 		this.dealDirectDamage = data.dealDirectDamage ?? true;
 		this.contact = data.contact ?? false;
@@ -57,7 +57,7 @@ namespace Move {
 	}
 	export enum Targeting {
 		SELF,
-		ENEMY,
+		ONE_OTHER,
 		NONE
 	}
 }

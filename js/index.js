@@ -9,8 +9,8 @@ import { randomArrayElement } from './util.js';
 const battle = new Battle();
 const creature0 = new Creature(SpeciesDex.jolteon);
 const creature1 = new Creature(SpeciesDex.jolteon);
-creature0.addMoves(MoveDex.accelerock);
-creature1.addMoves(MoveDex.accelerock);
+creature0.addMoves(MoveDex.thunderbolt, MoveDex.accelerock);
+creature1.addMoves(MoveDex.thunderbolt, MoveDex.accelerock);
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.leftovers;
 creature0.level = 100;
@@ -28,7 +28,7 @@ while (true) {
         const move = randomArrayElement(battler.usableMoves);
         let targets;
         const opponent = battler.team?.enemyTeam.switchedInBattler;
-        if (move.targeting === Move.Targeting.ENEMY && opponent)
+        if (move.targeting === Move.Targeting.ONE_OTHER && opponent)
             targets = [opponent];
         else if (move.targeting === Move.Targeting.SELF)
             targets = [battler];

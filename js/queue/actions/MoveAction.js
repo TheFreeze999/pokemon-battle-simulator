@@ -15,6 +15,7 @@ class MoveAction extends BattleAction {
     negateDirectDamage = false;
     performSecondaryEffects = true;
     showTypeEffectivenessInfoText = true;
+    skipDamageCalcPhase = false;
     missedOnTargets = new Map();
     criticalHitOnTargets = new Map();
     stoppedByTypeImmunityOnTargets = new Map();
@@ -37,7 +38,7 @@ class MoveAction extends BattleAction {
             return false;
         if (this.move.targeting === Move.Targeting.SELF && !(this.targets.length === 1 && this.targets[0] === this.user))
             return false;
-        if (this.move.targeting === Move.Targeting.ENEMY && !(this.targets.length === 1 && this.targets[0] !== this.user))
+        if (this.move.targeting === Move.Targeting.ONE_OTHER && !(this.targets.length === 1 && this.targets[0] !== this.user))
             return false;
         return true;
     }
@@ -72,17 +73,17 @@ class MoveAction extends BattleAction {
         return false;
     }
     async execute() {
-        if (this.move.targeting === Move.Targeting.ENEMY) {
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName}!`);
+        if (this.move.targeting === Move.Targeting.ONE_OTHER) {
             for (const target of this.targets) {
                 const isMissed = this.missedOnTargets.get(target) === true;
                 const isCriticalHit = this.criticalHitOnTargets.get(target) === true;
                 await this.queue?.battle.renderer.shakeBattler(this.user);
-                await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName} on ${target.displayName}!`);
                 if (isMissed) {
                     await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
                     return;
                 }
-                if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
+                if (!this.skipDamageCalcPhase && this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
                     const userStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(this.user.statBoosts, 1) : this.user.statBoosts;
                     const targetStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(target.statBoosts, -1) : target.statBoosts;
                     const userBoostedStats = this.user.getEffectiveStats(userStatBoosts);

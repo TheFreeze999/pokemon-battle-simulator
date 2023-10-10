@@ -14,6 +14,7 @@ class MoveAction extends BattleAction {
 	negateDirectDamage = false;
 	performSecondaryEffects = true;
 	showTypeEffectivenessInfoText = true;
+	skipDamageCalcPhase = false;
 	missedOnTargets = new Map<Battler, boolean>();
 	criticalHitOnTargets = new Map<Battler, boolean>();
 	stoppedByTypeImmunityOnTargets = new Map<Battler, boolean>();
@@ -31,7 +32,7 @@ class MoveAction extends BattleAction {
 		if (!this.user.usableMoves.includes(this.move)) return false;
 		if (this.move.targeting === Move.Targeting.NONE && this.targets.length !== 0) return false;
 		if (this.move.targeting === Move.Targeting.SELF && !(this.targets.length === 1 && this.targets[0] === this.user)) return false;
-		if (this.move.targeting === Move.Targeting.ENEMY && !(this.targets.length === 1 && this.targets[0] !== this.user)) return false;
+		if (this.move.targeting === Move.Targeting.ONE_OTHER && !(this.targets.length === 1 && this.targets[0] !== this.user)) return false;
 		return true;
 	}
 	/** Calculates the chance of a miss and returns true if the move should miss. */
@@ -68,20 +69,20 @@ class MoveAction extends BattleAction {
 	}
 
 	async execute() {
-		if (this.move.targeting === Move.Targeting.ENEMY) {
+		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName}!`);
+		if (this.move.targeting === Move.Targeting.ONE_OTHER) {
 			for (const target of this.targets) {
 				const isMissed = this.missedOnTargets.get(target) === true;
 				const isCriticalHit = this.criticalHitOnTargets.get(target) === true;
 
 				await this.queue?.battle.renderer.shakeBattler(this.user);
-				await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName} on ${target.displayName}!`);
 
 				if (isMissed) {
 					await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
 					return;
 				}
 
-				if (this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
+				if (!this.skipDamageCalcPhase && this.move.category !== Move.Category.STATUS && this.move.basePower !== undefined && this.move.dealDirectDamage) {
 					const userStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(this.user.statBoosts, 1) : this.user.statBoosts;
 					const targetStatBoosts = isCriticalHit ? Stats.BaseStatsWithoutHP.getOnlyPositiveOrNegative(target.statBoosts, -1) : target.statBoosts;
 					const userBoostedStats = this.user.getEffectiveStats(userStatBoosts);
@@ -120,6 +121,7 @@ class MoveAction extends BattleAction {
 				}
 			}
 		}
+
 		this.user.movePp.set(this.move, (this.user.movePp.get(this.move) ?? 0) - 1);
 
 		if (this.performSecondaryEffects) {

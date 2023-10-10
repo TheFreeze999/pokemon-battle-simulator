@@ -14,8 +14,8 @@ const creature0 = new Creature(SpeciesDex.jolteon);
 const creature1 = new Creature(SpeciesDex.jolteon);
 
 
-creature0.addMoves(MoveDex.accelerock);
-creature1.addMoves(MoveDex.accelerock);
+creature0.addMoves(MoveDex.thunderbolt, MoveDex.accelerock);
+creature1.addMoves(MoveDex.thunderbolt, MoveDex.accelerock);
 
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.leftovers;
@@ -41,7 +41,7 @@ while (true) {
 		let targets: Battler[];
 		const opponent = battler.team?.enemyTeam.switchedInBattler;
 
-		if (move.targeting === Move.Targeting.ENEMY && opponent) targets = [opponent];
+		if (move.targeting === Move.Targeting.ONE_OTHER && opponent) targets = [opponent];
 		else if (move.targeting === Move.Targeting.SELF) targets = [battler];
 		else targets = [];
 

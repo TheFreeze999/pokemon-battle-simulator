@@ -12,7 +12,7 @@ namespace MoveDex {
 		accuracy: 100,
 		contact: true,
 		priority: 1,
-		pp: 1,
+		pp: 20,
 	});
 	export const struggle = new Move({
 		name: "struggle",
@@ -37,6 +37,15 @@ namespace MoveDex {
 			})
 			moveAction.queue?.push(recoilAction);
 		},
+	});
+	export const thunderbolt = new Move({
+		name: "thunderbolt",
+		displayName: "Thunderbolt",
+		type: Type.ELECTRIC,
+		category: Move.Category.SPECIAL,
+		basePower: 90,
+		accuracy: 100,
+		pp: 15,
 	});
 }
 
