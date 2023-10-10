@@ -1,10 +1,11 @@
 import Ability from "../Ability.js";
+import Item from "../Item.js";
 import DamageAction from "../queue/actions/DamageAction.js";
 import HealAction from "../queue/actions/HealAction.js";
 import Type from '../Type.js';
 
-namespace AbilityDex {
-	export const leftovers = new Ability({
+namespace ItemDex {
+	export const leftovers = new Item({
 		name: "leftovers",
 		displayName: "Leftovers",
 		applyFinalPhaseBattleActions(owner) {
@@ -20,4 +21,4 @@ namespace AbilityDex {
 	});
 }
 
-export default AbilityDex;
+export default ItemDex;

@@ -18,7 +18,7 @@ class BurnEffect extends Effect {
 	preExecutionModifiers: BattleAction.Modifier[] = [
 		{
 			priority: 0,
-			modify(battleAction, owner) {
+			async modify(battleAction, owner) {
 				if (!(battleAction instanceof MoveAction)) return;
 				if (battleAction.user !== owner) return;
 				if (battleAction.move.category !== Move.Category.PHYSICAL) return;

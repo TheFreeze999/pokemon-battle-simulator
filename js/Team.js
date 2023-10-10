@@ -15,6 +15,7 @@ class Team {
     addBattler(battler) {
         this.battlers.push(battler);
         battler.team = this;
+        this.switchedInBattler ??= battler;
     }
     get allBattlersFainted() {
         return this.battlers.every(battler => battler.fainted);

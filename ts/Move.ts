@@ -23,7 +23,7 @@ class Move {
 	readonly criticalHitRatio: number;
 	readonly pp: number;
 	readonly ignoreTypeEffectiveness: boolean;
-	readonly applySecondaryEffects: (moveAction: MoveAction) => void;
+	readonly applySecondaryEffects: (moveAction: MoveAction) => Promise<void>;
 
 	constructor(data: MoveData) {
 		this.name = data.name;
@@ -39,7 +39,7 @@ class Move {
 		this.criticalHitRatio = data.criticalHitRatio ?? 0;
 		this.pp = data.pp;
 		this.ignoreTypeEffectiveness = data.ignoreTypeEffectiveness ?? false;
-		this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
+		this.applySecondaryEffects = data.applySecondaryEffects ?? (async () => { });
 	}
 
 	static standardDamageCalculation(attackerLevel: number, attackingStat: number, defendingStat: number, power: number, multiplier: number): number {

@@ -12,7 +12,7 @@ var MoveDex;
         accuracy: 100,
         contact: true,
         priority: 1,
-        pp: 20,
+        pp: 1,
     });
     MoveDex.struggle = new Move({
         name: "struggle",
@@ -25,7 +25,7 @@ var MoveDex;
         priority: 1,
         pp: -1,
         ignoreTypeEffectiveness: true,
-        applySecondaryEffects(moveAction) {
+        async applySecondaryEffects(moveAction) {
             const recoilAmount = Math.round(moveAction.user.initialStats.hp / 4);
             const recoilAction = new DamageAction(moveAction.user, recoilAmount);
             recoilAction.cause = moveAction;

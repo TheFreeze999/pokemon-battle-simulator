@@ -120,11 +120,11 @@ class MoveAction extends BattleAction {
 				}
 			}
 		}
+		this.user.movePp.set(this.move, (this.user.movePp.get(this.move) ?? 0) - 1);
 
 		if (this.performSecondaryEffects) {
-			this.move.applySecondaryEffects(this);
+			await this.move.applySecondaryEffects(this);
 		}
-		this.user.movePp.set(this.move, (this.user.movePp.get(this.move) ?? 0) - 1);
 	}
 
 	get allMissed() {

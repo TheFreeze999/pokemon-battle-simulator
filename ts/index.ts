@@ -30,19 +30,6 @@ const battler1 = new Battler(creature1);
 
 battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
-battle.teams[0].switchedInBattler = battler0;
-battle.teams[1].switchedInBattler = battler1;
-
-/* battle.queue.push(
-	new MoveAction(battler0, battler1, MoveDex.bite),
-	new MoveAction(battler1, battler0, MoveDex.bite),
-	new MoveAction(battler0, battler1, MoveDex.bite),
-	new MoveAction(battler1, battler0, MoveDex.bite),
-	new MoveAction(battler0, battler1, MoveDex.bite),
-	new MoveAction(battler1, battler0, MoveDex.bite),
-);
-
-await battle.queue.executeAll(); */
 
 battle.start();
 

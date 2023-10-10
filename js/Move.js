@@ -28,7 +28,7 @@ class Move {
         this.criticalHitRatio = data.criticalHitRatio ?? 0;
         this.pp = data.pp;
         this.ignoreTypeEffectiveness = data.ignoreTypeEffectiveness ?? false;
-        this.applySecondaryEffects = data.applySecondaryEffects ?? (() => { });
+        this.applySecondaryEffects = data.applySecondaryEffects ?? (async () => { });
     }
     static standardDamageCalculation(attackerLevel, attackingStat, defendingStat, power, multiplier) {
         const randomMultiplier = randomInteger(85, 100) / 100;

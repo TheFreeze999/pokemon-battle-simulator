@@ -1,13 +1,6 @@
 import Move from "../Move.js";
 import Type, { TypeUtils } from "../Type.js";
-import BurnEffect from "../effects/effect_types/status_conditions/BurnEffect.js";
 import DamageAction from "../queue/actions/DamageAction.js";
-import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js";
-import MoveAction from "../queue/actions/MoveAction.js";
-import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
-import RemoveItemAction from '../queue/actions/RemoveItemAction.js';
-import GiveItemAction from "../queue/actions/GiveItemAction.js";
-import HealAction from "../queue/actions/HealAction.js";
 
 namespace MoveDex {
 	export const accelerock = new Move({
@@ -19,7 +12,7 @@ namespace MoveDex {
 		accuracy: 100,
 		contact: true,
 		priority: 1,
-		pp: 20,
+		pp: 1,
 	});
 	export const struggle = new Move({
 		name: "struggle",
@@ -32,7 +25,7 @@ namespace MoveDex {
 		priority: 1,
 		pp: -1,
 		ignoreTypeEffectiveness: true,
-		applySecondaryEffects(moveAction) {
+		async applySecondaryEffects(moveAction) {
 			const recoilAmount = Math.round(moveAction.user.initialStats.hp / 4);
 			const recoilAction = new DamageAction(moveAction.user, recoilAmount);
 			recoilAction.cause = moveAction;

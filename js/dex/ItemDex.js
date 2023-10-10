@@ -1,8 +1,8 @@
-import Ability from "../Ability.js";
+import Item from "../Item.js";
 import HealAction from "../queue/actions/HealAction.js";
-var AbilityDex;
-(function (AbilityDex) {
-    AbilityDex.leftovers = new Ability({
+var ItemDex;
+(function (ItemDex) {
+    ItemDex.leftovers = new Item({
         name: "leftovers",
         displayName: "Leftovers",
         applyFinalPhaseBattleActions(owner) {
@@ -17,5 +17,5 @@ var AbilityDex;
             owner.battle?.queue.push(healAction);
         }
     });
-})(AbilityDex || (AbilityDex = {}));
-export default AbilityDex;
+})(ItemDex || (ItemDex = {}));
+export default ItemDex;

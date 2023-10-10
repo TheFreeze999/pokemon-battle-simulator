@@ -21,6 +21,7 @@ class Team {
 	addBattler(battler: Battler) {
 		this.battlers.push(battler);
 		battler.team = this;
+		this.switchedInBattler ??= battler;
 	}
 
 	get allBattlersFainted() {

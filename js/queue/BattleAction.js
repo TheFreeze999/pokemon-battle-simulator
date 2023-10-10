@@ -17,7 +17,7 @@ class BattleAction {
         if (!this.clause())
             return;
         this.eventHandler.dispatchEvent('clause passed');
-        this.applyModificationsToSelf("preExecutionModifiers");
+        await this.applyModificationsToSelf("preExecutionModifiers");
         this.eventHandler.dispatchEvent('pre execution modifications applied');
         if (!this.toExecute)
             return;
@@ -32,10 +32,10 @@ class BattleAction {
         }
         await this.execute();
         this.eventHandler.dispatchEvent('after execution');
-        this.applyModificationsToSelf("postExecutionModifiers");
+        await this.applyModificationsToSelf("postExecutionModifiers");
         this.eventHandler.dispatchEvent('post execution modifications applied');
     }
-    applyModificationsToSelf(type) {
+    async applyModificationsToSelf(type) {
         if (!this.queue)
             return;
         const allBattlers = this.queue.battle.allBattlers;
@@ -58,7 +58,7 @@ class BattleAction {
         const battlerModifierPairsSorted = battlerModifierPairs.sort((a, b) => b.modifier.priority - a.modifier.priority);
         console.log(this, battlerModifierPairsSorted);
         for (const { battler, modifier } of battlerModifierPairsSorted) {
-            modifier.modify(this, battler);
+            await modifier.modify(this, battler);
         }
         // debugger;
     }

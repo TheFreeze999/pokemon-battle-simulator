@@ -29,7 +29,7 @@ abstract class BattleAction {
 		if (!this.clause()) return;
 		this.eventHandler.dispatchEvent('clause passed');
 
-		this.applyModificationsToSelf("preExecutionModifiers");
+		await this.applyModificationsToSelf("preExecutionModifiers");
 		this.eventHandler.dispatchEvent('pre execution modifications applied');
 
 		if (!this.toExecute) return;
@@ -45,11 +45,11 @@ abstract class BattleAction {
 		await this.execute();
 		this.eventHandler.dispatchEvent('after execution');
 
-		this.applyModificationsToSelf("postExecutionModifiers");
+		await this.applyModificationsToSelf("postExecutionModifiers");
 		this.eventHandler.dispatchEvent('post execution modifications applied');
 	}
 
-	applyModificationsToSelf(type: 'preExecutionModifiers' | 'postExecutionModifiers') {
+	async applyModificationsToSelf(type: 'preExecutionModifiers' | 'postExecutionModifiers') {
 		if (!this.queue) return;
 		const allBattlers = this.queue.battle.allBattlers;
 		const battlerModifierPairs: { battler: Battler, modifier: BattleAction.Modifier }[] = [];
@@ -75,7 +75,7 @@ abstract class BattleAction {
 		console.log(this, battlerModifierPairsSorted);
 
 		for (const { battler, modifier } of battlerModifierPairsSorted) {
-			modifier.modify(this, battler)
+			await modifier.modify(this, battler)
 		}
 
 		// debugger;
@@ -92,7 +92,7 @@ namespace BattleAction {
 	export interface Modifier {
 		/** Highest first */
 		priority: number;
-		modify(battleAction: BattleAction, owner: Battler): void;
+		modify(battleAction: BattleAction, owner: Battler): Promise<void>;
 	}
 }
 
