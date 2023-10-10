@@ -70,12 +70,12 @@ class MoveAction extends BattleAction {
 
 	async execute() {
 		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName}!`);
+		await this.queue?.battle.renderer.shakeBattler(this.user);
 		if (this.move.targeting === Move.Targeting.ONE_OTHER) {
 			for (const target of this.targets) {
 				const isMissed = this.missedOnTargets.get(target) === true;
 				const isCriticalHit = this.criticalHitOnTargets.get(target) === true;
 
-				await this.queue?.battle.renderer.shakeBattler(this.user);
 
 				if (isMissed) {
 					await this.queue?.battle.renderer.showTextWhilePausingQueue(`The move missed!`);
@@ -136,7 +136,11 @@ class MoveAction extends BattleAction {
 		return Array.from(this.stoppedByTypeImmunityOnTargets).every((battler, stoppedByTypeImmunity) => stoppedByTypeImmunity);
 	}
 
-	isSuccessful() {
+	isSuccessfulOn(target: Battler) {
+		return this.missedOnTargets.get(target) !== true && this.stoppedByTypeImmunityOnTargets.get(target) !== true;
+	}
+
+	isSuccessfulOnAllTargets() {
 		return !this.allMissed && !this.allStoppedByTypeImmunity
 	}
 }

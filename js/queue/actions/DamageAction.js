@@ -34,7 +34,7 @@ class DamageAction extends BattleAction {
         await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage);
         if (this.target.initialStats.currentHp <= 0) {
             const faintAction = new FaintAction(this.target);
-            faintAction.priority = 10;
+            faintAction.priority = 100;
             this.queue?.push(faintAction);
             return;
         }

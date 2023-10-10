@@ -1,6 +1,8 @@
 import Move from "../Move.js";
+import Stats from "../Stats.js";
 import Type, { TypeUtils } from "../Type.js";
 import DamageAction from "../queue/actions/DamageAction.js";
+import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 
 namespace MoveDex {
 	export const accelerock = new Move({
@@ -13,6 +15,61 @@ namespace MoveDex {
 		contact: true,
 		priority: 1,
 		pp: 20,
+	});
+
+	export const energy_ball = new Move({
+		name: "energy_ball",
+		displayName: "Energy Ball",
+		type: Type.GRASS,
+		category: Move.Category.SPECIAL,
+		basePower: 90,
+		accuracy: 100,
+		pp: 10,
+		async applySecondaryEffects(moveAction) {
+			const target = moveAction.targets[0];
+			if (!moveAction.isSuccessfulOn(target)) return;
+
+			const statDropAction = new StatStageChangeAction(target, "specialDefense", -1);
+			statDropAction.priority = 30;
+			statDropAction.chance = [100, 100];
+			statDropAction.cause = moveAction;
+			moveAction.queue?.push(statDropAction);
+		},
+	});
+	export const flamethrower = new Move({
+		name: "flamethrower",
+		displayName: "Flamethrower",
+		type: Type.FIRE,
+		category: Move.Category.SPECIAL,
+		basePower: 90,
+		accuracy: 100,
+		pp: 15,
+	});
+	export const shell_smash = new Move({
+		name: "shell_smash",
+		displayName: "Shell Smash",
+		type: Type.NORMAL,
+		category: Move.Category.STATUS,
+		accuracy: -1,
+		targeting: Move.Targeting.SELF,
+		pp: 15,
+		async applySecondaryEffects(moveAction) {
+			const defensiveStats = ['defense', 'specialDefense'] as (keyof Stats.BaseStatsWithoutHP)[];
+			const offensiveStats = ['attack', 'specialAttack', 'speed'] as (keyof Stats.BaseStatsWithoutHP)[];
+
+			for (const defensiveStat of defensiveStats) {
+				const statDropAction = new StatStageChangeAction(moveAction.user, defensiveStat, -1);
+				statDropAction.cause = moveAction;
+				statDropAction.priority = 30;
+				moveAction.queue?.push(statDropAction);
+			}
+			for (const offensiveStat of offensiveStats) {
+				const statDropAction = new StatStageChangeAction(moveAction.user, offensiveStat, 2);
+				statDropAction.cause = moveAction;
+				statDropAction.priority = 30;
+				moveAction.queue?.push(statDropAction);
+			}
+		},
 	});
 	export const struggle = new Move({
 		name: "struggle",
@@ -37,6 +94,15 @@ namespace MoveDex {
 			})
 			moveAction.queue?.push(recoilAction);
 		},
+	});
+	export const surf = new Move({
+		name: "surf",
+		displayName: "Surf",
+		type: Type.WATER,
+		category: Move.Category.SPECIAL,
+		basePower: 90,
+		accuracy: 100,
+		pp: 15,
 	});
 	export const thunderbolt = new Move({
 		name: "thunderbolt",

@@ -122,8 +122,6 @@ namespace Stats {
 		if (amount < -2) return `${displayName}'s ${statDisplayName} severely fell!`;
 		return null;
 	}
-
-
 }
 
 export default Stats;

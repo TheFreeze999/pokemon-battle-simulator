@@ -18,9 +18,16 @@ class StatStageChangeAction extends BattleAction {
     async execute() {
         if (this.amount === 0 || this.target.fainted)
             return;
-        const infoText = Stats.getStatStageChangeInfoText(this.target.displayName, this.stat, this.amount);
+        const rendererPromises = [this.queue?.battle.renderer.showStatStageChange(this.target, this.amount)];
+        const statAmountBeforeChange = this.stat === "accuracy" || this.stat === "evasion" ? this.target.accuracyEvasionBoosts[this.stat] : this.target.statBoosts[this.stat];
+        let infoText = Stats.getStatStageChangeInfoText(this.target.displayName, this.stat, this.amount);
+        if (this.amount > 0 && statAmountBeforeChange >= 6)
+            infoText = `${this.target.displayName}'s ${Stats.toDisplayName(this.stat)} won't go any higher!`;
+        if (this.amount < 0 && statAmountBeforeChange <= -6)
+            infoText = `${this.target.displayName}'s ${Stats.toDisplayName(this.stat)} won't go any lower!`;
         if (infoText)
-            await this.queue?.battle.renderer.showTextWhilePausingQueue(infoText);
+            rendererPromises.push(this.queue?.battle.renderer.showTextWhilePausingQueue(infoText));
+        await Promise.all(rendererPromises);
         if (this.stat === "accuracy" || this.stat === "evasion") {
             this.target.accuracyEvasionBoosts[this.stat] += this.amount;
         }

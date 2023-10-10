@@ -12,7 +12,7 @@ export function delay(ms) {
     });
 }
 export function randomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 export function clamp(value, min, max) {
     if (value < min)
@@ -32,5 +32,5 @@ export function mapNumberInRange(number, fromRange, toRange) {
     return number / fromDiff * toDiff + minDiff;
 }
 export function randomArrayElement(arr) {
-    return arr[randomInteger(0, arr.length - 1)];
+    return arr[Math.floor(Math.random() * arr.length)];
 }

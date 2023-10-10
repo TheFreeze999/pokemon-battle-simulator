@@ -10,6 +10,7 @@
 	background: linear-gradient(150deg, hsl(120, 30%, 74%), hsl(120, 37%, 39%));
 	display: flex;
 	align-items: stretch;
+	overflow: hidden;
 
 
 	.scene {
@@ -28,6 +29,7 @@
 			align-items: center;
 			justify-content: space-between;
 			padding: 30px 30px 80px 30px;
+			position: relative;
 
 			.sprite {
 				width: 100px;
@@ -55,6 +57,38 @@
 					box-shadow: black 2px 0px;
 
 
+				}
+			}
+
+			.stat-change {
+				width: 150px;
+				height: 120px;
+				position: absolute;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				translate: 0 40px;
+				opacity: 0;
+
+				.arrow {
+					width: 150px;
+					height: 40px;
+
+					background-color: lime;
+					clip-path: polygon(50% 0%, 100% 50%, 100% 100%, 50% 50%, 0% 100%, 0% 50%);
+					transform-origin: center;
+
+					&.hidden {
+						display: none;
+					}
+				}
+
+				&.negative {
+					.arrow {
+						rotate: 180deg;
+						background-color: red;
+					}
 				}
 			}
 		}

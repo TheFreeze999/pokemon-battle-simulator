@@ -94,6 +94,55 @@ class Renderer {
         ], 500);
         await delay(500);
     }
+    async showFaintAnimation(battler) {
+        const battlerEl = this.getBattlerElFromBattler(battler);
+        const spriteEl = battlerEl.querySelector('.sprite');
+        const duration = 1000;
+        spriteEl.animate([
+            { opacity: "1" },
+            { opacity: "0" },
+        ], {
+            duration: duration / 2,
+            fill: 'forwards'
+        });
+        spriteEl.animate([
+            { translate: "0 0" },
+            { translate: "0 1000px" },
+        ], {
+            duration,
+        });
+        await delay(duration);
+    }
+    async showStatStageChange(battler, amount) {
+        const battlerEl = this.getBattlerElFromBattler(battler);
+        const statChangeEl = battlerEl.querySelector('.stat-change');
+        const arrowEls = Array.from(statChangeEl.querySelectorAll('.arrow'));
+        const isPositive = amount > 0;
+        const arrowsToRender = Math.abs(amount);
+        const duration = 750;
+        console.log(arrowEls, arrowsToRender);
+        for (let i = 0; i < arrowEls.length; i++) {
+            const arrowEl = arrowEls[i];
+            if (i < arrowsToRender)
+                arrowEl.classList.remove('hidden');
+            else
+                arrowEl.classList.add('hidden');
+        }
+        if (isPositive) {
+            statChangeEl.classList.add('positive');
+            statChangeEl.classList.remove('negative');
+        }
+        else {
+            statChangeEl.classList.add('negative');
+            statChangeEl.classList.remove('positive');
+        }
+        statChangeEl.animate([
+            { opacity: "0" },
+            { opacity: "1" },
+            { opacity: "0" },
+        ], duration);
+        await delay(duration);
+    }
     updateTurnEl() {
         this.turnEl.innerHTML = `Turn ${this.battle.turn.number}`;
     }

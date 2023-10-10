@@ -11,8 +11,9 @@ class FaintAction extends BattleAction {
         return true;
     }
     async execute() {
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} fainted!`);
         this.target.fainted = true;
+        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} fainted!`);
+        await this.queue?.battle.renderer.showFaintAnimation(this.target);
     }
 }
 export default FaintAction;

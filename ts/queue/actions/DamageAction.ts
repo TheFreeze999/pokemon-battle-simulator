@@ -31,7 +31,7 @@ class DamageAction extends BattleAction {
 
 		if (this.target.initialStats.currentHp <= 0) {
 			const faintAction = new FaintAction(this.target);
-			faintAction.priority = 10;
+			faintAction.priority = 100;
 			this.queue?.push(faintAction);
 			return;
 		}
