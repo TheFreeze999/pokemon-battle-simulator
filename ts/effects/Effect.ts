@@ -13,6 +13,7 @@ abstract class Effect {
 
 	constructor(public type: string) { }
 
+	applyPreStartPhaseBattleActions(owner: Battler) { }
 	applyFinalPhaseBattleActions(owner: Battler) { }
 
 	isImmune(battler: Battler): boolean { return false; }

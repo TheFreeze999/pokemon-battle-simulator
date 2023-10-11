@@ -1,15 +1,16 @@
 import Events from "./Events.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { randomArrayElement } from "./util.js";
+import { delay, randomArrayElement } from "./util.js";
 class Turn {
     battle;
     number;
-    _phase = Turn.Phase.ACTION_SELECTION;
+    _phase;
     battlerSelections = new Map();
     eventHandler = new Events.Handler();
     constructor(battle, number) {
         this.battle = battle;
         this.number = number;
+        this._phase = this.number === 1 ? Turn.Phase.PRE_START : Turn.Phase.ACTION_SELECTION;
     }
     get phase() { return this._phase; }
     setPhase(newPhase) {
@@ -18,15 +19,38 @@ class Turn {
         this._phase = newPhase;
     }
     incrementPhase() {
-        this.setPhase((this.phase + 1) % 3);
+        if (this.phase === Turn.Phase.FINAL)
+            this.setPhase(Turn.Phase.ACTION_SELECTION);
+        else
+            this.setPhase((this.phase + 1) % 4);
     }
     makeSelection(battler, selection) {
         this.battlerSelections.set(battler, selection);
     }
-    async concludeActionSelectionPhase() {
+    async performPreStartPhase() {
+        if (this.phase !== Turn.Phase.PRE_START)
+            return;
+        const allBattlers = this.battle.allBattlers;
+        for (const battler of allBattlers) {
+            battler.ability.applyPreStartPhaseBattleActions(battler);
+            battler.heldItem?.applyPreStartPhaseBattleActions(battler);
+            for (const effect of battler.effects) {
+                effect.applyPreStartPhaseBattleActions(battler);
+            }
+        }
+        await this.battle.queue.executeAll();
+        this.battle.renderer.showTextWhilePausingQueue("");
+        await delay(500);
+        this.incrementPhase();
+    }
+    async performActionSelectionPhase() {
         if (this.phase !== Turn.Phase.ACTION_SELECTION)
             return;
         this.incrementPhase();
+    }
+    async performMainActionPhase() {
+        if (this.phase !== Turn.Phase.MAIN_ACTION)
+            return;
         for (const [battler, selection] of this.battlerSelections) {
             if (battler !== selection.user)
                 continue;
@@ -38,11 +62,11 @@ class Turn {
             selection.user.battle?.queue.push(action);
         }
         await this.battle.queue.executeAll();
-    }
-    async concludeMainActionPhase() {
-        if (this.phase !== Turn.Phase.MAIN_ACTION)
-            return;
         this.incrementPhase();
+    }
+    async performFinalPhase() {
+        if (this.phase !== Turn.Phase.FINAL)
+            return;
         const allBattlers = this.battle.allBattlers;
         for (const battler of allBattlers) {
             battler.ability.applyFinalPhaseBattleActions(battler);
@@ -52,10 +76,6 @@ class Turn {
             }
         }
         await this.battle.queue.executeAll();
-    }
-    async concludeFinalPhase() {
-        if (this.phase !== Turn.Phase.FINAL)
-            return;
         await this.battle.renderer.showTextWhilePausingQueue("----------------------------", [], 2000);
         for (const team of this.battle.teams) {
             if (team.allBattlersFainted) {
@@ -82,9 +102,14 @@ class Turn {
 (function (Turn) {
     let Phase;
     (function (Phase) {
-        Phase[Phase["ACTION_SELECTION"] = 0] = "ACTION_SELECTION";
-        Phase[Phase["MAIN_ACTION"] = 1] = "MAIN_ACTION";
-        Phase[Phase["FINAL"] = 2] = "FINAL";
+        /** Happens once at the very start of the battle, before players select what to do. This is where e.g. Intimidate activates */
+        Phase[Phase["PRE_START"] = 0] = "PRE_START";
+        /** During this phase, the players choose what to do. This includes what moves to use, switches to make, items to use etc. */
+        Phase[Phase["ACTION_SELECTION"] = 1] = "ACTION_SELECTION";
+        /** This is where the main actions (which were directly/indirectly caused by the players' choices in the `ACTION_SELECTION` phase) take place*/
+        Phase[Phase["MAIN_ACTION"] = 2] = "MAIN_ACTION";
+        /** This phase is for the actions which take place at the very end of the round, e.g. burn damage*/
+        Phase[Phase["FINAL"] = 3] = "FINAL";
     })(Phase = Turn.Phase || (Turn.Phase = {}));
     let Selection;
     (function (Selection) {

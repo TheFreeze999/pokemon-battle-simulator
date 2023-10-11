@@ -9,6 +9,10 @@ import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 
 namespace AbilityDex {
+	export const no_ability = new Ability({
+		name: "no_ability",
+		displayName: "No Ability"
+	});
 	export const contrary = new Ability({
 		name: "contrary",
 		displayName: "Contrary",
@@ -23,9 +27,19 @@ namespace AbilityDex {
 			}
 		]
 	});
-	export const no_ability = new Ability({
-		name: "no_ability",
-		displayName: "No Ability"
+	export const intimidate = new Ability({
+		name: "intimidate",
+		displayName: "Intimidate",
+		applyPreStartPhaseBattleActions(owner) {
+			const target = owner.team?.enemyTeam.switchedInBattler;
+			if (!target) return;
+			const statStageChangeAction = new StatStageChangeAction(target, "attack", -1);
+			statStageChangeAction.priority = 30;
+			statStageChangeAction.eventHandler.addEventListener('before execution', async () => {
+				await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Intimidate]`, ["ability"]);
+			});
+			owner.battle?.queue.push(statStageChangeAction);
+		},
 	});
 	export const simple = new Ability({
 		name: "simple",

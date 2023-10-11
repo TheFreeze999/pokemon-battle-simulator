@@ -2,16 +2,15 @@ import Battle from "./Battle.js";
 import Battler from "./Battler.js";
 import Creature from "./Creature.js";
 import Move from "./Move.js";
+import Turn from "./Turn.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import { randomArrayElement } from './util.js';
 const battle = new Battle();
 const creature0 = new Creature(SpeciesDex.jolteon);
 const creature1 = new Creature(SpeciesDex.jolteon);
-creature0.addMoves(MoveDex.energy_ball, MoveDex.shell_smash);
-creature1.addMoves(MoveDex.energy_ball, MoveDex.shell_smash);
-/* creature0.heldItem = ItemDex.leftovers;
-creature1.heldItem = ItemDex.leftovers; */
+creature0.addMoves(MoveDex.energy_ball);
+creature1.addMoves(MoveDex.energy_ball);
 creature0.level = 100;
 creature1.level = 100;
 creature0.calcStats();
@@ -21,8 +20,11 @@ const battler1 = new Battler(creature1);
 battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);
 battle.start();
-console.log(battle.allSwitchedIn);
+await battle.turn.performPreStartPhase();
 while (true) {
+    if (battle.turn.phase !== Turn.Phase.ACTION_SELECTION)
+        break;
+    await battle.turn.performActionSelectionPhase();
     battle.allSwitchedIn.forEach(battler => {
         const move = randomArrayElement(battler.usableMoves);
         let targets;
@@ -40,9 +42,8 @@ while (true) {
             move
         });
     });
-    await battle.turn.concludeActionSelectionPhase();
-    await battle.turn.concludeMainActionPhase();
-    await battle.turn.concludeFinalPhase();
+    await battle.turn.performMainActionPhase();
+    await battle.turn.performFinalPhase();
     if (battle.ended)
         break;
 }

@@ -10,6 +10,7 @@ class Effect {
     constructor(type) {
         this.type = type;
     }
+    applyPreStartPhaseBattleActions(owner) { }
     applyFinalPhaseBattleActions(owner) { }
     isImmune(battler) { return false; }
 }

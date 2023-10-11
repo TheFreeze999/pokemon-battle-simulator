@@ -29,7 +29,7 @@ namespace SpeciesDex {
 		displayName: "Jolteon",
 		types: [Type.ELECTRIC],
 		baseStats: { hp: 65, attack: 65, defense: 60, specialAttack: 110, specialDefense: 95, speed: 130 },
-		abilities: { primary: AbilityDex.volt_absorb },
+		abilities: { primary: AbilityDex.intimidate },
 	});
 	export const litwick = new Species({
 		name: "litwick",

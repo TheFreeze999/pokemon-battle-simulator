@@ -4,15 +4,15 @@ import Events from "./Events.js";
 import Move from "./Move.js";
 import BattleAction from "./queue/BattleAction.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { randomArrayElement } from "./util.js";
+import { delay, randomArrayElement } from "./util.js";
 
 class Turn {
-	private _phase = Turn.Phase.ACTION_SELECTION;
+	private _phase: Turn.Phase;
 	battlerSelections = new Map<Battler, Turn.Selection>();
 	eventHandler = new Events.Handler();
 
 	constructor(public battle: Battle, public number: number) {
-
+		this._phase = this.number === 1 ? Turn.Phase.PRE_START : Turn.Phase.ACTION_SELECTION;
 	}
 
 	get phase() { return this._phase; }
@@ -24,16 +24,40 @@ class Turn {
 	}
 
 	incrementPhase() {
-		this.setPhase((this.phase + 1) % 3);
+		if (this.phase === Turn.Phase.FINAL)
+			this.setPhase(Turn.Phase.ACTION_SELECTION);
+		else
+			this.setPhase((this.phase + 1) % 4);
 	}
 
 	makeSelection(battler: Battler, selection: Turn.Selection) {
 		this.battlerSelections.set(battler, selection);
 	}
 
-	async concludeActionSelectionPhase() {
+	async performPreStartPhase() {
+		if (this.phase !== Turn.Phase.PRE_START) return;
+		const allBattlers = this.battle.allBattlers;
+		for (const battler of allBattlers) {
+			battler.ability.applyPreStartPhaseBattleActions(battler);
+			battler.heldItem?.applyPreStartPhaseBattleActions(battler);
+
+			for (const effect of battler.effects) {
+				effect.applyPreStartPhaseBattleActions(battler);
+			}
+		}
+		await this.battle.queue.executeAll();
+		this.battle.renderer.showTextWhilePausingQueue("");
+		await delay(500);
+		this.incrementPhase()
+	}
+
+	async performActionSelectionPhase() {
 		if (this.phase !== Turn.Phase.ACTION_SELECTION) return;
 		this.incrementPhase();
+	}
+
+	async performMainActionPhase() {
+		if (this.phase !== Turn.Phase.MAIN_ACTION) return;
 		for (const [battler, selection] of this.battlerSelections) {
 			if (battler !== selection.user) continue;
 
@@ -45,12 +69,11 @@ class Turn {
 			selection.user.battle?.queue.push(action);
 		}
 		await this.battle.queue.executeAll();
+		this.incrementPhase();
 	}
 
-	async concludeMainActionPhase() {
-		if (this.phase !== Turn.Phase.MAIN_ACTION) return;
-		this.incrementPhase();
-
+	async performFinalPhase() {
+		if (this.phase !== Turn.Phase.FINAL) return;
 
 		const allBattlers = this.battle.allBattlers;
 		for (const battler of allBattlers) {
@@ -62,9 +85,7 @@ class Turn {
 			}
 		}
 		await this.battle.queue.executeAll();
-	}
-	async concludeFinalPhase() {
-		if (this.phase !== Turn.Phase.FINAL) return;
+
 		await this.battle.renderer.showTextWhilePausingQueue("----------------------------", [], 2000);
 
 		for (const team of this.battle.teams) {
@@ -79,6 +100,7 @@ class Turn {
 		this.battle.eventHandler.dispatchEvent('new turn');
 		this.battle.renderer.updateTurnEl();
 	}
+
 	get speedOrderDesc() {
 		return this.battle.allSwitchedIn.toSorted((a, b) => {
 			const aSpeed = a.getEffectiveStats().speed;
@@ -91,8 +113,13 @@ class Turn {
 
 namespace Turn {
 	export enum Phase {
+		/** Happens once at the very start of the battle, before players select what to do. This is where e.g. Intimidate activates */
+		PRE_START,
+		/** During this phase, the players choose what to do. This includes what moves to use, switches to make, items to use etc. */
 		ACTION_SELECTION,
+		/** This is where the main actions (which were directly/indirectly caused by the players' choices in the `ACTION_SELECTION` phase) take place*/
 		MAIN_ACTION,
+		/** This phase is for the actions which take place at the very end of the round, e.g. burn damage*/
 		FINAL
 	}
 
