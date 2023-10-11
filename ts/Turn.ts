@@ -46,7 +46,7 @@ class Turn {
 			}
 		}
 		await this.battle.queue.executeAll();
-		this.battle.renderer.showTextWhilePausingQueue("");
+		this.battle.renderer.showTextWhilePausingQueue("~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		await delay(500);
 		this.incrementPhase()
 	}

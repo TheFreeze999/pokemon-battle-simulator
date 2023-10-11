@@ -41,6 +41,24 @@ namespace AbilityDex {
 			owner.battle?.queue.push(statStageChangeAction);
 		},
 	});
+	export const overgrow = new Ability({
+		name: "overgrow",
+		displayName: "Overgrow",
+		preExecutionModifiers: [
+			{
+				priority: 0,
+				async modify(battleAction, owner) {
+					if (!(battleAction instanceof MoveAction)) return;
+					if (battleAction.user !== owner) return;
+					if (battleAction.move.targeting !== Move.Targeting.ONE_OTHER) return;
+					if (battleAction.move.type !== Type.GRASS) return;
+					if (owner.hpPercentage > (100 / 3)) return;
+
+					battleAction.attackStatMultiplier *= 1.5;
+				},
+			}
+		]
+	});
 	export const simple = new Ability({
 		name: "simple",
 		displayName: "Simple",

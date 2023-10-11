@@ -8,7 +8,7 @@ namespace SpeciesDex {
 		displayName: "Bulbasaur",
 		types: [Type.GRASS, Type.POISON],
 		baseStats: { hp: 45, attack: 49, defense: 49, specialAttack: 65, specialDefense: 65, speed: 49 },
-		abilities: { primary: AbilityDex.no_ability },
+		abilities: { primary: AbilityDex.overgrow },
 	});
 	export const charmander = new Species({
 		name: "charmander",
@@ -29,7 +29,7 @@ namespace SpeciesDex {
 		displayName: "Jolteon",
 		types: [Type.ELECTRIC],
 		baseStats: { hp: 65, attack: 65, defense: 60, specialAttack: 110, specialDefense: 95, speed: 130 },
-		abilities: { primary: AbilityDex.intimidate },
+		abilities: { primary: AbilityDex.volt_absorb },
 	});
 	export const litwick = new Species({
 		name: "litwick",

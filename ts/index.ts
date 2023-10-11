@@ -7,16 +7,16 @@ import ItemDex from "./dex/ItemDex.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
 import MoveAction from "./queue/actions/MoveAction.js";
-import { randomArrayElement, mapNumberInRange } from './util.js';
+import { randomArrayElement } from './util.js';
 
 const battle = new Battle();
 
-const creature0 = new Creature(SpeciesDex.jolteon);
+const creature0 = new Creature(SpeciesDex.bulbasaur);
 const creature1 = new Creature(SpeciesDex.jolteon);
 
 
 creature0.addMoves(MoveDex.energy_ball);
-creature1.addMoves(MoveDex.energy_ball);
+creature1.addMoves(MoveDex.thunderbolt);
 
 creature0.level = 100;
 creature1.level = 100;
