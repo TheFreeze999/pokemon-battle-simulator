@@ -31,7 +31,7 @@ namespace MoveDex {
 
 			const statDropAction = new StatStageChangeAction(target, "specialDefense", -1);
 			statDropAction.priority = 30;
-			statDropAction.chance = [100, 100];
+			statDropAction.chance = [10, 100];
 			statDropAction.cause = moveAction;
 			moveAction.queue?.push(statDropAction);
 		},
