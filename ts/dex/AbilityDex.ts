@@ -41,6 +41,28 @@ namespace AbilityDex {
 			owner.battle?.queue.push(statStageChangeAction);
 		},
 	});
+	export const no_guard = new Ability({
+		name: "no_guard",
+		displayName: "No Guard",
+		preExecutionModifiers: [
+			{
+				priority: 0,
+				async modify(battleAction, owner) {
+					if (!(battleAction instanceof MoveAction)) return;
+					console.log(`user: ${battleAction.user.displayName}, targets: ${battleAction.targets.map(t => t.displayName)}`)
+					if (battleAction.user === owner) {
+						for (const target of battleAction.targets) {
+							battleAction.forceMoveHitOnTargets.set(target, true);
+						}
+					}
+					if (battleAction.targets.includes(owner)) {
+						battleAction.forceMoveHitOnTargets.set(owner, true);
+					}
+					console.log(battleAction.forceMoveHitOnTargets)
+				},
+			}
+		]
+	});
 	export const overgrow = new Ability({
 		name: "overgrow",
 		displayName: "Overgrow",

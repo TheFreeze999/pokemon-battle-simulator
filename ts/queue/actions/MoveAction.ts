@@ -10,7 +10,6 @@ class MoveAction extends BattleAction {
 	attackStatMultiplier = 1;
 	accuracyMultiplier = 1;
 	directDamageMultiplier = 1;
-	forceMoveHit = false;
 	negateDirectDamage = false;
 	performSecondaryEffects = true;
 	showTypeEffectivenessInfoText = true;
@@ -18,6 +17,7 @@ class MoveAction extends BattleAction {
 	missedOnTargets = new Map<Battler, boolean>();
 	criticalHitOnTargets = new Map<Battler, boolean>();
 	stoppedByTypeImmunityOnTargets = new Map<Battler, boolean>();
+	forceMoveHitOnTargets = new Map<Battler, boolean>();
 
 	constructor(public user: Battler, public targets: Battler[], public move: Move) {
 		super();
@@ -39,7 +39,7 @@ class MoveAction extends BattleAction {
 	private calculateMiss(target: Battler) {
 		let accuracy = this.move.accuracy;
 
-		if (this.forceMoveHit) return false;
+		if (this.forceMoveHitOnTargets.get(target) === true) return false;
 		if (accuracy < 0) return false;
 
 		const random = randomInteger(1, 100);
@@ -69,6 +69,11 @@ class MoveAction extends BattleAction {
 	}
 
 	async execute() {
+		this.targets.forEach(target => {
+			this.missedOnTargets.set(target, this.calculateMiss(target));
+			this.criticalHitOnTargets.set(target, this.calculateCriticalHit());
+		});
+
 		await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.user.displayName} used ${this.move.displayName}!`);
 		await this.queue?.battle.renderer.shakeBattler(this.user);
 		if (this.move.targeting === Move.Targeting.ONE_OTHER) {

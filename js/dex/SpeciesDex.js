@@ -50,7 +50,7 @@ var SpeciesDex;
         displayName: "Honedge",
         types: [Type.STEEL, Type.GHOST],
         baseStats: { hp: 45, attack: 80, defense: 100, specialAttack: 35, specialDefense: 37, speed: 28 },
-        abilities: { primary: AbilityDex.no_ability },
+        abilities: { primary: AbilityDex.no_guard },
     });
 })(SpeciesDex || (SpeciesDex = {}));
 export default SpeciesDex;

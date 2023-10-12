@@ -72,8 +72,6 @@ abstract class BattleAction {
 
 		const battlerModifierPairsSorted = battlerModifierPairs.sort((a, b) => b.modifier.priority - a.modifier.priority);
 
-		console.log(this, battlerModifierPairsSorted);
-
 		for (const { battler, modifier } of battlerModifierPairsSorted) {
 			await modifier.modify(this, battler)
 		}
