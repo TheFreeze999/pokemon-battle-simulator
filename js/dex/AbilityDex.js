@@ -86,6 +86,49 @@ var AbilityDex;
             }
         ]
     });
+    const SAP_SIPPER_ACTIVATED = Symbol('SAP_SIPPER_ACTIVATED');
+    AbilityDex.sap_sipper = new Ability({
+        name: "sap_sipper",
+        displayName: "Sap Sipper",
+        preExecutionModifiers: [
+            {
+                priority: 0,
+                async modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (battleAction.move.targeting === Move.Targeting.SELF)
+                        return;
+                    if (battleAction.move.targeting === Move.Targeting.NONE)
+                        return;
+                    if (!battleAction.targets.includes(owner))
+                        return;
+                    if (battleAction.move.type !== Type.GRASS)
+                        return;
+                    battleAction.flags[SAP_SIPPER_ACTIVATED] = true;
+                    battleAction.skipDamageCalcPhase = true;
+                    battleAction.performSecondaryEffects = false;
+                },
+            }
+        ],
+        postExecutionModifiers: [
+            {
+                priority: 0,
+                async modify(battleAction, owner) {
+                    if (!(battleAction instanceof MoveAction))
+                        return;
+                    if (!battleAction.targets.includes(owner))
+                        return;
+                    if (battleAction.flags[SAP_SIPPER_ACTIVATED] !== true)
+                        return;
+                    const statBoostAction = new StatStageChangeAction(owner, "attack", 1);
+                    statBoostAction.priority = 45;
+                    statBoostAction.cause = battleAction;
+                    await battleAction.queue?.battle.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Sap Sipper]`, ['ability'], 1000);
+                    battleAction.queue?.push(statBoostAction);
+                },
+            }
+        ]
+    });
     AbilityDex.simple = new Ability({
         name: "simple",
         displayName: "Simple",
@@ -112,7 +155,9 @@ var AbilityDex;
                 async modify(battleAction, owner) {
                     if (!(battleAction instanceof MoveAction))
                         return;
-                    if (battleAction.move.targeting !== Move.Targeting.ONE_OTHER)
+                    if (battleAction.move.targeting === Move.Targeting.SELF)
+                        return;
+                    if (battleAction.move.targeting === Move.Targeting.NONE)
                         return;
                     if (!battleAction.targets.includes(owner))
                         return;

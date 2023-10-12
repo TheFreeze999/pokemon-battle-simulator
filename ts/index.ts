@@ -15,8 +15,11 @@ const creature0 = new Creature(SpeciesDex.bulbasaur);
 const creature1 = new Creature(SpeciesDex.jolteon);
 
 
-creature0.addMoves(MoveDex.energy_ball);
-creature1.addMoves(MoveDex.energy_ball);
+creature0.addMoves(MoveDex.energy_ball, MoveDex.accelerock);
+creature1.addMoves(MoveDex.energy_ball, MoveDex.accelerock);
+
+creature0.heldItem = ItemDex.leftovers;
+creature1.heldItem = ItemDex.leftovers;
 
 creature0.level = 100;
 creature1.level = 100;
