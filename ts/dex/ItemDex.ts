@@ -13,9 +13,10 @@ namespace ItemDex {
 			const healAmount = owner.initialStats.hp / 16;
 			const healAction = new HealAction(owner, healAmount);
 			healAction.priority = 5 + owner.actingPriority;
+			healAction.textControls.showHpGainedText = false;
 			healAction.eventHandler.addEventListener('before execution', async () => {
 				await owner.battle?.renderer.showTextWhilePausingQueue(`${owner.displayName} was healed by its Leftovers.`);
-			})
+			});
 			owner.battle?.queue.push(healAction);
 		}
 	});

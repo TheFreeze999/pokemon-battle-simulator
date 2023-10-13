@@ -4,8 +4,10 @@ import FaintAction from "./FaintAction.js";
 
 class DamageAction extends BattleAction {
 	isDirectDamage = false;
-	showText = true;
-	showHpRemainingText = true;
+	textControls = {
+		showHpLostText: true,
+		showHpRemainingText: true,
+	}
 	constructor(public target: Battler, public amount: number) {
 		super();
 		this.amount = Math.floor(amount);
@@ -23,7 +25,7 @@ class DamageAction extends BattleAction {
 
 		const oldHpPercentage = this.target.hpPercentage;
 
-		if (this.showText)
+		if (this.textControls.showHpLostText)
 			await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} lost ${amount} HP!`);
 		this.target.initialStats.currentHp -= amount;
 		await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage);
@@ -36,7 +38,7 @@ class DamageAction extends BattleAction {
 			return;
 		}
 
-		if (this.showHpRemainingText)
+		if (this.textControls.showHpRemainingText)
 			await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
 	}
 }

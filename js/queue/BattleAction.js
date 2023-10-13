@@ -57,6 +57,8 @@ class BattleAction {
         }
         const battlerModifierPairsSorted = battlerModifierPairs.sort((a, b) => b.modifier.priority - a.modifier.priority);
         for (const { battler, modifier } of battlerModifierPairsSorted) {
+            if (!this.clause())
+                break;
             await modifier.modify(this, battler);
         }
         // debugger;

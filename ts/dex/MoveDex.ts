@@ -88,8 +88,8 @@ namespace MoveDex {
 			const recoilAction = new DamageAction(moveAction.user, recoilAmount);
 			recoilAction.cause = moveAction;
 			recoilAction.priority = 40;
-			recoilAction.showText = false;
-			recoilAction.showHpRemainingText = false;
+			recoilAction.textControls.showHpLostText = false;
+			recoilAction.textControls.showHpRemainingText = false;
 			recoilAction.eventHandler.addEventListener('before execution', async () => {
 				await moveAction.queue?.battle.renderer.showTextWhilePausingQueue(`${moveAction.user.displayName} lost some HP due to recoil.`)
 			})

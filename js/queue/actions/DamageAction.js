@@ -4,8 +4,10 @@ class DamageAction extends BattleAction {
     target;
     amount;
     isDirectDamage = false;
-    showText = true;
-    showHpRemainingText = true;
+    textControls = {
+        showHpLostText: true,
+        showHpRemainingText: true,
+    };
     constructor(target, amount) {
         super();
         this.target = target;
@@ -28,7 +30,7 @@ class DamageAction extends BattleAction {
         if (amount > this.target.initialStats.currentHp)
             amount = this.target.initialStats.currentHp;
         const oldHpPercentage = this.target.hpPercentage;
-        if (this.showText)
+        if (this.textControls.showHpLostText)
             await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} lost ${amount} HP!`);
         this.target.initialStats.currentHp -= amount;
         await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage);
@@ -38,7 +40,7 @@ class DamageAction extends BattleAction {
             this.queue?.push(faintAction);
             return;
         }
-        if (this.showHpRemainingText)
+        if (this.textControls.showHpRemainingText)
             await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }

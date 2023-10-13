@@ -2,6 +2,10 @@ import BattleAction from "../BattleAction.js";
 class HealAction extends BattleAction {
     target;
     amount;
+    textControls = {
+        showHpGainedText: true,
+        showHpRemainingText: true,
+    };
     constructor(target, amount) {
         super();
         this.target = target;
@@ -27,10 +31,12 @@ class HealAction extends BattleAction {
         if (amount > maxHealableAmount)
             amount = maxHealableAmount;
         const oldHpPercentage = this.target.hpPercentage;
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} was healed by ${amount} HP!`);
+        if (this.textControls.showHpGainedText)
+            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} was healed by ${amount} HP!`);
         this.target.initialStats.currentHp += amount;
         await this.queue?.battle.renderer.setHPPercentageTo(this.target, oldHpPercentage, this.target.hpPercentage);
-        await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
+        if (this.textControls.showHpRemainingText)
+            await this.queue?.battle.renderer.showTextWhilePausingQueue(`${this.target.displayName} now has ${this.target.initialStats.currentHp} HP!`);
     }
 }
 export default HealAction;

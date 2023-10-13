@@ -15,8 +15,8 @@ const creature0 = new Creature(SpeciesDex.bulbasaur);
 const creature1 = new Creature(SpeciesDex.jolteon);
 
 
-creature0.addMoves(MoveDex.energy_ball, MoveDex.accelerock);
-creature1.addMoves(MoveDex.energy_ball, MoveDex.accelerock);
+creature0.addMoves(MoveDex.energy_ball);
+creature1.addMoves(MoveDex.accelerock);
 
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.leftovers;
@@ -36,7 +36,7 @@ battle.start();
 
 await battle.turn.performPreStartPhase();
 
-while (true) {
+while (!battle.ended) {
 	if (battle.turn.phase !== Turn.Phase.ACTION_SELECTION) break;
 
 	await battle.turn.performActionSelectionPhase();
@@ -60,8 +60,6 @@ while (true) {
 
 	await battle.turn.performMainActionPhase();
 	await battle.turn.performFinalPhase();
-
-	if (battle.ended) break;
 }
 
 
