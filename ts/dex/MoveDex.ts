@@ -3,6 +3,7 @@ import Stats from "../Stats.js";
 import Type, { TypeUtils } from "../Type.js";
 import DamageAction from "../queue/actions/DamageAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
+import SwitchInAction from "../queue/actions/SwitchInAction.js";
 
 namespace MoveDex {
 	export const accelerock = new Move({

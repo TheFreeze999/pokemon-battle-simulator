@@ -4,7 +4,9 @@ export function removeNullAndUndefined(array) {
 export function objectClone(object) {
     return { ...object };
 }
-export function delay(ms) {
+export async function delay(ms) {
+    if (ms === 0)
+        return;
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve();

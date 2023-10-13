@@ -7,6 +7,7 @@ import EffectApplicationAction from "../queue/actions/EffectApplicationAction.js
 import HealAction from "../queue/actions/HealAction.js";
 import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
+import SwitchInAction from "../queue/actions/SwitchInAction.js";
 
 namespace AbilityDex {
 	export const no_ability = new Ability({
@@ -30,16 +31,25 @@ namespace AbilityDex {
 	export const intimidate = new Ability({
 		name: "intimidate",
 		displayName: "Intimidate",
-		applyPreStartPhaseBattleActions(owner) {
-			const target = owner.team?.enemyTeam.switchedInBattler;
-			if (!target) return;
-			const statStageChangeAction = new StatStageChangeAction(target, "attack", -1);
-			statStageChangeAction.priority = 30;
-			statStageChangeAction.eventHandler.addEventListener('before execution', async () => {
-				await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Intimidate]`, ["ability"]);
-			});
-			owner.battle?.queue.push(statStageChangeAction);
-		},
+		postExecutionModifiers: [
+			{
+				priority: 0,
+				async modify(battleAction, owner) {
+					if (!(battleAction instanceof SwitchInAction)) return;
+					if (battleAction.target !== owner) return;
+
+					const foes = battleAction.target.foes;
+					for (const foe of foes) {
+						const intimidateAction = new StatStageChangeAction(foe, "attack", -1);
+						intimidateAction.priority = 30;
+						intimidateAction.eventHandler.addEventListener('before execution', async () => {
+							await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Intimidate]`, ["ability"]);
+						});
+						owner.battle?.queue.push(intimidateAction);
+					}
+				},
+			}
+		]
 	});
 	export const no_guard = new Ability({
 		name: "no_guard",

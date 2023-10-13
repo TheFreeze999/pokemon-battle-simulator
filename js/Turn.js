@@ -1,5 +1,6 @@
 import Events from "./Events.js";
 import MoveAction from "./queue/actions/MoveAction.js";
+import SwitchInAction from "./queue/actions/SwitchInAction.js";
 import { delay, randomArrayElement } from "./util.js";
 class Turn {
     battle;
@@ -30,6 +31,12 @@ class Turn {
     async performPreStartPhase() {
         if (this.phase !== Turn.Phase.PRE_START)
             return;
+        const allSwitchedIn = this.battle.allSwitchedIn;
+        for (const battler of allSwitchedIn) {
+            const switchInAction = new SwitchInAction(battler);
+            switchInAction.priority = 100 - battler.placeInSpeedOrder;
+            this.battle.queue.push(switchInAction);
+        }
         const allBattlers = this.battle.allBattlers;
         for (const battler of allBattlers) {
             battler.ability.applyPreStartPhaseBattleActions(battler);

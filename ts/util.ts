@@ -6,7 +6,8 @@ export function objectClone<T extends Record<keyof any, any>>(object: T) {
 	return { ...object }
 }
 
-export function delay(ms: number): Promise<void> {
+export async function delay(ms: number): Promise<void> {
+	if (ms === 0) return;
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve();

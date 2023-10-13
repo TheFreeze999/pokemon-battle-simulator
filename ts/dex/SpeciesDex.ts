@@ -8,7 +8,7 @@ namespace SpeciesDex {
 		displayName: "Bulbasaur",
 		types: [Type.GRASS, Type.POISON],
 		baseStats: { hp: 45, attack: 49, defense: 49, specialAttack: 65, specialDefense: 65, speed: 49 },
-		abilities: { primary: AbilityDex.overgrow },
+		abilities: { primary: AbilityDex.intimidate },
 	});
 	export const charmander = new Species({
 		name: "charmander",
