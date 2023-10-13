@@ -3,6 +3,7 @@ import Battler from "./Battler.js";
 import Creature from "./Creature.js";
 import Move from "./Move.js";
 import Turn from "./Turn.js";
+import AbilityDex from "./dex/AbilityDex.js";
 import ItemDex from "./dex/ItemDex.js";
 import MoveDex from "./dex/MoveDex.js";
 import SpeciesDex from "./dex/SpeciesDex.js";
@@ -11,12 +12,12 @@ import { randomArrayElement } from './util.js';
 
 const battle = new Battle();
 
-const creature0 = new Creature(SpeciesDex.bulbasaur);
-const creature1 = new Creature(SpeciesDex.jolteon);
+const creature0 = new Creature(SpeciesDex.jolteon);
+const creature1 = new Creature(SpeciesDex.vaporeon);
 
 
 creature0.addMoves(MoveDex.energy_ball);
-creature1.addMoves(MoveDex.accelerock);
+creature1.addMoves(MoveDex.surf);
 
 creature0.heldItem = ItemDex.leftovers;
 creature1.heldItem = ItemDex.leftovers;
@@ -28,6 +29,8 @@ creature1.calcStats();
 
 const battler0 = new Battler(creature0);
 const battler1 = new Battler(creature1);
+
+battler1.ability = randomArrayElement([AbilityDex.torrent]);
 
 battle.teams[0].addBattler(battler0);
 battle.teams[1].addBattler(battler1);

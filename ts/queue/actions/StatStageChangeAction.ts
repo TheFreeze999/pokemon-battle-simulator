@@ -3,7 +3,7 @@ import Stats from "../../Stats.js";
 import BattleAction from "../BattleAction.js";
 
 class StatStageChangeAction extends BattleAction {
-	constructor(public target: Battler, public stat: keyof (Stats.BaseStatsWithoutHP & Stats.AccuracyEvasionStats), public amount: number) {
+	constructor(public target: Battler, public stat: keyof Stats.BoostableStats, public amount: number) {
 		super();
 	}
 	clause() {

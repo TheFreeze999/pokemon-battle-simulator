@@ -1,6 +1,10 @@
 import Battle from "./Battle.js";
 import Battler from "./Battler.js";
+import Move from "./Move.js";
+import Type from "./Type.js";
 import BattleAction from "./queue/BattleAction.js";
+import HealAction from "./queue/actions/HealAction.js";
+import MoveAction from "./queue/actions/MoveAction.js";
 
 type AbilityData =
 	/* Required Fields */
@@ -25,5 +29,4 @@ class Ability {
 		this.applyFinalPhaseBattleActions = data.applyFinalPhaseBattleActions ?? (() => { });
 	}
 }
-
 export default Ability;

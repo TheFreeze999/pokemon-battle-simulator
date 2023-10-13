@@ -97,7 +97,7 @@ var MoveDex;
         displayName: "Surf",
         type: Type.WATER,
         category: Move.Category.SPECIAL,
-        basePower: 90,
+        basePower: 75,
         accuracy: 100,
         pp: 15,
     });

@@ -1,16 +1,20 @@
 import Ability from "../Ability.js";
-import Move from "../Move.js";
 import Type from "../Type.js";
-import HealAction from "../queue/actions/HealAction.js";
 import MoveAction from "../queue/actions/MoveAction.js";
 import StatStageChangeAction from "../queue/actions/StatStageChangeAction.js";
 import SwitchInAction from "../queue/actions/SwitchInAction.js";
+import AbilityPresets from "./AbilityPresets.js";
 var AbilityDex;
 (function (AbilityDex) {
     AbilityDex.no_ability = new Ability({
         name: "no_ability",
         displayName: "No Ability"
     });
+    AbilityDex.blaze = new Ability({
+        name: "blaze",
+        displayName: "Blaze"
+    });
+    AbilityPresets.powerBoostWithTypeWhenLowHP(AbilityDex.blaze, Type.FIRE, 100 / 3);
     AbilityDex.contrary = new Ability({
         name: "contrary",
         displayName: "Contrary",
@@ -41,7 +45,7 @@ var AbilityDex;
                     const foes = battleAction.target.foes;
                     for (const foe of foes) {
                         const intimidateAction = new StatStageChangeAction(foe, "attack", -1);
-                        intimidateAction.priority = 30;
+                        intimidateAction.priority = 30 - owner.placeInSpeedOrder;
                         intimidateAction.eventHandler.addEventListener('before execution', async () => {
                             await owner.battle?.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Intimidate]`, ["ability"]);
                         });
@@ -76,69 +80,14 @@ var AbilityDex;
     });
     AbilityDex.overgrow = new Ability({
         name: "overgrow",
-        displayName: "Overgrow",
-        preExecutionModifiers: [
-            {
-                priority: 0,
-                async modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
-                        return;
-                    if (battleAction.user !== owner)
-                        return;
-                    if (battleAction.move.targeting !== Move.Targeting.ONE_OTHER)
-                        return;
-                    if (battleAction.move.type !== Type.GRASS)
-                        return;
-                    if (owner.hpPercentage > (100 / 3))
-                        return;
-                    battleAction.attackStatMultiplier *= 1.5;
-                },
-            }
-        ]
+        displayName: "Overgrow"
     });
-    const SAP_SIPPER_ACTIVATED = Symbol('SAP_SIPPER_ACTIVATED');
+    AbilityPresets.powerBoostWithTypeWhenLowHP(AbilityDex.overgrow, Type.GRASS, 100 / 3);
     AbilityDex.sap_sipper = new Ability({
         name: "sap_sipper",
-        displayName: "Sap Sipper",
-        preExecutionModifiers: [
-            {
-                priority: 0,
-                async modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
-                        return;
-                    if (battleAction.move.targeting === Move.Targeting.SELF)
-                        return;
-                    if (battleAction.move.targeting === Move.Targeting.NONE)
-                        return;
-                    if (!battleAction.targets.includes(owner))
-                        return;
-                    if (battleAction.move.type !== Type.GRASS)
-                        return;
-                    battleAction.flags[SAP_SIPPER_ACTIVATED] = true;
-                    battleAction.skipDamageCalcPhase = true;
-                    battleAction.performSecondaryEffects = false;
-                },
-            }
-        ],
-        postExecutionModifiers: [
-            {
-                priority: 0,
-                async modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
-                        return;
-                    if (!battleAction.targets.includes(owner))
-                        return;
-                    if (battleAction.flags[SAP_SIPPER_ACTIVATED] !== true)
-                        return;
-                    const statBoostAction = new StatStageChangeAction(owner, "attack", 1);
-                    statBoostAction.priority = 45;
-                    statBoostAction.cause = battleAction;
-                    await battleAction.queue?.battle.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Sap Sipper]`, ['ability'], 1000);
-                    battleAction.queue?.push(statBoostAction);
-                },
-            }
-        ]
+        displayName: "Sap Sipper"
     });
+    AbilityPresets.immunityToTypeWithStatBoost(AbilityDex.sap_sipper, Type.GRASS, "attack", 1);
     AbilityDex.simple = new Ability({
         name: "simple",
         displayName: "Simple",
@@ -155,48 +104,20 @@ var AbilityDex;
             }
         ]
     });
-    const VOLT_ABSORB_ACTIVATED = Symbol('VOLT_ABSORB_ACTIVATED');
+    AbilityDex.torrent = new Ability({
+        name: "torrent",
+        displayName: "Torrent"
+    });
+    AbilityPresets.powerBoostWithTypeWhenLowHP(AbilityDex.torrent, Type.WATER, 100 / 3);
     AbilityDex.volt_absorb = new Ability({
         name: "volt_absorb",
-        displayName: "Volt Absorb",
-        preExecutionModifiers: [
-            {
-                priority: 0,
-                async modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
-                        return;
-                    if (battleAction.move.targeting === Move.Targeting.SELF)
-                        return;
-                    if (battleAction.move.targeting === Move.Targeting.NONE)
-                        return;
-                    if (!battleAction.targets.includes(owner))
-                        return;
-                    if (battleAction.move.type !== Type.ELECTRIC)
-                        return;
-                    battleAction.flags[VOLT_ABSORB_ACTIVATED] = true;
-                    battleAction.skipDamageCalcPhase = true;
-                    battleAction.performSecondaryEffects = false;
-                },
-            }
-        ],
-        postExecutionModifiers: [
-            {
-                priority: 0,
-                async modify(battleAction, owner) {
-                    if (!(battleAction instanceof MoveAction))
-                        return;
-                    if (!battleAction.targets.includes(owner))
-                        return;
-                    if (battleAction.flags[VOLT_ABSORB_ACTIVATED] !== true)
-                        return;
-                    const healAction = new HealAction(owner, owner.initialStats.hp / 4);
-                    healAction.priority = 45;
-                    healAction.cause = battleAction;
-                    await battleAction.queue?.battle.renderer.showTextWhilePausingQueue(`[${owner.displayName}'s Volt Absorb]`, ['ability'], 1000);
-                    battleAction.queue?.push(healAction);
-                },
-            }
-        ]
+        displayName: "Volt Absorb"
     });
+    AbilityPresets.immunityToTypeWithHealing(AbilityDex.volt_absorb, Type.ELECTRIC, 25);
+    AbilityDex.water_absorb = new Ability({
+        name: "water_absorb",
+        displayName: "Water Absorb"
+    });
+    AbilityPresets.immunityToTypeWithHealing(AbilityDex.water_absorb, Type.WATER, 25);
 })(AbilityDex || (AbilityDex = {}));
 export default AbilityDex;

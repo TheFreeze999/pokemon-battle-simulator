@@ -68,6 +68,16 @@ var Stats;
         }
         AccuracyEvasionStats.createDefault = createDefault;
     })(AccuracyEvasionStats = Stats.AccuracyEvasionStats || (Stats.AccuracyEvasionStats = {}));
+    let BoostableStats;
+    (function (BoostableStats) {
+        function createDefault() {
+            return {
+                ...BaseStatsWithoutHP.createDefault(),
+                ...AccuracyEvasionStats.createDefault(),
+            };
+        }
+        BoostableStats.createDefault = createDefault;
+    })(BoostableStats = Stats.BoostableStats || (Stats.BoostableStats = {}));
     function normalize(stats) {
         const modifiedStats = { ...stats };
         for (const stat in modifiedStats) {

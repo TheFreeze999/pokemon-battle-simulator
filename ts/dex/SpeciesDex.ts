@@ -31,6 +31,13 @@ namespace SpeciesDex {
 		baseStats: { hp: 65, attack: 65, defense: 60, specialAttack: 110, specialDefense: 95, speed: 130 },
 		abilities: { primary: AbilityDex.volt_absorb },
 	});
+	export const vaporeon = new Species({
+		name: "vaporeon",
+		displayName: "Vaporeon",
+		types: [Type.WATER],
+		baseStats: { hp: 130, attack: 65, defense: 60, specialAttack: 110, specialDefense: 95, speed: 65 },
+		abilities: { primary: AbilityDex.water_absorb },
+	});
 	export const litwick = new Species({
 		name: "litwick",
 		displayName: "Litwick",

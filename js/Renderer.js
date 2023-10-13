@@ -120,7 +120,6 @@ class Renderer {
         const isPositive = amount > 0;
         const arrowsToRender = Math.abs(amount);
         const duration = 750;
-        console.log(arrowEls, arrowsToRender);
         for (let i = 0; i < arrowEls.length; i++) {
             const arrowEl = arrowEls[i];
             if (i < arrowsToRender)

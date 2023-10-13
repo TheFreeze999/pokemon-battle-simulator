@@ -82,7 +82,17 @@ namespace Stats {
 		}
 	}
 
-	export type AnyTypeOfStats = BaseStatsWithoutHP | BaseStats | CreatureStats | AccuracyEvasionStats;
+	export interface BoostableStats extends BaseStatsWithoutHP, AccuracyEvasionStats { }
+	export namespace BoostableStats {
+		export function createDefault(): BoostableStats {
+			return {
+				...BaseStatsWithoutHP.createDefault(),
+				...AccuracyEvasionStats.createDefault(),
+			}
+		}
+	}
+
+	export type AnyTypeOfStats = BaseStatsWithoutHP | BaseStats | CreatureStats | AccuracyEvasionStats | BoostableStats;
 
 	export function normalize(stats: BaseStatsWithoutHP): BaseStatsWithoutHP;
 	export function normalize(stats: BaseStats): BaseStats;
